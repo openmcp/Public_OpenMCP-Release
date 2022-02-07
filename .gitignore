@@ -1,0 +1,77 @@
+# Created by https://www.toptal.com/developers/gitignore/api/go
+# Edit at https://www.toptal.com/developers/gitignore?templates=go
+
+### Go ###
+# If you prefer the allow list template instead of the deny list, see community template:
+# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+#
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.zip
+# Test binary, built with `go test -c`
+*.test
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+# Dependency directories (remove the comment below to include it)
+# vendor/
+# Go workspace file
+go.work
+### Go Patch ###
+/vendor/
+/Godeps/
+# End of https://www.toptal.com/developers/gitignore/api/go
+openmcp-metric-collector/member/build/_output/bin/cluster-metric-collector
+openmcp-metric-collector/master/build/_output/bin/openmcp-metric-collector
+openmcp-cluster-manager/build/bin/istioctl
+openmcp-cluster-manager/build/bin/kubectl
+openmcp-cluster-manager/build/_output/bin/openmcp-cluster-manager
+sysbench-test/build/_output/bin/sysbench-test
+openmcp-resource-controller/openmcp-deployment-controller/build/_output/bin/openmcp-deployment-controller
+openmcp-resource-controller/openmcp-secret-controller/build/_output/bin/openmcp-secret-controller
+openmcp-resource-controller/openmcp-secret-controller/build/_output/bin/template-controller
+openmcp-resource-controller/openmcp-pv-controller/build/_output/bin/openmcp-pv-controller
+openmcp-resource-controller/openmcp-pv-controller/build/_output/bin/template-controller
+openmcp-resource-controller/openmcp-ingress-controller/build/_output/bin/openmcp-ingress-controller
+openmcp-resource-controller/openmcp-namespace-controller/build/_output/bin/openmcp-namespace-controller
+openmcp-resource-controller/openmcp-namespace-controller/build/_output/bin/template-controller
+openmcp-resource-controller/openmcp-statefulset-controller/build/_output/bin/openmcp-statefulset-controller
+openmcp-resource-controller/openmcp-pvc-controller/build/_output/bin/openmcp-pv-controller
+openmcp-resource-controller/openmcp-pvc-controller/build/_output/bin/openmcp-pvc-controller
+openmcp-resource-controller/openmcp-pvc-controller/build/_output/bin/template-controller
+openmcp-resource-controller/openmcp-configmap-controller/build/_output/bin/template-controller
+openmcp-resource-controller/openmcp-configmap-controller/build/_output/bin/openmcp-configmap-controller
+openmcp-resource-controller/openmcp-job-controller/build/_output/bin/template-controller
+openmcp-resource-controller/openmcp-job-controller/build/_output/bin/openmcp-job-controller
+openmcp-resource-controller/openmcp-has-controller/build/_output/bin/template-controller
+openmcp-resource-controller/openmcp-has-controller/build/_output/bin/openmcp-hpa-controller
+openmcp-resource-controller/openmcp-has-controller/build/_output/bin/openmcp-has-controller
+openmcp-resource-controller/openmcp-service-controller/build/_output/bin/template-controller
+openmcp-resource-controller/openmcp-service-controller/build/_output/bin/openmcp-service-controller
+openmcp-resource-controller/openmcp-daemonset-controller/build/_output/bin/openmcp-daemonset-controller
+openmcp-analytic-engine/build/_output/bin/openmcp-metric-collector
+openmcp-analytic-engine/build/_output/bin/openmcp-analytic-engine
+openmcp-migration/build/_output/bin/openmcp-migration
+openmcp-snapshot/build/_output/bin/openmcp-snapshot
+openmcp-loadbalancing-controller/build/_output/bin/openmcp-loadbalancing-controller2
+openmcp-loadbalancing-controller/build/_output/bin/openmcp-loadbalancing-controller
+openmcp-dns-controller/build/_output/bin/openmcp-dns-controller
+openmcp-dns-controller/build/_output/bin/openmcp-apiserver
+omcpctl/omcpctl
+install_openmcp/master/istio/bin/istioctl
+install_openmcp/master.back/istio/bin/istioctl
+openmcp-policy-engine/build/_output/bin/openmcp-policy-engine
+openmcp-scheduler/build/_output/bin/openmcp-scheduler
+openmcp-sync-controller/build/_output/bin/template-controller
+openmcp-sync-controller/build/_output/bin/openmcp-sync-controller
+openmcp-sync-controller/build/_output/bin/sync-controller
+example/dt/7.preprocessor/docker/build/hadoop/lib/native/libhdfs.so.0.0.0
+example/dt/7.preprocessor/docker/build/hadoop/lib/native/examples/pipes-sort
+example/dt/7.preprocessor/docker/build/hadoop/lib/native/examples/wordcount-nopipe
+example/dt/7.preprocessor/docker/build/hadoop/lib/native/examples/wordcount-simple
+example/dt/7.preprocessor/docker/build/hadoop/lib/native/examples/wordcount-part
+example/dt/7.preprocessor/docker/build/hadoop/lib/native/libhadoop.so.1.0.0
+openmcp-apiserver/build/_output/bin/openmcp-apiserver

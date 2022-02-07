@@ -1,0 +1,24 @@
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: wordpress-cpa
+  namespace: wordpress
+  labels:
+    app: wordpress-cpa
+spec:
+  template:
+    spec:
+      type: LoadBalancer
+      ports:
+        - name: wordpress
+          port: 80
+          protocol: TCP
+          targetPort: 80
+#          nodePort: 31180
+        - name: php-apache
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+#          nodePort: 31185
+      selector:
+        app: wordpress-cpa

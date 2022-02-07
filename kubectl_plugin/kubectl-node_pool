@@ -1,0 +1,155 @@
+#!/bin/bash
+
+if [ "$1" == "list" ]; then
+  #echo "[NodePool List]"
+  filename='/root/.kube/nodepool.txt'
+
+  if [ ! -f $filename ]; then
+          touch $filename
+  fi
+
+  echo "[NodePool List]"
+  while read p;
+  do
+          echo "$p"
+  done < $filename
+
+elif [ "$1" == "regist" ]; then
+  if [ "$2" == "" ]; then
+    echo "Input Cluster IP"  
+    echo "ex) kubectl node-pool regist 0.0.0.0"
+  else
+    #echo "[Success Register]"
+
+    filename='/root/.kube/nodepool.txt'
+
+    function valid_ip()
+    {   
+        local  ip=$1
+        local  stat=1
+    
+        if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+            OIFS=$IFS
+            IFS='.'
+            ip=($ip)
+            IFS=$OIFS
+            [[ ${ip[0]} -le 255 && ${ip[1]} -le 255 \
+                && ${ip[2]} -le 255 && ${ip[3]} -le 255 ]]
+            stat=$?
+        fi
+        return $stat
+    }
+    
+    if [ ! -f $filename ]; then
+            touch $filename
+    fi
+
+    if valid_ip $2;
+    then
+            stat='good';
+    else
+            stat='bad';
+    fi
+
+    if [[ "$stat" == "bad" ]];
+    then
+            echo "Input Must be IP Type"
+            exit
+    fi
+
+    find=false
+    while read p;
+    do
+            if [[ "$p" == "$2" ]];
+            then
+                    find=true
+                    break
+            fi
+    done < $filename
+
+    if $find;
+    then
+            echo "Already Register '$2' in Nodepool"
+    else
+            ssh-copy-id -i /root/.ssh/id_rsa.pub $2
+            if [ $? -eq 0 ];
+            then
+                    echo $2 >> $filename
+                    echo "Success Register '$2' in Nodepool"
+            else
+                    echo "[Error] ssh-copy-id Failed '$2' in Nodepool"
+
+            fi
+
+    fi
+
+  fi
+elif [ "$1" == "unregist" ]; then
+  if [ "$2" == "" ]; then
+    echo "Input Cluster IP"  
+    echo "ex) kubectl node-pool unregist 0.0.0.0"
+  else
+    #echo "[Success Unregister]"
+   
+    filename='/root/.kube/nodepool.txt'
+
+    function valid_ip()
+    {
+        local  ip=$1
+        local  stat=1
+
+        if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+            OIFS=$IFS
+            IFS='.'
+            ip=($ip)
+            IFS=$OIFS
+            [[ ${ip[0]} -le 255 && ${ip[1]} -le 255 \
+                && ${ip[2]} -le 255 && ${ip[3]} -le 255 ]]
+            stat=$?
+        fi
+        return $stat
+    }
+    
+    if [ ! -f $filename ]; then
+            touch $filename
+    fi
+
+    if valid_ip $2;
+    then
+            stat='good';
+    else
+            stat='bad';
+    fi    
+    
+    if [[ "$stat" == "bad" ]];
+    then
+            echo "Input Must be IP Type"
+            exit
+    fi
+    
+    find=false
+    while read p;
+    do
+            if [[ "$p" == "$2" ]];
+            then
+                    find=true
+                    break
+            fi
+    done < $filename
+    
+    if $find;
+    then
+            sed -i "/$2/d" $filename
+            echo "Success UnRegister '$2' in Nodepool"
+    else
+            echo "Not exist '$2' in Nodepool"
+    fi
+    
+    
+  fi
+else
+  echo "Basic Commands :"
+  echo "list          ex) kubectl node-pool list"
+  echo "regist        ex) kubectl node-pool regist 0.0.0.0"
+  echo "unregist      ex) kubectl node-pool unregist 0.0.0.0"
+fi
