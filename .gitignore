@@ -23,6 +23,8 @@ go.work
 ### Go Patch ###
 /vendor/
 /Godeps/
+install_openmcp/master/
+install_openmcp/member/
 # End of https://www.toptal.com/developers/gitignore/api/go
 openmcp-metric-collector/member/build/_output/bin/cluster-metric-collector
 openmcp-metric-collector/master/build/_output/bin/openmcp-metric-collector
