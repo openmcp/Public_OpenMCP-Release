@@ -254,12 +254,23 @@ func (r *reconciler) createIngress(req reconcile.Request, cm *clusterManager.Clu
 
 	if err != nil && errors.IsNotFound(err) {
 		err = cm.Host_client.Create(context.Background(), host_ing)
-
-		if err != nil {
+		if err != nil && errors.IsAlreadyExists(err) {
+			err = cm.Host_client.Update(context.Background(), host_ing)
+			if err != nil {
+				omcplog.V(2).Info("Host ing Update Err")
+				return err
+			}
+		} else if err != nil {
+			omcplog.V(2).Info("Host ing Create Err")
 			return err
 		}
+
+		host_ing := &extv1b1.Ingress{}
+		err := cm.Host_client.Get(context.TODO(), host_ing, instance.Namespace, instance.Name)
+
 		err = cm.Host_client.UpdateStatus(context.Background(), host_ing)
 		if err != nil {
+			omcplog.V(2).Info("Host ing Create Err")
 			return err
 		}
 	}
@@ -448,6 +459,11 @@ func (r *reconciler) ingressForOpenMCPIngress(req reconcile.Request, m *resource
 	// }
 
 	// if m.Spec.IngressForClientFrom == "external" {
+
+	// 이건 DNS Controller에서 자동으로 DNS를 생성하기위한 코드
+	// 실제 Ingress Controller의 동작은 상관없음
+	// 외부 IP에 대한 Ingress DNS가 만들어지면 해당 도메인으로 접근가능(Loadbalancer 외부 IP : 8181)
+	// 로드밸런서로 접근시 Virtual Service의 영향을 받음
 	externalIP := os.Getenv("LB_EXTERNAL_IP")
 	lbIngress := corev1.LoadBalancerIngress{IP: externalIP}
 
