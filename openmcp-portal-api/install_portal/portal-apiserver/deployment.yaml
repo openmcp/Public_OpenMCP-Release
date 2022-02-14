@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openmcp-portal-apiserver
+  namespace: openmcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: openmcp-portal-apiserver
+  template:
+    metadata:
+      labels:
+        name: openmcp-portal-apiserver
+    spec:
+      serviceAccountName: openmcp-portal-apiserver-sa
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: openmcp-portal-apiserver
+          image: lkh1434/openmcp-portal-apiserver:v0.0.1
+          command:
+          - openmcp-portal-apiserver
+          imagePullPolicy: Always
+          env:
+            - name: INFLUX_IP
+              value: "REPLACE_INFLUX_IP"
+            - name: INFLUX_PORT
+              value: "REPLACE_INFLUX_PORT"
+            - name: INFLUX_USERNAME
+              value: "REPLACE_INFLUX_USERNAME"
+            - name: INFLUX_PASSWORD
+              value: "REPLACE_INFLUX_PASSWORD"
+            - name: OPENMCPURL
+              value: "REPLACE_OPENMCP_URL"
+            - name: OPENMCPURLPORT
+              value: "REPLACE_OPENMCP_PORT"
+            - name: DB_HOST
+              value: "REPLACE_DB_HOST"
+            - name: DB_USER
+              value: "REPLACE_DB_USER"
+            - name: DB_PASSWORD
+              value: "REPLACE_DB_PASSWORD"
+            - name: DB_PORT
+              value: "REPLACE_DB_PORT"
+          ports:
+          - containerPort: 4885
+            name: http
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          effect: NoExecute
+          tolerationSeconds: 0
+        - key: node.kubernetes.io/unreachable
+          effect: NoExecute
+          tolerationSeconds: 0

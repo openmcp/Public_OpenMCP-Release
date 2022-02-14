@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: openmcp-portal-apiserver
+  namespace: openmcp
+spec:
+  selector:
+    name: openmcp-portal-apiserver
+  ports:
+  - port: 4885
+    targetPort: 4885
+    nodePort: 30902
+  type: NodePort

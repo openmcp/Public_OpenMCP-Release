@@ -1,0 +1,18 @@
+common:
+  nfsip: 192.168.0.161
+  nfsmount: /mnt
+postgresql:
+  user: postgres
+  password: postgres123
+  nodeport: 30901
+  url: 192.168.0.152
+influx:
+  ip: 192.168.0.152
+  port: 30003
+  username: root
+  password: root
+openmcp:
+  url: 192.168.0.152
+  port: 30000
+  
+
