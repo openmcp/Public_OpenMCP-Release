@@ -1,0 +1,15 @@
+apiVersion: v1                                      # API version
+kind: Service                                       # Type of kubernetes resource 
+metadata:
+  name: openmcp-postgres                          # Name of the resource
+  namespace: openmcp
+  labels:                                           # Labels that will be applied to the resource
+    app: openmcp-postgres
+spec:
+  type: NodePort
+  ports:
+    - port: 5432
+      nodePort: REPLACE_NODEPORT
+  selector:                                         # Selects any Pod with labels `app=openmcp-postgres,tier=postgres`
+    app: openmcp-postgres
+    tier: postgres
