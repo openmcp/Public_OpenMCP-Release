@@ -1,0 +1,1301 @@
+{
+  "hello": "hello",
+  "leftMenu": {
+    "monitor": {
+      "name": "Monitor",
+      "sub": {
+        "dashboard": "Dashboard",
+        "multipleMetric": "Multiple Metrics"
+      }
+    },
+    "multipleClusters": {
+      "name": "Multiple Clusters",
+      "sub": {
+        "clusters": "Clusters",
+        "nodes": "Nodes"
+      }
+    },
+    "workloads": {
+      "name": "WorkLoads",
+      "sub": {
+        "projects": "Projects",
+        "deployments": "Deployments",
+        "pods": "Pods",
+        "network": "Network"
+      }
+    },
+    "motions": {
+      "name": "Motions",
+      "sub": {
+        "migrations": "Migrations",
+        "snapshots": "Snapshots",
+        "globalCache": "Global Cache"
+      }
+    },
+    "settings": {
+      "name": "Settings",
+      "sub": {
+        "accounts": "Accounts",
+        "groupRole": "Group Role",
+        "policy": "Policy",
+        "alert": "Alerts",
+        "meterings": "Meterings",
+        "billings": "Billings",
+        "config": "Config"
+      }
+    }
+  },
+  "detailLeftMenu": {
+    "cluster": {
+      "overview": "Overview",
+      "nodes": "Nodes",
+      "pods": "Pods"
+    },
+    "project": {
+      "overview": "Overview",
+      "resources": {
+        "title": "Resources",
+        "workloads": "Workloads",
+        "pods": "Pods",
+        "services": "Services",
+        "ingress": "Ingress"
+      },
+      "volumnes": "Volumnes",
+      "config": {
+        "title": "Config",
+        "secrets": "Secrets",
+        "configmaps": "ConfigMaps"
+      }
+    }
+  },
+  "navigation": {
+    "home": "Home"
+  },
+  "common": {
+    "btn": {
+      "save": "SAVE",
+      "cancel": "CANCEL",
+      "confirm": "CONFIRM",
+      "update": "UPDATE",
+      "execution": "EXECUTION",
+      "register": "REGISTER",
+      "back": "BACK",
+      "next": "NEXT",
+      "delete": "DELETE",
+      "open": "OPEN",
+      "prev": "Prev",
+      "refresh":"Refresh"
+    },
+    "label": {
+      "target": "Target",
+      "processing": "Processing...",
+      "loading": "Loading..."
+    },
+    "nav": {
+      "home": "home"
+    },
+    "msg": {
+      "unselected-target": "Please select target"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "btn-edit": "Edit Dashboard",
+    "deployService": {
+      "btn-title": "Service Deployment",
+      "title": "Service Deployment"
+    },
+    "pop-editDashboard": {
+      "title": "Dashboard Custom View",
+      "lb-choices": "Choices",
+      "lb-chosen": "Chosen",
+      "systemStatus": "System Status",
+      "clusterPowerUsage": "Cluster Power Usage",
+      "clusterRegion": "Cluster Regions",
+      "clusterJoinUnjoin": "Cluster Join/Unjoin",
+      "worldClusterStatus": "World Cluster Status",
+      "topology": "Topology"
+    },
+    "connectionFailed": "Connection Failed",
+    "systemStatus": {
+      "title": "SystemStatus",
+      "btn-info": "Info",
+      "clusters": "Clusters",
+      "nodes": "Nodes",
+      "pods": "Pods",
+      "porjects": "Projects"
+    },
+    "powerUsage": {
+      "title": "Cluster Power Usage",
+      "range": {
+        "low": "low",
+        "medium": "medium",
+        "high": "high"
+      }
+    },
+    "regions": {
+      "title": "Cluster Regions"
+    },
+    "joinUnjoin": {
+      "title": "Cluster Join/Unjoin",
+      "omcpCluster": "OpenMCP Cluster",
+      "joinableCluster": "Joinable Cluster"
+    },
+    "worldClusterMap": {
+      "title": "World Cluster Status"
+    },
+    "topology": {
+      "title": "Topology",
+      "btn-refresh": "Refresh",
+      "cluster": {
+        "title": "cluster"
+      },
+      "service": {
+        "title": "service"
+      },
+      "region": {
+        "title": "region"
+      }
+    }
+  },
+  "multipleMetrics": {
+    "title": "Multiple Metrics",
+    "apiServerMetric": {
+      "title": "Api Server Metric",
+      "requestsPerSec": "requests/sec",
+      "latency": "latency"
+    },
+    "clusterMetric": {
+      "title": "Cluster Metric",
+      "deployment": "deployment",
+      "replicaset": "replicaset",
+      "statefulset": "statefulset",
+      "service": "service",
+      "endpoint": "endpoint",
+      "nodeState": "node state",
+      "podState": "pod state"
+    },
+    "namespaceMetric": {
+      "title": "Namespace Metric",
+      "lb-namespace": "name",
+      "lb-namespaceResourceUsage": "Namespace Resource Usage Rank",
+      "pvc": "pvc",
+      "deployment": "deployment",
+      "replicaset": "replicaset",
+      "statefulset": "statefulset",
+      "service": "service",
+      "endpoint": "endpoint",
+      "podState": "pod state",
+      "networkState": "network state",
+      "cpuTop5": "cpu top 5",
+      "memoryTop5": "memory top 5"
+    },
+    "nodeMetric": {
+      "title": "Node Metric",
+      "lb-node": "name",
+      "diskUsage": "disk usage",
+      "networkUsage": "network usage",
+      "podState": {
+        "title": "pod state"
+      },
+      "cpuUsage": "all node cpu usage",
+      "memoryUsage": "all node memory usage"
+    }
+  },
+  "clusters": {
+    "title": "Clusters",
+    "joined": {
+      "title": "Joined",
+      "btn-unjoin": "UNJOIN",
+      "pop-unjoin": {
+        "title": "Cluster Unjoin Confrim",
+        "context": "Are you sure you want to cancel the Cluster Join?"
+      },
+      "grid": {
+        "name": "Name",
+        "status": "Status",
+        "region": "Region",
+        "zone": "Zone",
+        "nodes": "Nodes",
+        "cpu": "CPU",
+        "memory": "Memory",
+        "provider": "Provider"
+      },
+      "clusterResourceStatus": "Cluster Resource Status"
+    },
+    "joinable": {
+      "title": "Joinable",
+      "btn-join": "JOIN",
+      "pop-unjoin": {
+        "title": "Cluster Join Confrim",
+        "context": "Are you sure you want to Join the Cluster?"
+      },
+      "grid": {
+        "name": "Name",
+        "serverIp": "Server IP",
+        "provider": "Provider",
+        "region": "Region",
+        "zone": "Zone"
+      }
+    },
+    "detail": {
+      "overview": {
+        "name": "Cluster Overview",
+        "basicInfo": {
+          "name": "Basic Info",
+          "sub": {
+            "name": "Name",
+            "provider": "Provider",
+            "version": "Kubernetes Version",
+            "status": "Status",
+            "region": "Region",
+            "zone": "Zone"
+          }
+        },
+        "projectUsage": {
+          "name": "Project Usage Top5",
+          "grid": {
+            "name": "Name",
+            "usage": "Uage"
+          }
+        },
+        "nodeUsage": {
+          "name": "Node Usage Top5",
+          "grid": {
+            "name": "Name",
+            "usage": "Uage"
+          }
+        },
+        "resourceUsage": {
+          "name": "Cluster Resource Usage"
+        },
+        "kubeStatus": {
+          "name": "Kubernetes Status"
+        },
+        "events": {
+          "name": "Events",
+          "grid": {
+            "project": "Project",
+            "type": "Type",
+            "reason": "Reason",
+            "object": "Object",
+            "message": "Message",
+            "time": "Created Time"
+          }
+        }
+      },
+      "nodes": {},
+      "pods": {}
+    }
+  },
+  "nodes": {
+    "title": "Nodes",
+    "grid": {
+      "name": "Name",
+      "status": "Status",
+      "cluster": "Cluster",
+      "role": "Role",
+      "version": "System Version",
+      "cpu": "CPU",
+      "memory": "Memory",
+      "pods": "Pods",
+      "provider": "Provider",
+      "region": "Region",
+      "zone": "Zone"
+    },
+    "pop-addNode": {
+      "btn-addNode": "Add Node",
+      "title": "Add Node",
+      "grid": {
+        "title": "Cluster",
+        "name": "Name",
+        "status": "Status",
+        "type": "Type",
+        "cpu": "CPU(%)",
+        "memory": "Memory(%)",
+        "pool": "Pools"
+      },
+      "msg-checkVmName": "Please enter New VM(Node) Name",
+      "msg-checkVmPassword": "Please enter New VM(Node) Password",
+      "msg-checkTempImgName": "Please enter Template Image VM",
+      "msg-checkDesiredZero": "Desired number must be a number greater than 0",
+      "msg-dataNotExists1": "Data does not exists",
+      "msg-dataNotExists2": "Please check public-cloud config settings",
+      "newVmName": "New VM(Node) Name",
+      "newVmName-placeholder": "new vm name",
+      "newVmPasswd": "New VM(Node) Password",
+      "newVmPasswd-placeholder": "new vm password",
+      "templateImgVm": "Template Image VM",
+      "templateImgVm-placeholder": "template vm name",
+      "desiredNum": "Selected Desired Number"
+    },
+    "detail": {
+      "title": "Node Overview",
+      "basicInfo": {
+        "title": "Basic Info",
+        "sub": {
+          "name": "Name",
+          "status": "Status",
+          "role": "Role",
+          "cluster": "Cluster",
+          "version": "Kubernetes",
+          "proxy": "Kubernetes Proxy",
+          "ip": "IP",
+          "os": "OS",
+          "docker": "Docker",
+          "createdTime": "Created Time",
+          "provider": "Provider"
+        }
+      },
+      "nodeStatus": {
+        "title": "Kubernetes Node Status",
+        "btn-startNode": "Start Node",
+        "btn-stopNode": "Stop Node",
+        "btn-deleteNode": "Delete Node",
+        "pop-powerStart": {
+          "title": "Confirm Start Node",
+          "context": "Are you sure you want to Start Node?"
+        },
+        "pop-powerOff": {
+          "title": "Confirm Stop Node",
+          "context": "Are you sure you want to stop Node?"
+        },
+        "pop-deleteNode": {
+          "title": "Confirm Delete KVM VM",
+          "context": "Are you sure you want to delete vm(node)?"
+        }
+      },
+      "resourceUsage": {
+        "title": "Node Resource Usage"
+      },
+      "powerUsage": {
+        "title": "Node Power Usage (Watt)"
+      }
+    }
+  },
+  "projects": {
+    "title": "Projects",
+    "grid": {
+      "name": "Name",
+      "status": "Status",
+      "cluster": "Cluster",
+      "labels": "Labels",
+      "createdTime": "Created Time"
+    },
+    "pop-create": {
+      "btn-create": "Create Project",
+      "title": "Create Project",
+      "project": {
+        "title": "Project",
+        "placeHolder": "project name"
+      },
+      "cluster": {
+        "title": "Select Clusters",
+        "grid": {
+          "name": "Name",
+          "status": "Status",
+          "nodes": "Nodes",
+          "cpu": "CPU(%)",
+          "memory": "Memory(%)"
+        }
+      },
+      "msg": {
+        "chk-proejctName": "Please insert project name"
+      }
+    },
+    "detail": {
+      "overview": {
+        "title": "Project Overview",
+        "basicInfo": {
+          "title": "Basic Info",
+          "sub": {
+            "name": "Name",
+            "cluster": "Cluster",
+            "labels": "Lasbels",
+            "status": "Status",
+            "uid": "UID",
+            "createdTime": "Created Time"
+          }
+        },
+        "projectResource": {
+          "title": "Project Resources",
+          "grid": {
+            "resource": "Resource",
+            "total": "Total",
+            "abnormal": "Abnormal"
+          }
+        },
+        "usageTop5": {
+          "title": "Usage Top5",
+          "grid": {
+            "name": "Name",
+            "usage": "Usage"
+          }
+        },
+        "physicalResources": {
+          "title": "Physical Resources"
+        }
+      },
+      "resources": {
+        "title": "Resources",
+        "workloads": {
+          "title": "Workloads",
+          "deployments": {
+            "title": "Deployments",
+            "detail": {
+              "title": "Deployment Overview",
+              "basicInfo": {
+                "title": "Basic Info"
+              },
+              "replicaStatus": {
+                "title": "Replica Status"
+              },
+              "pods": {
+                "title": "Pods"
+              },
+              "ports": {
+                "title": "Ports"
+              },
+              "events": {
+                "title": "Events"
+              }
+            }
+          },
+          "statefulsets": {
+            "title": "Statefulsets",
+            "detail": {
+              "title": "Statefulset Overview",
+              "basicInfo": {
+                "title": "Basic Info"
+              },
+              "pods": {
+                "title": "Pods"
+              },
+              "ports": {
+                "title": "Ports"
+              },
+              "events": {
+                "title": "Events"
+              }
+            },
+            "pop-create": {
+              "btn-create": "Create Statefulset",
+              "title": "Create"
+            }
+          }
+        },
+        "pods": {
+          "title": "Pods"
+        },
+        "services": {
+          "title": "Services"
+        },
+        "ingress": {
+          "title": "Ingress"
+        }
+      },
+      "volumes": {
+        "title": "Volumes",
+        "grid": {
+          "name": "Name",
+          "status": "Ready",
+          "project": "Project",
+          "capacity": "Capacity",
+          "createdTime": "Created Time"
+        },
+        "detail": {
+          "title": "Volume Overview",
+          "basicInfo": {
+            "title": "Basic Info"
+          },
+          "mountedBy": {
+            "title": "Mounted By"
+          },
+          "events": {
+            "title": "Events"
+          }
+        }
+      },
+      "config": {
+        "secrets": {
+          "title": "Secrets",
+          "grid": {
+            "name": "Name",
+            "project": "Project",
+            "type": "Type",
+            "createdTime": "Created Time"
+          },
+          "detail": {
+            "title": "Secret Overview",
+            "basicInfo": {
+              "title": "Basic Info"
+            },
+            "data": {
+              "title": "Data"
+            }
+          }
+        },
+        "configmaps": {
+          "title": "ConfigMaps",
+          "grid": {
+            "name": "Name",
+            "project": "Project",
+            "keys": "Keys",
+            "createdTime": "Created Time"
+          },
+          "detail": {
+            "title": "ConfigMap Overview",
+            "basicInfo": {
+              "title": "Basic Info"
+            },
+            "data": {
+              "title": "Data"
+            }
+          }
+        }
+      }
+    }
+  },
+  "deployments": {
+    "title": "Deployments",
+    "tabTitle": {
+      "deployment": "Deployment",
+      "omcpTitle": "OpenMCP Deployment"
+    },
+    "grid": {
+      "name": "Name",
+      "ready": "Ready",
+      "replicas": "Replicas",
+      "cluster": "Cluster",
+      "clusterDp": "Cluster:Deployment count",
+      "project": "Project",
+      "image": "Image",
+      "createdTime": "Created Time"
+    },
+    "pop-create": {
+      "btn-create": "Create",
+      "title": "Create Deployment",
+      "omcpTitle": "Create OpenMCP Deployment",
+      "targetCluster": "Target Cluster",
+      "step": {
+        "1": {
+          "title": "Set Definitions"
+        },
+        "2": {
+          "title": "Select Cluster"
+        },
+        "3": {
+          "title": "Execution"
+        }
+      },
+      "msg": {
+        "chk-name": "Please enter 'Name' field",
+        "chk-namespace": "Please enter 'Name' field",
+        "chk-replicas": "Please enter 'Replicas' field",
+        "chk-containerImage": "Please enter 'Container Image' field",
+        "chk-containerPort": "Please enter 'Container Port' field"
+      }
+    },
+    "pop-delete": {
+      "btn-delete": "Delete",
+      "title": "Delete Deployment",
+      "omcpTitle": "Delete OpenMCP Deployment",
+      "context": "Are you sure you want to Delete Deployment?",
+      "msg": {
+        "chk-selectDeployment": "Please select deployment"
+      }
+    },
+    "detail": {
+      "title": "Deployment Overview",
+      "basicInfo": {
+        "title": "Basic Info",
+        "name": "Name",
+        "project": "Project",
+        "labels": "Labels",
+        "createdTime": "Created Time",
+        "uid": "UID",
+        "replica": "Replica",
+        "kind": "Kind"
+      },
+      "replicaStatus": {
+        "title": "Replica Status",
+        "total": "Total"
+      },
+      "pods": {
+        "title": "Pods"
+      },
+      "ports": {
+        "title": "Ports",
+        "grid": {
+          "name": "Name",
+          "port": "Port",
+          "protocol": "Protocol"
+        }
+      },
+      "events": {
+        "title": "Events",
+        "grid": {
+          "project": "Projet",
+          "type": "Type",
+          "reason": "Reason",
+          "object": "Object",
+          "message": "Message",
+          "createdTime": "Created Time"
+        }
+      }
+    }
+  },
+  "pods": {
+    "title": "Pods",
+    "pod": {
+      "title": "pod",
+      "grid": {
+        "name": "Name",
+        "status": "Status",
+        "cluster": "Cluster",
+        "project": "Project",
+        "podIp": "Pod IP",
+        "node": "Node",
+        "nodeIp": "Node IP",
+        "createdTime": "Created Time"
+      },
+      "detail": {
+        "title": "Pod Overview",
+        "basicInfo": {
+          "title": "Basic Info",
+          "name": "Name",
+          "status": "Status",
+          "cluster": "Cluster",
+          "project": "Project",
+          "node": "Node",
+          "totalRestartCount": "Total Restart Count",
+          "namespace": "Namespace",
+
+          "nodeIp": "Node IP",
+          "podIp": "Pod IP",
+          "createdTime": "Created Time"
+        },
+        "podStatus": {
+          "title": "Pod Status",
+          "grid": {
+            "type": "Type",
+            "status": "Status",
+            "updatedTime": "Updated Time",
+            "reason": "Reason",
+            "message": "Message"
+          }
+        },
+        "containers": {
+          "title": "Containers",
+          "grid": {
+            "name": "Name",
+            "status": "Status",
+            "restartCount": "Restart Count",
+            "port": "Port",
+            "image": "Image"
+          }
+        },
+        "physicalResources": {
+          "title": "Physical Resources"
+        },
+        "events": {
+          "title": "Events",
+          "grid": {
+            "project": "Project",
+            "type": "Type",
+            "reason": "Reason",
+            "object": "Object",
+            "message": "Message",
+            "createdTime": "Created Time"
+          }
+        }
+      }
+    },
+    "hpa": {
+      "title": "hpa",
+      "grid": {
+        "name": "Name",
+        "project": "Project",
+        "cluster": "Cluster",
+        "reference": "Reference",
+        "min": "Min",
+        "max": "Max",
+        "replicas": "Replicas"
+      }
+    },
+    "vpa": {
+      "title": "vpa",
+      "grid": {
+        "name": "Name",
+        "project": "Project",
+        "reference": "Reference"
+      }
+    }
+  },
+  "network": {
+    "title": "Network",
+    "dns": {
+      "title": "DNS",
+      "grid": {
+        "project": "Project",
+        "name": "name",
+        "dnsName": "DNS",
+        "ip": "IP"
+      },
+      "detail": {
+        "title": ""
+      }
+    },
+    "services": {
+      "title": "Services",
+      "grid": {
+        "name": "name",
+        "cluster": "Cluster",
+        "project": "Project",
+        "type": "Type",
+        "clusterIp": "Cluster IP",
+        "externalIp": "External IP",
+        "selector": "Selector",
+        "createdTime": "Created Time"
+      },
+      "pop-create": {
+        "btn-create": "Create Service",
+        "title": "Create Service"
+      },
+      "pop-delete":{
+        "btn-delete": "Delete Service",
+        "title": "Delete Services",
+        "context":"Are you sure delete service?"
+      },
+      "detail": {
+        "title": "Service Overview",
+        "basicInfo": {
+          "title": "Basic Info",
+          "name": "Name",
+          "project": "Project",
+          "type": "Type",
+          "affinity": "Session Affinity",
+          "selector": "Selector",
+          "cluster": "Cluster",
+          "clusterIp": "Cluster IP",
+          "externerIp": "Externer IP",
+          "endpoints": "Endpoints",
+          "createdTime": "Created Time"
+        },
+        "pods": {
+          "title": "Pods"
+        },
+        "events": {
+          "title": "Events",
+          "grid": {
+            "project": "Projet",
+            "type": "Type",
+            "reason": "Reason",
+            "object": "Object",
+            "message": "Message",
+            "createdTime": "Created Time"
+          }
+        }
+      }
+    },
+    "ingress": {
+      "title": "Ingress",
+      "grid": {
+        "name": "name",
+        "cluster": "Cluster",
+        "project": "Project",
+        "address": "Address",
+        "createdTime": "Created Time"
+      },
+      "pop-create": {
+        "btn-create": "Create Ingress",
+        "title": "Create Ingress"
+      },
+      "detail": {
+        "title": "Ingress Overview",
+        "basicInfo": {
+          "title": "Basic Info",
+          "name": "Name",
+          "project": "Project",
+          "address": "Address",
+          "createdTime": "Created Time"
+        },
+        "rules": {
+          "title": "Rules",
+          "grid": {
+            "domain": "Domain",
+            "protocol": "Protocol",
+            "path": "Path",
+            "service": "Service",
+            "port": "Port",
+            "secret": "Secret"
+          }
+        },
+        "events": {
+          "title": "Events",
+          "grid": {
+            "project": "Projet",
+            "type": "Type",
+            "reason": "Reason",
+            "object": "Object",
+            "message": "Message",
+            "createdTime": "Created Time"
+          }
+        }
+      }
+    },
+    "loadbalancer": {
+      "title": "LB Visualization",
+      "msg": {
+        "noneData": "There's no URL set up"
+      }
+    }
+  },
+  "migrations": {
+    "title": "Migrations",
+    "migration": {
+      "title": "Migration",
+      "pop-migration": {
+        "btn-migration": "Migration",
+        "title": "Migration",
+        "targetDeployments": {
+          "title": "Target Deployments"
+        },
+        "selectCluster": {
+          "title": "Select Cluster"
+        },
+        "msg": {
+          "chk-selectDeployment": "Please select deployment",
+          "completedRequest": "Migration request has been completed"
+        }
+      }
+    },
+    "migrationLog": {
+      "title": "Migration Log"
+    }
+  },
+  "snapshots": {
+    "title": "Snapshots",
+    "snapshot": {
+      "title": "Snapshot",
+      "pop-snapshot": {
+        "btn-snapshot": "Take Snapshot",
+        "title": "Take Snapshot",
+        "snapshotInfo": {
+          "title": "Snapshot Info"
+        },
+        "msg": {
+          "chk-selectSnapshot": "Please select deployment",
+          "completedRequest": "Snapshot request has been completed"
+        }
+      }
+    },
+    "snapshotLog": {
+      "title": "Snapshot Log"
+    }
+  },
+  "globalCache": {
+    "title": "Global Cache",
+    "sub":{
+      "history" : "Global Cache History",
+      "updateList" : "Global Cache Update List"
+    }
+  },
+  "accounts": {
+    "title":"Accounts",
+    "account":{
+      "title": "Account",
+      "pop-craete": {
+        "title": "Create Account",
+        "btn-create": "Create an Account",
+        "msg": {
+          "chk-selectAccount": "Please select account"
+        }
+      },
+      "pop-changeRole": {
+        "title": "Change Account Role",
+        "btn-change": "Change Role",
+        "userInfo": {
+          "title": "User Info"
+        },
+        "selectRole": {
+          "title": "Select Role"
+        },
+        "msg": {
+          "chk-selectAccount": "Please select account",
+          "chk-selectRole": "Please select account role"
+        }
+      }
+    },
+    "userLog":{
+      "title":"User Log"
+    }
+  },
+  "groupRole": {
+    "title": "Group Role",
+    "pop-create": {
+      "btn-create": "Create Group",
+      "title": "Create Group Role",
+      "step": {
+        "1": {
+          "title": "Set Group Informations",
+          "groupRoleName": {
+            "title": "Group Role Name",
+            "placeholder": "group role name"
+          },
+          "description": {
+            "title": "Description",
+            "placeholder": "group information"
+          }
+        },
+        "2": {
+          "title": "Select Clusters",
+          "selectClusters": {
+            "title": "Select Clusters",
+            "placeholder": "Please Select Clusters"
+          }
+        },
+        "3": {
+          "title": "Select Group Users",
+          "selectUsers": {
+            "title": "Select Users",
+            "placeholder": "Please Select Users"
+          }
+        }
+      },
+      "msg": {
+        "chk-groupName": "Please insert 'group name' data",
+        "chk-description": "Please insert 'description' data",
+        "chk-clusters": "Please select clusters",
+        "chk-users": "Please select users"
+      }
+    },
+    "pop-edit": {
+      "btn-edit": "Edit Group",
+      "title": "Edit Group Role",
+      "step": {
+        "1": {
+          "title": "Set Group Informations",
+          "groupRoleName": {
+            "title": "Group Role Name",
+            "placeholder": "group role name"
+          },
+          "Description": {
+            "title": "Description",
+            "placeholder": "group information"
+          }
+        },
+        "2": {
+          "title": "Select Clusters",
+          "selectClusters": {
+            "title": "Selected Clusters",
+            "placeholder": "Please Select Clusters"
+          }
+        },
+        "3": {
+          "title": "Select Group Users",
+          "selectUsers": {
+            "title": "Selected Users",
+            "placeholder": "Please Select Users"
+          }
+        }
+      },
+      "msg": {
+        "chk-selectGroup": "Please select a Group Role",
+        "chk-groupName": "Please insert 'group name' data",
+        "chk-description": "Please insert 'description' data",
+        "chk-clusters": "Please select clusters",
+        "chk-users": "Please select users"
+      }
+    },
+    "pop-delete": {
+      "btn-delete": "Delete Group",
+      "title": "Delete Group Role",
+      "confirm": {
+        "title": "Delete Group Role",
+        "context": "Are you sure you want to Delete Group Role?"
+      },
+      "msg": {
+        "chk-selectGroup": "Please select a Group Role"
+      }
+    }
+  },
+  "policy": {
+    "title": "Policy",
+    "omcpPolicy": {
+      "title": "OMCP POLICY",
+      "pop-edit": {
+        "btn-edit": "Edit Policy",
+        "title": ""
+      }
+    }
+  },
+  "alert": {
+    "title": "Alerts",
+    "alertLog": {
+      "title": "Alert Log"
+    },
+    "threshold": {
+      "title": "Threshold",
+      "pop-create": {
+        "btn-create": "Create Threshold",
+        "title": "Create Node Threshold",
+        "step": {
+          "1": {
+            "title": "Select Cluster",
+            "selectClusters": {
+              "title": "Selected Cluster",
+              "placeholder": "Please Select Cluster"
+            }
+          },
+          "2": {
+            "title": "Select Node(host)",
+            "selectNode": {
+              "title": "Selected Node",
+              "placeholder": "Please Select Node"
+            }
+          },
+          "3": {
+            "title": "Set Threshold",
+            "cpuThW": "CPU Threshold (Warning)",
+            "cpuThD": "CPU Threshold (Danger)",
+            "memoryThW": "Memory Threshold (Warning)",
+            "memoryThD": "Memory Threshold (Danger)",
+            "storageThW": "Storage Threshold (Warning)",
+            "storageThD": "Storage Threshold (Danger)"
+          }
+        },
+        "msg": {
+          "chk-cluster": "Please select 'Cluster'",
+          "chk-node": "Please select 'Node'",
+          "chk-cpuW": "Please set 'cpu warning threshold (%)'",
+          "chk-cpuD": "Please set 'cpu danger threshold (%)'",
+          "chk-memoryW": "Please set 'memory warning threshold (%)'",
+          "chk-memoryD": "Please set 'memory warning threshold (%)'",
+          "chk-storageW": "Please set 'storage warning threshold (%)'",
+          "chk-storageD": "Please set 'storage warning threshold (%)'"
+        }
+      },
+      "pop-edit": {
+        "btn-edit": "Edit Threshold",
+        "title": "Edit Node Threshold",
+        "cpuThW": "CPU Threshold (Warning)",
+        "cpuThD": "CPU Threshold (Danger)",
+        "memoryThW": "Memory Threshold (Warning)",
+        "memoryThD": "Memory Threshold (Danger)",
+        "storageThW": "Storage Threshold (Warning)",
+        "storageThD": "Storage Threshold (Danger)",
+        "msg": {
+          "chk-cluster": "Please select 'Cluster'",
+          "chk-node": "Please select 'Node'",
+          "chk-cpuW": "Please set 'cpu warning threshold (%)'",
+          "chk-cpuD": "Please set 'cpu danger threshold (%)'",
+          "chk-memoryW": "Please set 'memory warning threshold (%)'",
+          "chk-memoryD": "Please set 'memory warning threshold (%)'",
+          "chk-storageW": "Please set 'storage warning threshold (%)'",
+          "chk-storageD": "Please set 'storage warning threshold (%)'"
+        }
+      },
+      "pop-delete": {
+        "btn-delete": "Delete Threshold",
+        "confirm": {
+          "title": "Delete Threshold",
+          "context": "Are you sure you want to Delete Host Threshold?"
+        },
+        "msg": {
+          "chk-selectGroup": "Please select a Host Threshold"
+        }
+      }
+    }
+  },
+  "meterings": {
+    "title": "Meterings",
+    "pop-add": {
+      "btn-add": "Add Region",
+      "title": "Add Region",
+      "region": "Region",
+      "costDescription": "(cost per hour for each cluster)"
+    },
+    "pop-edit": {
+      "btn-add": "Edit Metering",
+      "title": "Edit Metering",
+      "region": "Region",
+      "clusterCost": "Cluster Cost",
+      "costDescription": "per hour for each cluster",
+      "workerNodeCost": "Worker Node Cost"
+    }
+  },
+  "billing": {
+    "title": "Billing"
+  },
+  "config": {
+    "title": "Config",
+    "publicCloudAuth": {
+      "title": "Public Cloud Auth",
+      "eks": {
+        "title": "EKS",
+        "description": "EKS Cluster Authentications Configration",
+        "pop-common": {
+          "cluster": "Cluster",
+          "secretKey": "Secret Key",
+          "accessKey": "Access Key",
+          "region": "Region",
+          "msg": {
+            "chk-cluster": "Please enter Cluster Name",
+            "chk-secretKey": "Please enter Secret Key",
+            "chk-accessKey": "Please enter Access Key",
+            "chk-region": "Please enter Region"
+          }
+        },
+        "pop-new": {
+          "btn-open": "New",
+          "title": "Add EKS Cluster Authentication"
+        },
+        "pop-edit": {
+          "btn-open": "Edit",
+          "title": "Edit EKS Cluster Authentication",
+          "msg": {
+            "chk-selectAuth": "Please select a authentication data row"
+          }
+        },
+        "pop-delete": {
+          "btn-open": "Delete",
+          "title": "Delete EKS Cluster Authentication",
+          "context": "Are you sure you want to delete EKS PCA config?",
+          "msg": {
+            "chk-selectAuth": "Please select a authentication data row"
+          }
+        }
+      },
+      "gke": {
+        "title": "GKE",
+        "description": "GKE Cluster Authentications Configration",
+        "pop-common": {
+          "cluster": "Cluster",
+          "credentialType": "Credential Type",
+          "clientEmail": "Client Email",
+          "projectId": "Project ID",
+          "privateKey": "Private Key",
+          "msg": {
+            "chk-cluster": "Please enter Cluster Name",
+            "chk-credentialType": "Please enter Credential Type",
+            "chk-clientEmail": "Please enter Client Email",
+            "chk-projectId": "Please enter Project ID",
+            "chk-privateKey": "Please enter Private Key"
+          }
+        },
+        "pop-new": {
+          "btn-open": "New",
+          "title": "Add GKE Cluster Authentication",
+          "msg": {
+            "chk-selectAuth": "Please select a authentication data row"
+          }
+        },
+        "pop-edit": {
+          "btn-open": "Edit",
+          "title": "Add GKE Cluster Authentication",
+          "msg": {
+            "chk-selectAuth": "Please select a authentication data row"
+          }
+        },
+        "pop-delete": {
+          "btn-open": "Delete",
+          "title": "Delete GKE Cluster Authentication",
+          "context": "Are you sure you want to delete GKE PCA config?",
+          "msg": {
+            "chk-selectAuth": "Please select a authentication data row"
+          }
+        }
+      },
+      "aks": {
+        "title": "AKS",
+        "description": "AKS Cluster Authentications Configration",
+        "pop-common": {
+          "cluster": "Cluster",
+          "clusterId": "Cluster ID",
+          "clientSec": "Client Sec",
+          "tenantId": "Tenant ID",
+          "subId": "Sub ID",
+          "msg": {
+            "chk-cluster": "Please enter Cluster Name",
+            "chk-clusterId": "Please enter Client ID",
+            "chk-clientSec": "Please enter Client Sec",
+            "chk-tenantId": "Please enter Tenant ID",
+            "chk-subId": "Please enter Sub ID"
+          }
+        },
+        "pop-new": {
+          "btn-open": "New",
+          "title": "Add AKS Cluster Authentication",
+          "msg": {
+            "chk-selectAuth": "Please select a authentication data row"
+          }
+        },
+        "pop-edit": {
+          "btn-open": "Edit",
+          "title": "Edit AKS Cluster Authentication",
+          "msg": {
+            "chk-selectAuth": "Please select a authentication data row"
+          }
+        },
+        "pop-delete": {
+          "btn-open": "Delete",
+          "title": "Delete AKS Cluster Authentication",
+          "context": "Are you sure you want to delete AKS PCA config?",
+          "msg": {
+            "chk-selectAuth": "Please select a authentication data row"
+          }
+        }
+      },
+      "kvm": {
+        "title": "KVM",
+        "description": "KVM Cluster Authentications Configration",
+        "pop-common": {
+          "cluster": "Cluster",
+          "kvmAgentUrl": "KVM Agent URL",
+          "kvmAgentPort": "KVM Agent Port",
+          "masterVmName": "Cluster Master VM Name",
+          "masterVmPwd": "Cluster Master VM Password",
+          "msg": {
+            "chk-cluster": "Please enter Cluster Name",
+            "chk-kvmAgentUrl": "Please enter KVM Agent URL",
+            "chk-kvmAgentPort": "Please enter KVM Agent Port",
+            "chk-masterVmName": "Please enter Cluster Master VM Name",
+            "chk-masterVmPwd": "Please enter Cluster Master VM Password"
+          }
+        },
+        "pop-new": {
+          "btn-open": "New",
+          "title": "Add KVM Cluster Authentication",
+          "msg": {
+            "chk-selectAuth": "Please select a authentication data row"
+          }
+        },
+        "pop-edit": {
+          "btn-open": "Edit",
+          "title": "Edit KVM Cluster Authentication",
+          "msg": {
+            "chk-selectAuth": "Please select a authentication data row"
+          }
+        },
+        "pop-delete": {
+          "btn-open": "Delete",
+          "title": "Delete KVM Cluster Authentication",
+          "context": "Are you sure you want to delete KVM PCA config?",
+          "msg": {
+            "chk-selectAuth": "Please select a authentication data row"
+          }
+        }
+      }
+    },
+    "dashboardConfig": {
+      "title": "Dashboard Config",
+      "refreshCycle": {
+        "title": "Refresh-Cycle(second)"
+      },
+      "powerUsageRange": {
+        "title": "Power Usage Range(watt)"
+      }
+    }
+  }
+}

@@ -1,0 +1,1298 @@
+{
+  "hello": "안녕",
+  "leftMenu": {
+    "monitor": {
+      "name": "모니터",
+      "sub": {
+        "dashboard": "대시보드",
+        "multipleMetric": "다중 메트릭스"
+      }
+    },
+    "multipleClusters": {
+      "name": "멀티 클러스터",
+      "sub": {
+        "clusters": "클러스터",
+        "nodes": "노드"
+      }
+    },
+    "workloads": {
+      "name": "워크로드",
+      "sub": {
+        "projects": "프로젝트",
+        "deployments": "디플로이먼트",
+        "pods": "파드",
+        "network": "네트워크"
+      }
+    },
+    "motions": {
+      "name": "모션",
+      "sub": {
+        "migrations": "마이그레이션",
+        "snapshots": "스냅샷",
+        "globalCache": "글로벌 캐시"
+      }
+    },
+    "settings": {
+      "name": "설정",
+      "sub": {
+        "accounts": "사용자",
+        "groupRole": "그룹권한",
+        "policy": "정책",
+        "alert": "알림",
+        "meterings": "비용관리",
+        "billings": "비용이력",
+        "config": "시스템"
+      }
+    }
+  },
+  "detailLeftMenu": {
+    "cluster": {
+      "overview": "개요",
+      "nodes": "노드",
+      "pods": "파드"
+    },
+    "project": {
+      "overview": "개요",
+      "resources": {
+        "title": "리소스",
+        "workloads": "워크로드",
+        "pods": "파드",
+        "services": "서비스",
+        "ingress": "인그레스"
+      },
+      "volumnes": "볼륨",
+      "config": {
+        "title": "Config",
+        "secrets": "Secrets",
+        "configmaps": "ConfigMaps"
+      }
+    }
+  },
+  "navigation": {
+    "home": "홈"
+  },
+  "common": {
+    "btn": {
+      "save": "저장",
+      "cancel": "취소",
+      "confirm": "승인",
+      "update": "업데이트",
+      "execution": "실행",
+      "register": "등록",
+      "back": "이전",
+      "next": "다음",
+      "delete": "삭제",
+      "open": "열기",
+      "prev": "이전",
+      "refresh":"새로고침"
+    },
+    "label": {
+      "target": "대상",
+      "processing": "처리중...",
+      "loading": "로딩중..."
+    },
+    "nav": {
+      "home": "홈"
+    },
+    "msg": {
+      "unselected-target": "대상을 선택해 주세요"
+    }
+  },
+  "dashboard": {
+    "title": "대시보드",
+    "btn-edit": "사용자 정의",
+    "deployService": {
+      "btn-title": "서비스 배포",
+      "title": "서비스 배포"
+    },
+    "pop-editDashboard": {
+      "title": "대시보드 사용자 정의",
+      "lb-choices": "선택안됨",
+      "lb-chosen": "선택됨",
+      "systemStatus": "시스템 상태",
+      "clusterPowerUsage": "클러스터 전력사용량",
+      "clusterRegion": "지역별 클러스터",
+      "clusterJoinUnjoin": "클러스터 조인/언조인",
+      "worldClusterStatus": "세계 클러스터 분포",
+      "topology": "토폴로지"
+    },
+    "connectionFailed": "API서버 응답없음",
+    "systemStatus": {
+      "title": "시스템 상태",
+      "btn-info": "상세정보",
+      "clusters": "클러스터",
+      "nodes": "노드",
+      "pods": "파드",
+      "porjects": "프로젝트"
+    },
+    "powerUsage": {
+      "title": "클러스터 전력 평균사용량",
+      "range": {
+        "low": "낮음",
+        "medium": "중간",
+        "high": "높음"
+      }
+    },
+    "regions": {
+      "title": "지역별 클러스터"
+    },
+    "joinUnjoin": {
+      "title": "클러스터 조인/언조인",
+      "omcpCluster": "OpenMCP 클러스터",
+      "joinableCluster": "조인가능한 클러스터"
+    },
+    "worldClusterMap": {
+      "title": "세계 클러스터 분포"
+    },
+    "topology": {
+      "title": "토폴로지",
+      "btn-refresh": "새로고침",
+      "cluster": {
+        "title": "클러스터"
+      },
+      "service": {
+        "title": "서비스"
+      },
+      "region": {
+        "title": "지역"
+      }
+    }
+  },
+  "multipleMetrics": {
+    "title": "다중 메트릭스",
+    "apiServerMetric": {
+      "title": "API 서버 메트릭",
+      "requestsPerSec": "응답시간/초",
+      "latency": "지연시간"
+    },
+    "clusterMetric": {
+      "title": "클러스터 메트릭",
+      "deployment": "deployment",
+      "replicaset": "replicaset",
+      "statefulset": "statefulset",
+      "service": "service",
+      "endpoint": "endpoint",
+      "nodeState": "node 상태",
+      "podState": "pod 상태"
+    },
+    "namespaceMetric": {
+      "title": "네임스페이스 메트릭",
+      "lb-namespace": "이름",
+      "lb-namespaceResourceUsage": "네임스페이스 자원 사용순위",
+      "pvc": "pvc",
+      "deployment": "deployment",
+      "replicaset": "replicaset",
+      "statefulset": "statefulset",
+      "service": "service",
+      "endpoint": "endpoint",
+      "podState": "pod 상태",
+      "networkState": "네트워크 상태",
+      "cpuTop5": "cpu Top5",
+      "memoryTop5": "memory Top5"
+    },
+    "nodeMetric": {
+      "title": "노드 메트릭",
+      "lb-node": "이름",
+      "diskUsage": "디스크 사용량",
+      "networkUsage": "네트워크 사용량",
+      "podState": {
+        "title": "pod 상태"
+      },
+      "cpuUsage": "노드전체 cpu 사용량",
+      "memoryUsage": "노드전체 Memory 사용량"
+    }
+  },
+  "clusters": {
+    "title": "클러스터",
+    "joined": {
+      "title": "가입됨",
+      "btn-unjoin": "가입해제",
+      "pop-unjoin": {
+        "title": "클러스터 가입해제 확인",
+        "context": "해당 클러스터를 가입해제 하시겠습니까?"
+      },
+      "grid": {
+        "name": "이름",
+        "status": "상태",
+        "region": "지역",
+        "zone": "구역",
+        "nodes": "노드수",
+        "cpu": "CPU",
+        "memory": "Memory",
+        "provider": "제공원"
+      },
+      "clusterResourceStatus": "클러스터 자원 현황"
+    },
+    "joinable": {
+      "title": "해지됨",
+      "btn-join": "가입",
+      "pop-join": {
+        "title": "클러스터 가입 확인",
+        "context": "해당 클러스터를 가입 하시겠습니까?"
+      },
+      "grid": {
+        "name": "이름",
+        "serverIp": "서버IP",
+        "provider": "제공원",
+        "region": "지역",
+        "zone": "구역"
+      }
+    },
+    "detail": {
+      "overview": {
+        "name": "클러스터 개요",
+        "basicInfo": {
+          "name": "기본정보",
+          "sub": {
+            "name": "이름",
+            "provider": "제공원",
+            "version": "쿠버네티스 버전",
+            "status": "상태",
+            "region": "지역",
+            "zone": "구역"
+          }
+        },
+        "projectUsage": {
+          "name": "자원사용 Top5 Project",
+          "grid": {
+            "name": "이름",
+            "usage": "사용량"
+          }
+        },
+        "nodeUsage": {
+          "name": "자원사용 Top5 Node",
+          "grid": {
+            "name": "이름",
+            "usage": "사용량"
+          }
+        },
+        "resourceUsage": {
+          "name": "클러스터 자원 사용량"
+        },
+        "kubeStatus": {
+          "name": "쿠버네티스 상태"
+        },
+        "events": {
+          "name": "이벤트",
+          "grid": {
+            "project": "프로젝트",
+            "type": "구분",
+            "reason": "사유",
+            "object": "객체",
+            "message": "내용",
+            "time": "생성일시"
+          }
+        }
+      },
+      "nodes": {},
+      "pods": {}
+    }
+  },
+  "nodes": {
+    "title": "노드",
+    "grid": {
+      "name": "이름",
+      "status": "상태",
+      "cluster": "클러스터",
+      "role": "역할",
+      "version": "시스템 버젼",
+      "cpu": "CPU",
+      "memory": "Memory",
+      "pods": "파드",
+      "provider": "제공원",
+      "region": "지역",
+      "zone": "구역"
+    },
+    "pop-addNode": {
+      "btn-addNode": "노드추가",
+      "title": "노드 추가",
+      "grid": {
+        "title": "클러스터",
+        "name": "이름",
+        "status": "상태",
+        "type": "구분",
+        "cpu": "CPU(%)",
+        "memory": "Memory(%)",
+        "pool": "Pools"
+      },
+      "msg-checkVmName": "vm 이름은 필수입력입니다",
+      "msg-checkVmPassword": "vm 비밀번호는 필수입력입니다",
+      "msg-checkTempImgName": "vm 템플릿 이름은 필수입력입니다",
+      "msg-checkDesiredZero": "희망 노드수는 0보다 커야 합니다.",
+      "msg-dataNotExists1": "데이터가 없습니다",
+      "msg-dataNotExists2": "설정 > 시스템 메뉴에 Public-cloud 설정을 확인하세요",
+      "newVmName": "신규 VM 이름",
+      "newVmName-placeholder": "신규 VM 이름",
+      "newVmPasswd": " 신규 VM 비밀번호",
+      "newVmPasswd-placeholder": " 신규 VM 비밀번호",
+      "templateImgVm": "템플릿 VM 이름",
+      "templateImgVm-placeholder": "템플릿 vm 이름",
+      "desiredNum": "희망 노드수 입력"
+    },
+    "detail": {
+      "title": "노드 개요",
+      "basicInfo": {
+        "title": "기본정보",
+        "sub": {
+          "name": "이름",
+          "status": "상태",
+          "role": "역할",
+          "cluster": "클러스터명",
+          "version": "쿠버네티스",
+          "proxy": "쿠버네티스 Proxy",
+          "ip": "IP",
+          "os": "OS",
+          "docker": "Docker",
+          "createdTime": "생성일시",
+          "provider": "제공원"
+        }
+      },
+      "nodeStatus": {
+        "title": "쿠버네티스 노드 상태",
+        "btn-startNode": "전원 켜기",
+        "btn-stopNode": "전원 끄기",
+        "btn-deleteNode": "노드 삭제",
+        "pop-powerStart": {
+          "title": "노드 시작(전원) 확인",
+          "context": "노드의 전원을 켜시겠습니까?"
+        },
+        "pop-powerOff": {
+          "title": "노드 중지(전원) 확인",
+          "context": "노드의 전원을 끄시겠습니까?"
+        },
+        "pop-deleteNode": {
+          "title": "KVM VM 삭제 확인",
+          "context": "KVM VM을 삭제하시겠습니까? (영구삭제)"
+        }
+      },
+      "resourceUsage": {
+        "title": "노드 자원 사용량"
+      },
+      "powerUsage": {
+        "title": "노드 전원 사용량 (Watt)"
+      }
+    }
+  },
+  "projects": {
+    "title": "프로젝트",
+    "grid": {
+      "name": "이름",
+      "status": "상태",
+      "cluster": "클러스터",
+      "labels": "레이블",
+      "createdTime": "생성일시"
+    },
+    "pop-create": {
+      "btn-create": "프로젝트 생성",
+      "title": "프로젝트 생성",
+      "project": {
+        "title": "프로젝트",
+        "placeHolder": "프로젝트 명"
+      },
+      "cluster": {
+        "title": "클러스터 선택",
+        "grid": {
+          "name": "이름",
+          "status": "상태",
+          "nodes": "노드 수",
+          "cpu": "CPU(%)",
+          "memory": "Memory(%)"
+        }
+      },
+      "msg": {
+        "chk-proejctName": "프로젝트명은 필수 입력사항입니다."
+      }
+    },
+    "detail": {
+      "overview": {
+        "title": "프로젝트 개요",
+        "basicInfo": {
+          "title": "기본정보",
+          "sub": {
+            "name": "Name",
+            "cluster": "Cluster",
+            "labels": "Lasbels",
+            "status": "Status",
+            "uid": "UID",
+            "createdTime": "Created Time"
+          }
+        },
+        "projectResource": {
+          "title": "프로젝트 객체",
+          "grid": {
+            "resource": "Resource",
+            "total": "Total",
+            "abnormal": "Abnormal"
+          }
+        },
+        "usageTop5": {
+          "title": "자원 사용량 Top5",
+          "grid": {
+            "name": "Name",
+            "usage": "Usage"
+          }
+        },
+        "physicalResources": {
+          "title": "Physical Resources"
+        }
+      },
+      "resources": {
+        "title": "자원",
+        "workloads": {
+          "title": "워크로드",
+          "deployments": {
+            "title": "디플로이먼트",
+            "detail": {
+              "title": "디플로이먼트 개요",
+              "basicInfo": {
+                "title": "기본정보"
+              },
+              "replicaStatus": {
+                "title": "레플리카상태"
+              },
+              "pods": {
+                "title": "파드"
+              },
+              "ports": {
+                "title": "포트"
+              },
+              "events": {
+                "title": "이벤트"
+              }
+            }
+          },
+          "statefulsets": {
+            "title": "스테이트풀셋",
+            "detail": {
+              "title": "스테이트풀셋 개요",
+              "basicInfo": {
+                "title": "기본정보"
+              },
+              "pods": {
+                "title": "파드"
+              },
+              "ports": {
+                "title": "포트"
+              },
+              "events": {
+                "title": "이벤트"
+              }
+            },
+            "pop-create": {
+              "btn-create": "스테이트풀셋 생성",
+              "title": "스테이트풀셋 생성"
+            }
+          }
+        },
+        "pods": {
+          "title": "파드"
+        },
+        "services": {
+          "title": "서비스"
+        },
+        "ingress": {
+          "title": "인그레스"
+        }
+      },
+      "volumes": {
+        "title": "볼륨",
+        "grid": {
+          "name": "Name",
+          "status": "Ready",
+          "project": "Project",
+          "capacity": "Capacity",
+          "createdTime": "Created Time"
+        },
+        "detail": {
+          "title": "볼륨 개요",
+          "basicInfo": {
+            "title": "기본정보"
+          },
+          "mountedBy": {
+            "title": "마운트"
+          },
+          "events": {
+            "title": "이벤트"
+          }
+        }
+      },
+      "config": {
+        "title": "Config",
+        "secrets": {
+          "title": "Secrets",
+          "grid": {
+            "name": "Name",
+            "project": "Project",
+            "type": "Type",
+            "createdTime": "Created Time"
+          },
+          "detail": {
+            "title": "Secret 개요",
+            "basicInfo": {
+              "title": "기본정보"
+            },
+            "data": {
+              "title": "데이터"
+            }
+          }
+        },
+        "configmaps": {
+          "title": "ConfigMaps",
+          "grid": {
+            "name": "Name",
+            "project": "Project",
+            "keys": "Keys",
+            "createdTime": "Created Time"
+          },
+          "detail": {
+            "title": "ConfigMap 개요",
+            "basicInfo": {
+              "title": "기본정보"
+            },
+            "data": {
+              "title": "데이터"
+            }
+          }
+        }
+      }
+    }
+  },
+  "deployments": {
+    "title": "디플로이먼트",
+    "tabTitle": {
+      "deployment": "디플로이먼트",
+      "omcpTitle": "OpenMCP 디플로이먼트"
+    },
+    "grid": {
+      "name": "이름",
+      "ready": "준비",
+      "replicas": "레플리카",
+      "cluster": "클러스터",
+      "clusterDp": "클러스터:디플로이먼트 수",
+      "project": "프로젝트",
+      "image": "이미지",
+      "createdTime": "생성일시"
+    },
+    "pop-create": {
+      "btn-create": "디플로이먼트 생성",
+      "title": "디플로이먼트 생성",
+      "omcpTitle": "OpenMCP 디플로이먼트 생성",
+      "targetCluster": "대상 클러스터 선택",
+      "step": {
+        "1": {
+          "title": "기본설정"
+        },
+        "2": {
+          "title": "클러스터 선택"
+        },
+        "3": {
+          "title": "실행"
+        }
+      },
+      "msg": {
+        "chk-name": "'Name'을 입력해주세요",
+        "chk-namespace": "'Namespace'를 입력해주세요",
+        "chk-replicas": "'Replicas'를 입력해주세요",
+        "chk-containerImage": "'Container Image'를 입력해주세요",
+        "chk-containerPort": "'Container Port'를 입력해주세요"
+      }
+    },
+    "pop-delete": {
+      "btn-delete": "디플로이먼트 삭제",
+      "title": "디플로이먼트 삭제",
+      "omcpTitle": "OpenMCP 디플로이먼트 삭제",
+      "context": "디플로이먼트를 삭제하시겠습니까?",
+      "msg": {
+        "chk-selectDeployment": "디플로이먼트를 선택하세요"
+      }
+    },
+    "detail": {
+      "title": "디플로이먼트 개요",
+      "basicInfo": {
+        "title": "기본정보",
+        "name": "이름",
+        "project": "프로젝트",
+        "labels": "레이블",
+        "createdTime": "생성일시",
+        "uid": "UID",
+        "replica": "레플리카",
+        "kind": "종류"
+      },
+      "replicaStatus": {
+        "title": "레플리카 현황",
+        "total": "전체"
+      },
+      "pods": {
+        "title": "파드"
+      },
+      "ports": {
+        "title": "포트",
+        "grid": {
+          "name": "포트 명",
+          "port": "포트",
+          "protocol": "프로토콜"
+        }
+      },
+      "events": {
+        "title": "이벤트",
+        "grid": {
+          "project": "프로젝트",
+          "type": "구분",
+          "reason": "사유",
+          "object": "객체",
+          "message": "내용",
+          "createdTime": "생성일시"
+        }
+      }
+    }
+  },
+  "pods": {
+    "title": "파드",
+    "pod": {
+      "title": "pod",
+      "grid": {
+        "name": "이름",
+        "status": "상태",
+        "cluster": "클러스터",
+        "project": "프로젝트",
+        "podIp": "파드 IP",
+        "node": "노드",
+        "nodeIp": "노드 IP",
+        "createdTime": "생성일시"
+      },
+      "detail": {
+        "title": "파드 개요",
+        "basicInfo": {
+          "title": "기본정보",
+          "name": "이름",
+          "status": "상태",
+          "cluster": "클러스터",
+          "project": "프로젝트",
+          "node": "노드",
+          "totalRestartCount": "재시작횟수",
+          "namespace": "네임스페이스",
+
+          "nodeIp": "노드 IP",
+          "podIp": "파드 IP",
+          "createdTime": "생성일시"
+        },
+        "podStatus": {
+          "title": "Pod 상태",
+          "grid": {
+            "type": "타입",
+            "status": "상태",
+            "updatedTime": "최종수정일시",
+            "reason": "사유",
+            "message": "내용"
+          }
+        },
+        "containers": {
+          "title": "컨테이너",
+          "grid": {
+            "name": "이름",
+            "status": "상태",
+            "restartCount": "재시작 횟수",
+            "port": "포트",
+            "image": "이미지"
+          }
+        },
+        "physicalResources": {
+          "title": "자원현황"
+        },
+        "events": {
+          "title": "이벤트",
+          "grid": {
+            "project": "프로젝트",
+            "type": "구분",
+            "reason": "사유",
+            "object": "객체",
+            "message": "내용",
+            "createdTime": "생성일시"
+          }
+        }
+      }
+    },
+    "hpa": {
+      "title": "hpa",
+      "grid": {
+        "name": "이름",
+        "project": "프로젝트",
+        "cluster": "클러스터",
+        "reference": "참조",
+        "min": "최소",
+        "max": "최대",
+        "replicas": "Replicas"
+      }
+    },
+    "vpa": {
+      "title": "vpa",
+      "grid": {
+        "name": "이름",
+        "project": "프로젝트",
+        "reference": "참조"
+      }
+    }
+  },
+  "network": {
+    "title": "네트워크",
+    "dns": {
+      "title": "DNS",
+      "grid": {
+        "project": "프로젝트",
+        "name": "이름",
+        "dnsName": "DNS",
+        "ip": "IP"
+      },
+      "detail": {
+        "title": ""
+      }
+    },
+    "services": {
+      "title": "서비스",
+      "grid": {
+        "name": "이름",
+        "cluster": "클러스터",
+        "project": "프로젝트",
+        "type": "구분",
+        "clusterIp": "클러스터 IP",
+        "externalIp": "외부 IP",
+        "selector": "선택자",
+        "createdTime": "생성일시"
+      },
+      "pop-delete":{
+        "btn-delete": "서비스 삭제",
+        "title": "서비스 삭제",
+        "context":"서비스를 삭제하시겠습니까?"
+      },
+      "pop-create": {
+        "btn-create": "서비스 생성",
+        "title": "서비스 생성"
+      },
+      "detail": {
+        "title": "서비스 개요",
+        "basicInfo": {
+          "title": "기본정보",
+          "name": "이름",
+          "project": "프로젝트",
+          "type": "타입",
+          "affinity": "세션 Affinity",
+          "selector": "선택자",
+          "cluster": "클러스터",
+          "clusterIp": "클러스터 IP",
+          "externerIp": "외부 IP",
+          "endpoints": "엔드포인트",
+          "createdTime": "생성일시"
+        },
+        "pods": {
+          "title": "파드"
+        },
+        "events": {
+          "title": "이벤트",
+          "grid": {
+            "project": "프로젝트",
+            "type": "구분",
+            "reason": "사유",
+            "object": "객체",
+            "message": "내용",
+            "createdTime": "생성일시"
+          }
+        }
+      }
+    },
+    "ingress": {
+      "title": "인그레스",
+      "grid": {
+        "name": "이름",
+        "cluster": "클러스터",
+        "project": "프로젝트",
+        "address": "IP주소",
+        "createdTime": "생성일시"
+      },
+      "pop-create": {
+        "btn-create": "인그레스 생성",
+        "title": "인그레스 생성"
+      },
+      "detail": {
+        "title": "인그레스 개요",
+        "basicInfo": {
+          "title": "기본정보",
+          "name": "이름",
+          "project": "프로젝트",
+          "address": "주소",
+          "createdTime": "생성일시"
+        },
+        "rules": {
+          "title": "Rules",
+          "grid": {
+            "domain": "프로젝트",
+            "protocol": "프로토콜",
+            "path": "경로",
+            "service": "서비스",
+            "port": "포트",
+            "secret": "Secret"
+          }
+        },
+        "events": {
+          "title": "이벤트",
+          "grid": {
+            "project": "프로젝트",
+            "type": "구분",
+            "reason": "사유",
+            "object": "객체",
+            "message": "내용",
+            "createdTime": "생성일시"
+          }
+        }
+      }
+    },
+    "loadbalancer": {
+      "title": "LB Visualization",
+      "msg": {
+        "noneData": "설정된 URL이 없습니다."
+      }
+    }
+  },
+  "migrations": {
+    "title": "마이그레이션",
+    "migration": {
+      "title": "마이그레이션",
+      "pop-migration": {
+        "btn-migration": "마이그레이션",
+        "title": "디플로이먼트 마이그레이션",
+        "targetDeployments": {
+          "title": "대상 디플로이먼트"
+        },
+        "selectCluster": {
+          "title": "클러스터 선택"
+        },
+        "msg": {
+          "chk-selectDeployment": "디플로이먼트를 선택해주세요",
+          "completedRequest": "마이그레이션 요청이 완료되었습니다. (로그에서 확인)"
+        }
+      }
+    },
+    "migrationLog": {
+      "title": "마이그레이션로그"
+    }
+  },
+  "snapshots": {
+    "title": "스냅샷",
+    "snapshot": {
+      "title": "스냅샷",
+      "pop-snapshot": {
+        "btn-snapshot": "스냅샷 생성",
+        "title": "스냅샷 생성",
+        "snapshotInfo": {
+          "title": "스냅샷 생성 정보"
+        },
+        "msg": {
+          "chk-selectSnapshot": "Please select deployment",
+          "completedRequest": "Snapshot request has been completed"
+        }
+      }
+    },
+    "snapshotLog": {
+      "title": "스냅샷 로그"
+    }
+  },
+  "globalCache": {
+    "title": "글로벌 캐시",
+    "sub":{
+      "history" : "글로벌 캐시 이력",
+      "updateList" : "글로벌 캐시 업데이트 목록"
+    }
+  },
+  "accounts": {
+    "title":"사용자",
+    "account":{
+      "title": "사용자",
+      "pop-craete": {
+        "title": "신규 등록",
+        "btn-create": "사용자 신규 등록"
+      },
+      "pop-changeRole": {
+        "title": "사용자 역할 설정",
+        "btn-change": "역할 설정",
+        "userInfo": {
+          "title": "사용자 정보"
+        },
+        "selectRole": {
+          "title": "역할 선택"
+        },
+        "msg": {
+          "chk-selectAccount": "사용자 계정을 선택해주세요",
+          "chk-selectRole": "역할을 선택해주세요"
+        }
+      }
+    },
+    "userLog":{
+      "title":"사용자 로그"
+    }
+  },
+  "groupRole": {
+    "title": "그룹권한",
+    "pop-create": {
+      "btn-create": "그룹 생성",
+      "title": "신규 그룹 생성",
+      "step": {
+        "1": {
+          "title": "그룹 정보 입력",
+          "groupRoleName": {
+            "title": "그룹권한 이름",
+            "placeholder": "그룹권한 이름"
+          },
+          "description": {
+            "title": "그룹설명",
+            "placeholder": "그룹설명"
+          }
+        },
+        "2": {
+          "title": "클러스터 선택",
+          "selectClusters": {
+            "title": "클러스터 선택",
+            "placeholder": "클러스터를 선택하세요"
+          }
+        },
+        "3": {
+          "title": "그룹 사용자 선택",
+          "selectUsers": {
+            "title": "사용자 선택",
+            "placeholder": "사용자를 선택해 주세요"
+          }
+        }
+      },
+      "msg": {
+        "chk-groupName": "그룹권한 명을 입력해주세요",
+        "chk-description": "그룹권한 설명을 입력해주세요",
+        "chk-clusters": "클러스터를 선택해주세요",
+        "chk-users": "사용자를 선택해주세요"
+      }
+    },
+    "pop-edit": {
+      "btn-edit": "그룹 수정",
+      "title": "그룹 정보 수정",
+      "step": {
+        "1": {
+          "title": "그룹 정보 입력",
+          "groupRoleName": {
+            "title": "그룹권한 이름",
+            "placeholder": "그룹권한 이름"
+          },
+          "description": {
+            "title": "그룹설명",
+            "placeholder": "그룹설명"
+          }
+        },
+        "2": {
+          "title": "클러스터 선택",
+          "selectClusters": {
+            "title": "클러스터 선택",
+            "placeholder": "클러스터를 선택하세요"
+          }
+        },
+        "3": {
+          "title": "그룹 사용자 선택",
+          "selectUsers": {
+            "title": "사용자 선택",
+            "placeholder": "사용자를 선택해 주세요"
+          }
+        }
+      },
+      "msg": {
+        "chk-selectGroup": "그룹권한을 선택해주세요",
+        "chk-groupName": "그룹권한 명을 입력해주세요",
+        "chk-description": "그룹권한 설명을 입력해주세요",
+        "chk-clusters": "클러스터를 선택해주세요",
+        "chk-users": "사용자를 선택해주세요"
+      }
+    },
+    "pop-delete": {
+      "btn-delete": "그룹 삭제",
+      "title": "그룹 삭제",
+      "confirm": {
+        "title": "그룹 삭제 확인",
+        "context": "그룹권한을 삭제하시겠습니까?"
+      },
+      "msg": {
+        "chk-selectGroup": "그룹을 선택해주세요"
+      }
+    }
+  },
+  "policy": {
+    "title": "정책",
+    "omcpPolicy": {
+      "title": "OMCP 정책",
+      "pop-edit": {
+        "btn-edit": "정책 수정",
+        "title": ""
+      }
+    }
+  },
+  "alert": {
+    "title": "알림",
+    "alertLog": {
+      "title": "알림 이력"
+    },
+    "threshold": {
+      "title": "임계설정",
+      "pop-create": {
+        "btn-create": "임계 등록",
+        "title": "노드 임계 등록",
+        "step": {
+          "1": {
+            "title": "클러스터 선택",
+            "selectClusters": {
+              "title": "클러스터 선택",
+              "placeholder": "클러스터를 선택해주세요"
+            }
+          },
+          "2": {
+            "title": "노드(호스트) 선택",
+            "selectNode": {
+              "title": "노드 선택",
+              "placeholder": "노드를 선택해 주세요"
+            }
+          },
+          "3": {
+            "title": "임계값 설정",
+            "cpuThW": "CPU 임계값 (경고)",
+            "cpuThD": "CPU 임계값 (위험)",
+            "memoryThW": "Memory 임계값 (경고)",
+            "memoryThD": "Memory 임계값 (위험)",
+            "storageThW": "Storage 임계값 (경고)",
+            "storageThD": "Storage 임계값 (위험)"
+          }
+        },
+        "msg": {
+          "chk-cluster": "클러스터를 선택해주세요",
+          "chk-node": "노드를 선택해주세요",
+          "chk-cpuW": "CPU(경고) 임계값을 설정해주세요",
+          "chk-cpuD": "CPU(위험) 임계값을 설정해주세요",
+          "chk-memoryW": "Memory(경고) 임계값을 설정해주세요",
+          "chk-memoryD": "Memory(위험) 임계값을 설정해주세요",
+          "chk-storageW": "Storage(경고) 임계값을 설정해주세요",
+          "chk-storageD": "Storage(위험) 임계값을 설정해주세요"
+        }
+      },
+      "pop-edit": {
+        "btn-edit": "임계 수정",
+        "title": "임계 수정",
+        "cpuThW": "CPU 임계값 (경고)",
+        "cpuThD": "CPU 임계값 (위험)",
+        "memoryThW": "Memory 임계값 (경고)",
+        "memoryThD": "Memory 임계값 (위험)",
+        "storageThW": "Storage 임계값 (경고)",
+        "storageThD": "Storage 임계값 (위험)",
+        "msg": {
+          "chk-selectThreshold": "임계설정을 선택해주세요",
+          "chk-cpuW": "CPU(경고) 임계값을 설정해주세요",
+          "chk-cpuD": "CPU(위험) 임계값을 설정해주세요",
+          "chk-memoryW": "Memory(경고) 임계값을 설정해주세요",
+          "chk-memoryD": "Memory(위험) 임계값을 설정해주세요",
+          "chk-storageW": "Storage(경고) 임계값을 설정해주세요",
+          "chk-storageD": "Storage(위험) 임계값을 설정해주세요"
+        }
+      },
+      "pop-delete": {
+        "btn-delete": "임계 삭제",
+        "confirm": {
+          "title": "임계 삭제",
+          "context": "해당 임계설정을 삭제하시겠습니까?"
+        },
+        "msg": {
+          "chk-selectThreshold": "임계설정을 선택해주세요"
+        }
+      }
+    }
+  },
+  "meterings": {
+    "title": "비용관리",
+    "pop-add": {
+      "btn-add": "지역 추가",
+      "title": "지역 추가",
+      "region": "지역",
+      "costDescription": "(시간당 클러스터 비용)"
+    },
+    "pop-edit": {
+      "btn-add": "비용설정 수정",
+      "title": "비용설정 수정",
+      "region": "지역",
+      "clusterCost": "클러스터 비용",
+      "costDescription": "시간당 클러스터 비용",
+      "workerNodeCost": "노드 비용"
+    }
+  },
+  "billing": {
+    "title": "비용이력"
+  },
+  "config": {
+    "title": "시스템",
+    "publicCloudAuth": {
+      "title": "Public Cloud 인증",
+      "eks": {
+        "title": "EKS",
+        "description": "EKS 클러스터 인증구성",
+        "pop-common": {
+          "cluster": "클러스터",
+          "secretKey": "시크릿 키",
+          "accessKey": "액세스 키",
+          "region": "지역",
+          "msg": {
+            "chk-cluster": "클러스터명을 입력해주세요",
+            "chk-secretKey": "시크릿 키를 입력해주세요",
+            "chk-accessKey": "액세스 키를 입력해주세요",
+            "chk-region": "지역을 입력해주세요"
+          }
+        },
+        "pop-new": {
+          "btn-open": "신규",
+          "title": "EKS 클러스터 인증구성 추가"
+        },
+        "pop-edit": {
+          "btn-open": "수정",
+          "title": "EKS 클러스터 인증구성 수정",
+          "msg": {
+            "chk-selectAuth": "인증구성 데이터를 선택해주세요"
+          }
+        },
+        "pop-delete": {
+          "btn-open": "삭제",
+          "title": "EKS 클러스터 인증구성 삭제",
+          "context": "선택한 EKS 클러스터 인증구성을 삭제하시겠습니까?",
+          "msg": {
+            "chk-selectAuth": "인증구성 데이터를 선택해주세요"
+          }
+        }
+      },
+      "gke": {
+        "title": "GKE",
+        "description": "GKE 클러스터 인증구성",
+        "pop-common": {
+          "cluster": "클러스터",
+          "credentialType": "자격증명 유형",
+          "clientEmail": "클라이언트 이메일",
+          "projectId": "프로젝트 ID",
+          "privateKey": "개인 키",
+          "msg": {
+            "chk-cluster": "클러스터명을 입력해주세요",
+            "chk-credentialType": "자격증명 유형을 입력해주세요",
+            "chk-clientEmail": "클라이언트 이메일을 입력해주세요",
+            "chk-projectId": "프로젝트 ID를 입력해주세요",
+            "chk-privateKey": "개인 키를 입력해주세요"
+          }
+        },
+        "pop-new": {
+          "btn-open": "신규",
+          "title": "GKE 클러스터 인증구성 추가",
+          "msg": {
+            "chk-selectAuth": "인증구성 데이터를 선택해주세요"
+          }
+        },
+        "pop-edit": {
+          "btn-open": "수정",
+          "title": "GKE 클러스터 인증구성 수정",
+          "msg": {
+            "chk-selectAuth": "인증구성 데이터를 선택해주세요"
+          }
+        },
+        "pop-delete": {
+          "btn-open": "삭제",
+          "title": "GKE 클러스터 인증구성 삭제",
+          "context": "선택한 GKE 클러스터 인증구성을 삭제하시겠습니까?",
+          "msg": {
+            "chk-selectAuth": "인증구성 데이터를 선택해주세요"
+          }
+        }
+      },
+      "aks": {
+        "title": "AKS",
+        "description": "AKS 클러스터 인증구성",
+        "pop-common": {
+          "cluster": "클러스터",
+          "clusterId": "클러스터 ID",
+          "clientSec": "클라이언트 Sec",
+          "tenantId": "Tenant ID",
+          "subId": "Sub ID",
+          "msg": {
+            "chk-cluster": "클러스터명을 입력해주세요",
+            "chk-clusterId": "클라이언트 ID를 입력해주세요",
+            "chk-clientSec": "클라이언트 Sec를 입력해주세요",
+            "chk-tenantId": "Tenant ID를 입력해주세요",
+            "chk-subId": "Sub ID를 입력해주세요"
+          }
+        },
+        "pop-new": {
+          "btn-open": "신규",
+          "title": "AKS 클러스터 인증구성 추가",
+          "msg": {
+            "chk-selectAuth": "인증구성 데이터를 선택해주세요"
+          }
+        },
+        "pop-edit": {
+          "btn-open": "수정",
+          "title": "AKS 클러스터 인증구성 수정",
+          "msg": {
+            "chk-selectAuth": "인증구성 데이터를 선택해주세요"
+          }
+        },
+        "pop-delete": {
+          "btn-open": "삭제",
+          "title": "AKS 클러스터 인증구성 삭제",
+          "context": "선택한 AKS 클러스터 인증구성을 삭제하시겠습니까?",
+          "msg": {
+            "chk-selectAuth": "인증구성 데이터를 선택해주세요"
+          }
+        }
+      },
+      "kvm": {
+        "title": "KVM",
+        "description": "KVM 클러스터 인증구성",
+        "pop-common": {
+          "cluster": "클러스터",
+          "kvmAgentUrl": "KVM Agent URL",
+          "kvmAgentPort": "KVM Agent Port",
+          "masterVmName": "클러스터 마스터VM",
+          "masterVmPwd": "클러스터 마스터VM 비밀번호",
+          "msg": {
+            "chk-cluster": "클러스터명을 입력해주세요",
+            "chk-kvmAgentUrl": "KVM Agent URL을 입력해주세요",
+            "chk-kvmAgentPort": "KVM Agent Port를 입력해주세요",
+            "chk-masterVmName": "클러스터 마스터VM명을 입력해주세요",
+            "chk-masterVmPwd": "클러스터 마스터VM 비밀번호를 입력해주세요"
+          }
+        },
+        "pop-new": {
+          "btn-open": "신규",
+          "title": "KVM 클러스터 인증구성 추가",
+          "msg": {
+            "chk-selectAuth": "인증구성 데이터를 선택해주세요"
+          }
+        },
+        "pop-edit": {
+          "btn-open": "수정",
+          "title": "KVM 클러스터 인증구성 수정",
+          "msg": {
+            "chk-selectAuth": "인증구성 데이터를 선택해주세요"
+          }
+        },
+        "pop-delete": {
+          "btn-open": "삭제",
+          "title": "KVM 클러스터 인증구성 삭제",
+          "context": "선택한 KVM 클러스터 인증구성을 삭제하시겠습니까?",
+          "msg": {
+            "chk-selectAuth": "인증구성 데이터를 선택해주세요"
+          }
+        }
+      }
+    },
+    "dashboardConfig": {
+      "title": "Dashboard 설정",
+      "refreshCycle": {
+        "title": "갱신 주기(초)"
+      },
+      "powerUsageRange": {
+        "title": "전력사용 효율 범주(watt)"
+      }
+    }
+  }
+}
