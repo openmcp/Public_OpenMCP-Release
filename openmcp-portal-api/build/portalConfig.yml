@@ -1,8 +1,0 @@
-portal:
-    openmcpurl: 115.94.141.62
-    port:       8080
-    kubeconfig: config   
-    openmcpclustername : openmcp
-    # openmcpurl: 192.168.0.152
-    # port:       30000
-    
