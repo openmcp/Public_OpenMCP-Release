@@ -1,0 +1,11 @@
+postgresql:
+  user: postgres
+  password: postgres123
+  nodeport: 30901
+  url: 192.168.0.152
+  dbname: portal-controller
+portalapi :
+  apiurl : http://192.168.0.152:30902
+
+  
+
