@@ -29,11 +29,10 @@ spec:
               name: zookeeper
               ports:
                 - containerPort: 2181
-              #resources:
-              #  requests:
-              #    memory: 1Gi
-              #    cpu: 1
-              #    ephemeral-storage: 1Gi
+              resources:
+                requests:
+                  memory: 100Mi
+                  cpu: 100m
               volumeMounts:
                 - mountPath: /tmp
                   name: zookeeper-tmpfs0

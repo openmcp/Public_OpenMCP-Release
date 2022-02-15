@@ -37,6 +37,9 @@ type AnalyticEngineStruct struct {
 	ClusterPodResourceScore map[string]map[string]map[string]float64 // ClusterPodResourceScore[clusterName][NS]["Pod"] = value
 	//ClusterSVCResourceScore map[string]map[string]map[string]float64 // ClusterSVCResourceScore[clusterName][NS]["SVC"] = value
 	GeoScore []float64 // 0: RegionZoneMatchedScore, 1: OnlyRegionMatcehdScore, 2: NoRegionZoneMatchedScore
+
+	ClusterManager      *clusterManager.ClusterManager
+
 	mutex    *sync.Mutex
 }
 
@@ -50,7 +53,7 @@ type NetworkInfo struct {
 	next_tx int64
 }
 
-func NewAnalyticEngine(INFLUX_IP, INFLUX_PORT, INFLUX_USERNAME, INFLUX_PASSWORD string) *AnalyticEngineStruct {
+func NewAnalyticEngine(cm *clusterManager.ClusterManager, INFLUX_IP, INFLUX_PORT, INFLUX_USERNAME, INFLUX_PASSWORD string) *AnalyticEngineStruct {
 	omcplog.V(4).Info("Func NewAnalyticEngine Called")
 	fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 	fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -66,6 +69,7 @@ func NewAnalyticEngine(INFLUX_IP, INFLUX_PORT, INFLUX_USERNAME, INFLUX_PASSWORD 
 	ae.ClusterPodResourceScore = make(map[string]map[string]map[string]float64)
 	//ae.ClusterSVCResourceScore = make(map[string]map[string]map[string]float64)
 	ae.GeoScore = []float64{-1, -1, -1}
+	ae.ClusterManager = cm
 	ae.mutex = &sync.Mutex{}
 
 	return ae
@@ -1154,6 +1158,87 @@ func (ae *AnalyticEngineStruct) AnalyzeCPADeployment(cDeploy *protobuf.CPADeploy
 	omcplog.V(4).Info("Func AnalyzeCPADeployment Called")
 	//** request 없으면 CPA 불가
 
+	var scalein_cpu float64
+	var scalein_mem float64
+	var scaleout_cpu float64
+	var scaleout_mem float64
+	var relaxedcluster_cpu float64
+	var relaxedcluster_mem float64
+
+	ohasList, olist_err := ae.ClusterManager.Crd_client.OpenMCPHybridAutoScaler(cDeploy.Namespace).List(metav1.ListOptions{})
+
+	if olist_err == nil {
+
+		for _, ohas := range ohasList.Items {
+			if ohas.Spec.ScalingOptions.CpaTemplate.ScaleTargetRef.Name == cDeploy.Name {
+				ohasInstance, ohas_err := ae.ClusterManager.Crd_client.OpenMCPHybridAutoScaler(cDeploy.Namespace).Get(ohas.Name, metav1.GetOptions{})
+
+				if ohas_err == nil {
+					scalein := ohasInstance.Spec.ScalingOptions.CpaTemplate.ScaleInCriterion
+					for _, value := range scalein {
+						if value.Kind == "cpu" {
+							scalein_cpu = value.TargetUtilization
+						}
+						if value.Kind == "memory" {
+							scalein_mem = value.TargetUtilization
+						}
+					}
+
+					scaleout := ohasInstance.Spec.ScalingOptions.CpaTemplate.ScaleOutCriterion
+					for _, value := range scaleout {
+						if value.Kind == "cpu" {
+							scaleout_cpu = value.TargetUtilization
+						}
+						if value.Kind == "memory" {
+							scaleout_mem = value.TargetUtilization
+						}
+					}
+
+					relaxedcluster := ohasInstance.Spec.ScalingOptions.CpaTemplate.SelectRelaxedClusterCriterion
+					for _, value := range relaxedcluster {
+						if value.Kind == "cpu" {
+							relaxedcluster_cpu = value.TargetUtilization
+						}
+						if value.Kind == "memory" {
+							relaxedcluster_mem = value.TargetUtilization
+						}
+					}
+
+					if scalein_cpu == 0 {
+						omcplog.V(1).Info("! CPU Criterion for Scale-In is Empty. Set Default Value [ 5 ]")
+						scalein_cpu = 5
+					}
+					if scalein_mem == 0 {
+						omcplog.V(1).Info("! Memory Criterion for Scale-In is Empty. Set Default Value [ 5 ]")
+						scalein_mem = 5
+					}
+					if scaleout_cpu == 0 {
+						omcplog.V(1).Info("! CPU Criterion for Scale-Out is Empty. Set Default Value [ 60 ]")
+						scaleout_cpu = 60
+					}
+					if scaleout_mem == 0 {
+						omcplog.V(1).Info("! Memory Criterion for Scale-Out is Empty. Set Default Value [ 60 ]")
+						scaleout_mem = 60
+					}
+					if relaxedcluster_cpu == 0 {
+						omcplog.V(1).Info("! CPU Criterion for Select-RelaxedCluster is Empty. Set Default Value [ 20 ]")
+						relaxedcluster_cpu = 20
+					}
+					if relaxedcluster_mem == 0 {
+						omcplog.V(1).Info("! Memory Criterion for Select-RelaxedCluster is Empty. Set Default Value [ 20 ]")
+						relaxedcluster_mem = 20
+					}
+
+
+				} else {
+					omcplog.V(0).Info("Error OpenMCPHAS : ", ohas_err)
+				}
+
+			}
+		}
+	}else {
+		omcplog.V(0).Info("Error OpenMCPHASList : ", olist_err)
+	}
 	//cpu, memory, fs 문제면 cluster 내
 	//cpuusage/cpurequest > 60 or memusage/memrequest > 60 이면 Warning
 	//노드 용량이 넉넉하면 'scale-out'
@@ -1215,26 +1300,26 @@ func (ae *AnalyticEngineStruct) AnalyzeCPADeployment(cDeploy *protobuf.CPADeploy
 	omcplog.V(1).Info("========================================================")
 	omcplog.V(1).Info("")
 
-	if cpuUsage/float64(cpuRequestInt64)*100 > 60 {
+	if cpuUsage/float64(cpuRequestInt64)*100 > scaleout_cpu {
 		if ae.ClusterResourceUsage[cluster]["cpu"] < 80 {
 			omcplog.V(1).Info("CPU Warning! -> Scale-out")
 			return "Warning-cpu", "Scale-out", 0
 		} else {
 			omcplog.V(1).Info("CPU Warning! -> Can't Scale-out (No Capacity)")
 		}
-	} else if memUsage/float64(memRequestInt64)*100 > 60 {
+	} else if memUsage/float64(memRequestInt64)*100 > scaleout_mem {
 		if ae.ClusterResourceUsage[cluster]["memory"] < 80 {
 			omcplog.V(1).Info("Memory Warning! -> Scale-out")
 			return "Warning-memory", "Scale-out", 0
 		} else {
 			omcplog.V(1).Info("Memory Warning! -> Can't Scale-out (No Capacity)")
 		}
-	} else if cpuUsage/float64(cpuRequestInt64)*100 < 5 && memUsage/float64(memRequestInt64)*100 < 5 {
+	} else if cpuUsage/float64(cpuRequestInt64)*100 < scalein_cpu && memUsage/float64(memRequestInt64)*100 < scalein_mem {
 		omcplog.V(1).Info("CPU/Memory Warning! -> Scale-in")
 		return "Warning-cpu/memory", "Scale-in", 0
 	}
 
-	if cpuUsage/float64(cpuRequestInt64)*100 < 20 && memUsage/float64(memRequestInt64)*100 < 20 {
+	if cpuUsage/float64(cpuRequestInt64)*100 < relaxedcluster_cpu && memUsage/float64(memRequestInt64)*100 < relaxedcluster_mem {
 		return "", "", 1
 	}
 
@@ -1285,6 +1370,7 @@ func (ae *AnalyticEngineStruct) AnalyzeCPADeployment(cDeploy *protobuf.CPADeploy
 				return cluster, "Warning-memory", "Scale-in"
 			}
 	*/
+
 
 	return "", "", 0
 

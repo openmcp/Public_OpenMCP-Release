@@ -587,7 +587,7 @@ func (sched *OpenMCPScheduler) ScheduleOne(newPod *ketiresource.Pod, replicas in
 	omcplog.V(2).Infof("     Existing_cluster [%v]", *sched.origin_clusternames)
 	omcplog.V(2).Infof("     FilteredResultMap [%v]", PrintFilterString(filteredCluster))
 	selectedCluster := sched.Framework.RunScorePluginsOnClusters(newPod, filteredCluster, sched.ClusterInfos, replicas)
-	
+
 	omcplog.V(2).Infof("     SelectedCluster [%v]", selectedCluster)
 	omcplog.V(2).Infof("     Scoring Time [%v]", time.Since(startTime))
 

@@ -1,0 +1,585 @@
+#0_deploy/ns/smartcity
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPNamespace
+metadata:
+  name: smartcity
+  labels:
+    istio-injection: enabled
+---
+#1_deploy/opv/post-pv-claim0
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPersistentVolume
+metadata:
+  name: post-pv-claim0
+spec:
+  template:
+    spec:
+      capacity:
+        storage: 2Gi
+      storageClassName: post
+      accessModes:
+        - ReadWriteMany
+      persistentVolumeReclaimPolicy: Retain
+      nfs:
+        path: /k8s_smartcity/openmcp/sql
+        server: "115.94.141.62"
+        readOnly: false
+---
+#1_deploy/opvc/post-pvc-claim0
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPersistentVolumeClaim
+metadata:
+  name: post-pvc-claim0
+  namespace: smartcity
+spec:
+  template:
+    spec:
+      accessModes:
+        - ReadWriteMany
+      storageClassName: post
+      resources:
+        requests:
+          storage: 2Gi
+---
+#1_deploy/odeploy/postgis
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: postgis
+  namespace: smartcity
+spec:
+  replicas: 1
+  clusters:
+    - cluster05
+    - cluster10
+    - cluster12
+    - cluster17
+  labels:
+    app: postgis
+  template:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regcred
+          containers:
+            - env:
+                - name: POSTGRES_DBNAME
+                  value: smart_city
+                - name: POSTGRES_PASS
+                  value: postgres
+                - name: POSTGRES_USER
+                  value: postgres
+              image: kartoza/postgis:11.0-2.5
+              name: postgis4
+              ports:
+                - containerPort: 5432
+              volumeMounts:
+                - mountPath: /docker-entrypoint-initdb.d/setup-db.sql
+                  name: postgis-claim0
+                  subPath: core-setup-db.sql
+          restartPolicy: Always
+          volumes:
+            - name: postgis-claim0
+              persistentVolumeClaim:
+                claimName: post-pvc-claim0
+---
+#1_deploy/osvc/postgis
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: postgis
+  namespace: smartcity
+  labels:
+    app: postgis
+spec:
+  template:
+    spec:
+      ports:
+        - name: "5432"
+          port: 5432
+          targetPort: 5432
+      selector:
+        app: postgis
+---
+#1_deploy/odeploy/postgres
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: postgres
+  namespace: smartcity
+spec:
+  clusters:
+    - cluster05
+    - cluster10
+    - cluster12
+    - cluster17
+  replicas: 1
+  labels:
+    app: postgres
+  template:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regcred
+          containers:
+            - env:
+                - name: POSTGRES_DBNAME
+                  value: postgres
+                - name: POSTGRES_PASSWORD
+                  value: pine1234
+                - name: POSTGRES_USER
+                  value: postgres
+                - name: TZ
+                  value: Asia/Seoul
+              image: postgis/postgis:11-2.5-alpine
+              name: smartcitydb
+              ports:
+                - containerPort: 5432
+              volumeMounts:
+                - mountPath: /docker-entrypoint-initdb.d/init.sql
+                  name: postgres-claim0
+                  subPath: ingest-setup-db.sql
+          hostname: postgres
+          volumes:
+            - name: postgres-claim0
+              persistentVolumeClaim:
+                claimName: post-pvc-claim0
+---
+#1_deploy/osvc/postgis
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: postgres
+  namespace: smartcity
+  labels:
+    app: postgres
+spec:
+  template:
+    spec:
+      ports:
+        - name: "5432"
+          port: 5432
+          targetPort: 5432
+      selector:
+        app: postgres
+---
+#1_deploy/odeploy/zookeeper
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: zookeeper
+  namespace: smartcity
+spec:
+  replicas: 1
+  clusters:
+    - cluster05
+    - cluster10
+    - cluster12
+    - cluster17
+  labels:
+    app: zookeeper
+  template:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regcred
+          containers:
+            - env:
+                - name: ZOOKEEPER_CLIENT_PORT
+                  value: "2181"
+                - name: ZOOKEEPER_TICK_TIME
+                  value: "2000"
+              image: confluentinc/cp-zookeeper:6.0.0
+              name: zookeeper
+              ports:
+                - containerPort: 2181
+              volumeMounts:
+                - mountPath: /tmp
+                  name: zookeeper-tmpfs0
+          hostname: zookeeper
+          restartPolicy: Always
+          volumes:
+            - emptyDir:
+                medium: Memory
+              name: zookeeper-tmpfs0
+---
+#1_deploy/osvc/zookeeper
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: zookeeper
+  namespace: smartcity
+  labels:
+    app: zookeeper
+spec:
+  template:
+    spec:
+      ports:
+        - name: "2181"
+          port: 2181
+          targetPort: 2181
+      selector:
+        app: zookeeper
+---
+#2_deploy/odeploy/broker
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: broker
+  namespace: smartcity
+spec:
+  replicas: 1
+  clusters:
+    - cluster05
+    - cluster10
+    - cluster12
+    - cluster17
+  labels:
+    app: broker
+  template:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regcred
+          containers:
+            - env:
+                - name: KAFKA_ADVERTISED_LISTENERS
+                  value: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+                - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
+                  value: "true"
+                - name: KAFKA_BROKER_ID
+                  value: "1"
+                - name: KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS
+                  value: "0"
+                - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+                  value: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+                - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+                  value: "1"
+                - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
+                  value: "1"
+                - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+                  value: "1"
+                - name: KAFKA_ZOOKEEPER_CONNECT
+                  value: zookeeper:2181
+              image: confluentinc/cp-kafka:6.0.0
+              name: broker
+              ports:
+                - containerPort: 29092
+                - containerPort: 9092
+          hostname: broker
+          restartPolicy: Always
+---
+#2_deploy/osvc/broker
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: broker
+  namespace: smartcity
+  labels:
+    app: broker
+spec:
+  template:
+    spec:
+      ports:
+        - name: "29092"
+          port: 29092
+          targetPort: 29092
+        - name: "9092"
+          port: 9092
+          targetPort: 9092
+      selector:
+        app: broker
+---
+#3_deploy/odeploy/rest-proxy
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: rest-proxy
+  namespace: smartcity
+spec:
+  replicas: 1
+  clusters:
+    - cluster05
+    - cluster10
+    - cluster12
+    - cluster17
+  labels:
+    app: rest-proxy
+  template:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regcred
+          containers:
+            - env:
+                - name: KAFKA_REST_BOOTSTRAP_SERVERS
+                  value: broker:29092
+                - name: KAFKA_REST_HOST_NAME
+                  value: rest-proxy
+                - name: KAFKA_REST_LISTENERS
+                  value: http://0.0.0.0:8082
+              image: confluentinc/cp-kafka-rest:6.0.0
+              name: rest-proxy
+              ports:
+                - containerPort: 8082
+          hostname: rest-proxy
+          restartPolicy: Always
+---
+#3_deploy/osvc/rest-proxy
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: rest-proxy
+  namespace: smartcity
+  labels:
+    app: rest-proxy
+spec:
+  template:
+    spec:
+      ports:
+        - name: "8082"
+          port: 8082
+          targetPort: 8082
+      selector:
+        app: rest-proxy
+---
+#4_deploy/odeploy/data-manager
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: data-manager
+  namespace: smartcity
+spec:
+  replicas: 1
+  clusters:
+    - cluster05
+    - cluster10
+    - cluster12
+    - cluster17
+  labels:
+    app: data-manager
+  template:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regcred
+          containers:
+            - env:
+                - name: DATASOURCE_SECONDARY_URL
+                  value: jdbc:postgresql://postgis:5432/smart_city
+                - name: DATASOURCE_URL
+                  value: jdbc:postgresql://postgis:5432/smart_city
+                - name: KAFKA_URL
+                  value: broker:29092
+                - name: REST_PROXY_URL
+                  value: http://rest-proxy:8082
+                - name: SECURITY_USEYN
+                  value: "N"
+              image: ketidevit2/data-manager:0.0.1
+              imagePullPolicy: Always
+              name: data-manager
+              ports:
+                - containerPort: 8080
+              resources: {}
+          restartPolicy: Always
+---
+#4_deploy/osvc/data-manager
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: data-manager
+  namespace: smartcity
+  labels:
+    app: data-manager
+spec:
+  template:
+    spec:
+      ports:
+        - name: "8080"
+          port: 8080
+          targetPort: 8080
+      selector:
+        app: data-manager
+---
+#4_deploy/odeploy/data-service-broker
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: data-service-broker
+  namespace: smartcity
+spec:
+  replicas: 1
+  clusters:
+    - cluster05
+    - cluster10
+    - cluster12
+    - cluster17
+  labels:
+    app: data-service-broker
+  template:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regcred
+          containers:
+            - env:
+                - name: DATASOURCE_SECONDARY_URL
+                  value: jdbc:postgresql://postgis:5432/smart_city
+                - name: DATASOURCE_URL
+                  value: jdbc:postgresql://postgis:5432/smart_city
+                - name: KAFKA_URL
+                  value: broker:29092
+                - name: SECURITY_USEYN
+                  value: "N"
+              image: ketidevit2/data-service-broker:0.0.1
+              imagePullPolicy: Always
+              name: data-service-broker
+              ports:
+                - containerPort: 8082
+              resources: {}
+          restartPolicy: Always
+---
+#4_deploy/osvc/data-service-broker
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: data-service-broker
+  namespace: smartcity
+  labels:
+    app: data-service-broker
+spec:
+  template:
+    spec:
+      ports:
+        - name: "8082"
+          port: 8082
+          targetPort: 8082
+      selector:
+        app: data-service-broker
+---
+#4_deploy/odeploy/datacore-ui
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: datacore-ui
+  namespace: smartcity
+spec:
+  replicas: 1
+  clusters:
+    - cluster05
+    - cluster10
+    - cluster12
+    - cluster17
+  labels:
+    app: datacore-ui
+  template:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regcred
+          containers:
+            - env:
+                - name: DATAMANAGER_URL
+                  value: http://data-manager:8080
+                - name: DATASOURCE_SECONDARY_URL
+                  value: jdbc:postgresql://postgis:5432/smart_city
+                - name: DATASOURCE_URL
+                  value: jdbc:postgresql://postgis:5432/smart_city
+                - name: INGESTINTERFACE_URL
+                  value: http://ingest-interface:8081
+              image: ketidevit2/datacore-ui:0.0.1
+              imagePullPolicy: Always
+              name: datacore-ui
+              ports:
+                - containerPort: 8080
+              resources: {}
+          restartPolicy: Always
+---
+#4_deploy/osvc/datacore-ui
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: datacore-ui
+  namespace: smartcity
+  labels:
+    app: datacore-ui
+spec:
+  template:
+    spec:
+      ports:
+        - name: "80"
+          port: 80
+          targetPort: 8080
+      selector:
+        app: datacore-ui
+---
+#4_deploy/odeploy/ingest-interface
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: ingest-interface
+  namespace: smartcity
+spec:
+  replicas: 1
+  clusters:
+    - cluster05
+    - cluster10
+    - cluster12
+    - cluster17
+  labels:
+    app: ingest-interface
+  template:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regcred
+          containers:
+            - env:
+                - name: DATASOURCE_SECONDARY_URL
+                  value: jdbc:postgresql://postgis:5432/smart_city
+                - name: DATASOURCE_URL
+                  value: jdbc:postgresql://postgis:5432/smart_city
+                - name: KAFKA_URL
+                  value: broker:29092
+                - name: SECURITY_USEYN
+                  value: "N"
+                - name: SPRING_PROFILES_ACTIVE
+                  value: local
+              image: ketidevit2/ingest-interface:0.0.1
+              imagePullPolicy: Always
+              name: ingest-interface
+              ports:
+                - containerPort: 8081
+                - containerPort: 443
+              resources: {}
+          restartPolicy: Always
+---
+#4_deploy/osvc/ingest-interface
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: ingest-interface
+  namespace: smartcity
+  labels:
+    app: ingest-interface
+spec:
+  template:
+    spec:
+      ports:
+        - name: "8081"
+          port: 8081
+          targetPort: 8081
+        - name: "443"
+          port: 443
+          targetPort: 443
+      selector:
+        app: ingest-interface

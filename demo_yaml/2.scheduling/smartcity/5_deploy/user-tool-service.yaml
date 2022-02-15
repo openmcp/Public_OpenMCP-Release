@@ -13,6 +13,6 @@ spec:
         - name: "8083"
           port: 8083
           targetPort: 38081
-          nodePort: 30036
+          #nodePort: 30036
       selector:
         app: user-tool

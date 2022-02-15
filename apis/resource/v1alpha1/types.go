@@ -279,6 +279,14 @@ type CpaTemplate struct {
 	ScaleTargetRef ScaleTargetRef `json:"scaleTargetRef,omitempty" protobuf:"bytes,1,opt,name=scaletargetref"`
 	MinReplicas    int32          `json:"minReplicas,omitempty" protobuf:"varint,2,opt,name=minreplicas"`
 	MaxReplicas    int32          `json:"maxReplicas,omitempty" protobuf:"varint,3,opt,name=maxreplicas"`
+	ScaleInCriterion []ScalingCriterion                 `json:"scaleInCriterion,omitempty" protobuf:"varint,4,opt,name=scaleincriterion"`
+	ScaleOutCriterion []ScalingCriterion                `json:"scaleOutCriterion,omitempty" protobuf:"varint,5,opt,name=scaleoutcriterion"`
+	SelectRelaxedClusterCriterion []ScalingCriterion    `json:"selectRelaxedClusterCriterion,omitempty" protobuf:"varint,6,opt,name=selectrelaxedclustercriterion"`
+}
+
+type ScalingCriterion struct {
+	Kind string             `json:"kind,omitempty" protobuf:"bytes,1,opt,name=kind"`
+	TargetUtilization float64 `json:"targetUtilization,omitempty" protobuf:"bytes,2,opt,name=targetutilization"`
 }
 
 type ScaleTargetRef struct {

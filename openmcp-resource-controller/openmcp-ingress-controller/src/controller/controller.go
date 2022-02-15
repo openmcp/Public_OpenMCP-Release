@@ -163,7 +163,7 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 		if err != nil {
 			return reconcile.Result{}, err
 		}
-		err = cm.Host_client.UpdateStatus(context.Background(), foundIngress)
+		err = cm.Host_client.UpdateStatus(context.Background(), host_ing)
 		if err != nil {
 			return reconcile.Result{}, err
 		}
@@ -257,20 +257,17 @@ func (r *reconciler) createIngress(req reconcile.Request, cm *clusterManager.Clu
 		if err != nil && errors.IsAlreadyExists(err) {
 			err = cm.Host_client.Update(context.Background(), host_ing)
 			if err != nil {
-				omcplog.V(2).Info("Host ing Update Err")
+				omcplog.V(0).Info("Host ing Update Err", err)
 				return err
 			}
 		} else if err != nil {
-			omcplog.V(2).Info("Host ing Create Err")
+			omcplog.V(0).Info("Host ing Create Err", err)
 			return err
 		}
 
-		host_ing := &extv1b1.Ingress{}
-		err := cm.Host_client.Get(context.TODO(), host_ing, instance.Namespace, instance.Name)
-
 		err = cm.Host_client.UpdateStatus(context.Background(), host_ing)
 		if err != nil {
-			omcplog.V(2).Info("Host ing Create Err")
+			omcplog.V(0).Info("Host ing Status Update Err", err)
 			return err
 		}
 	}
@@ -368,6 +365,11 @@ func (r *reconciler) updateIngress(req reconcile.Request, cm *clusterManager.Clu
 			if err != nil {
 				return err
 			}
+		}
+		err := cm.Host_client.UpdateStatus(context.Background(), host_ing)
+		if err != nil {
+			omcplog.V(0).Info("Host ing Status Update Err", err)
+			return err
 		}
 	} else {
 		if host_ing_get_err == nil { // find Ingress

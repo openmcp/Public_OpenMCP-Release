@@ -1,0 +1,100 @@
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: web-odoo
+  namespace: odoo
+  annotations:
+    k8s.kuboard.cn/workload: web-odoo
+    deployment.kubernetes.io/revision: '5'
+    k8s.eip.work/displayName: web-odoo
+    k8s.eip.work/ingress: 'true'
+    k8s.eip.work/service: ClusterIP
+    k8s.eip.work/workload: web-odoo
+    k8s.kuboard.cn/ingress: 'true'
+    k8s.kuboard.cn/service: ClusterIP
+spec:
+  replicas: 6
+  clusters:
+    - cluster01
+    - cluster02
+    - cluster03
+  labels:
+    app: web-odoo
+    k8s.eip.work/layer: web
+    k8s.eip.work/name: web-odoo
+  template:
+    spec:
+      selector:
+        matchLabels:
+          k8s.eip.work/layer: web
+          k8s.eip.work/name: web-odoo
+      revisionHistoryLimit: 10
+      template:
+        metadata:
+          labels:
+            k8s.eip.work/layer: web
+            k8s.eip.work/name: web-odoo
+        spec:
+          securityContext:
+            seLinuxOptions: {}
+          imagePullSecrets: []
+          restartPolicy: Always
+          initContainers: []
+          containers:
+            - image: 'odoo:14.0'
+              imagePullPolicy: Always
+              name: web-odoo
+              volumeMounts: []
+              resources:
+                limits:
+                requests:
+              env:
+                - name: HOST
+                  value: db-postgres
+                - name: USER
+                  value: keti
+                - name: PASSWORD
+                  value: ketilinux
+              lifecycle: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          volumes: []
+          dnsPolicy: ClusterFirst
+          dnsConfig: {}
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+      progressDeadlineSeconds: 600
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 25%
+          maxSurge: 25%
+---
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: web-odoo
+  namespace: odoo
+  annotations:
+    k8s.kuboard.cn/workload: web-odoo
+    k8s.eip.work/displayName: web-odoo
+    k8s.eip.work/workload: web-odoo
+  labels:
+    app: web-odoo
+    k8s.eip.work/layer: web
+    k8s.eip.work/name: web-odoo
+spec:
+  template:
+    spec:
+      selector:
+        app: web-odoo
+        k8s.eip.work/layer: web
+        k8s.eip.work/name: web-odoo
+      type: LoadBalancer
+      ports:
+        - name: mawfrp
+          port: 8069
+          targetPort: 8069
+          protocol: TCP
+      sessionAffinity: None
+

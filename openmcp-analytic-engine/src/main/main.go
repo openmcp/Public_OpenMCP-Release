@@ -91,7 +91,7 @@ func AnalyticEngine(cm *clusterManager.ClusterManager, quit, quitok chan bool) {
 	INFLUX_PASSWORD := os.Getenv("INFLUX_PASSWORD")
 
 	//ae := analyticEngine.NewAnalyticEngine()
-	ae := analyticEngine.NewAnalyticEngine(INFLUX_IP, INFLUX_PORT, INFLUX_USERNAME, INFLUX_PASSWORD)
+	ae := analyticEngine.NewAnalyticEngine(cm, INFLUX_IP, INFLUX_PORT, INFLUX_USERNAME, INFLUX_PASSWORD)
 
 	go ae.CalcResourceScore(cm, quit, quitok)
 

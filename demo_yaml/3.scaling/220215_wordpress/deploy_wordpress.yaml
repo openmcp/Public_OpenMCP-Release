@@ -1,0 +1,362 @@
+#opolicy/scheduling-policy
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPolicy
+metadata:
+  name: scheduling-policy
+  namespace: openmcp
+spec:
+  template:
+    spec:
+      targetController:
+        kind: OpenMCPSchduler
+      policies:
+        - type: algorithm
+          value:
+            - RR
+  rangeOfApplication: All
+  policyStatus: Enabled
+---
+#opolicy/log-level
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPolicy
+metadata:
+  name: log-level
+  namespace: openmcp
+spec:
+  template:
+    spec:
+      targetController:
+        kind: All-OpenMCP-Resource-Controller
+      policies:
+        - type: Level
+          value:
+            - "5"
+  policyStatus: Enabled
+---
+#opolicy/cpa-period
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPolicy
+metadata:
+  name: cpa-period
+  namespace: openmcp
+spec:
+  template:
+    spec:
+      targetController:
+        kind: OpenMCPHybridAutoScaler
+      policies:
+        - type: period
+          value:
+            - "100"
+  policyStatus: Enabled
+---
+#osecret/mysql-password
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPSecret
+metadata:
+  name: mysql-password
+  namespace: wordpress
+spec:
+  template:
+    data:
+      password: a2V0aWxpbnV4
+---
+#osvc/mysql-cpa
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: mysql-cpa
+  namespace: wordpress
+  labels:
+    app: mysql-cpa
+spec:
+  template:
+    spec:
+      type: ClusterIP
+      ports:
+        - port: 3306
+      selector:
+        app: mysql-cpa
+---
+#odeploy/mysql-cpa
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: mysql-cpa
+  namespace: wordpress
+spec:
+  replicas: 1
+  clusters:
+    - cluster02
+  labels:
+    app: mysql-cpa
+  template:
+    spec:
+      template:
+        spec:
+          containers:
+            - image: mysql:5.6
+              name: mysql
+              env:
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: mysql-password
+                      key: password
+                - name: MYSQL_DATABASE # 구성할 database명
+                  value: keti
+                - name: MYSQL_USER # database에 권한이 있는 user
+                  value: keti
+                - name: MYSQL_ROOT_HOST # 접근 호스트
+                  value: '%'
+                - name: MYSQL_PASSWORD # database에 권한이 있는 user의 패스워드
+                  value: ketilinux
+              ports:
+                - containerPort: 3306
+                  name: mysql
+              volumeMounts:
+                - name: mysql-persistent-storage
+                  mountPath: /var/lib/mysql
+              resources:
+                requests:
+                  memory: 1Gi
+                  cpu: 100m
+          volumes:
+            - name: mysql-persistent-storage
+              persistentVolumeClaim:
+                claimName: mysql-volumeclaim
+---
+#osvc/wordpress-cpa
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: wordpress-cpa
+  namespace: wordpress
+  labels:
+    app: wordpress-cpa
+spec:
+  template:
+    spec:
+      type: LoadBalancer
+      ports:
+        - name: wordpress
+          port: 80
+          protocol: TCP
+          targetPort: 80
+        #          nodePort: 31180
+        - name: php-apache
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      #          nodePort: 31185
+      selector:
+        app: wordpress-cpa
+---
+#odeploy/wordpress-cpa
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: wordpress-cpa
+  namespace: wordpress
+spec:
+  replicas: 6
+  clusters:
+    - cluster01
+    - cluster02
+    - cluster03
+  labels:
+    app: wordpress-cpa
+  template:
+    spec:
+      template:
+        spec:
+          containers:
+            - image: wordpress
+              name: wordpress
+              env:
+                - name: WORDPRESS_DB_HOST
+                  value: mysql-cpa:3306
+                - name: WORDPRESS_DB_NAME
+                  value: keti
+                - name: WORDPRESS_DB_USER
+                  value: keti
+                - name: WORDPRESS_DB_PASSWORD
+                  value: ketilinux
+              ports:
+                - containerPort: 80
+                  name: wordpress
+              volumeMounts:
+                - name: wordpress-persistent-storage
+                  mountPath: /var/www/html
+              resources:
+                requests:
+                  memory: 1Gi
+                  cpu: 100m
+            - name: php-apache
+              image: ketidevit2/hpa-example:v0.0.1
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 8080
+              resources:
+                requests:
+                  memory: 500Mi
+                  cpu: 250m
+          volumes:
+            - name: wordpress-persistent-storage
+              persistentVolumeClaim:
+                claimName: wordpress-volumeclaim
+---
+#opv/pv001
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPersistentVolume
+metadata:
+  name: pv001
+  labels:
+    type: local
+spec:
+  clusters:
+    - cluster01
+    - cluster02
+    - cluster03
+  labels:
+    type: local
+  template:
+    spec:
+      storageClassName: mysql
+      capacity:
+        storage: 10Gi
+      accessModes:
+        - ReadWriteOnce
+      nfs:
+        path: /wordpress/data001/pv001
+        server: "115.94.141.62"
+        readOnly: false
+---
+#opv/pv002
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPersistentVolume
+metadata:
+  name: pv002
+  labels:
+    type: local
+spec:
+  clusters:
+    - cluster01
+    - cluster02
+    - cluster03
+  labels:
+    type: local
+  template:
+    spec:
+      storageClassName: wp
+      capacity:
+        storage: 10Gi
+      accessModes:
+        - ReadWriteOnce
+      nfs:
+        path: /wordpress/data001/pv002
+        server: "115.94.141.62"
+        readOnly: false
+---
+#opvc/mysql-volumeclaim
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPersistentVolumeClaim
+metadata:
+  name: mysql-volumeclaim
+  namespace: wordpress
+spec:
+  clusters:
+    - cluster01
+    - cluster02
+    - cluster03
+  template:
+    spec:
+      storageClassName: mysql
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+---
+#opvc/wordpress-volumeclaim
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPersistentVolumeClaim
+metadata:
+  name: wordpress-volumeclaim
+  namespace: wordpress
+spec:
+  clusters:
+    - cluster01
+    - cluster02
+    - cluster03
+  template:
+    spec:
+      storageClassName: wp
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+---
+#gateway/istio-ingress-gateway
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-ingress-gateway
+  namespace: wordpress
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+apiVersion:  openmcp.k8s.io/v1alpha1
+kind: OpenMCPIngress
+metadata:
+  name: wordpress-ingress
+  namespace: wordpress
+spec:
+  template:
+    spec:
+      rules:
+        - host: keti.wordpress.openmcp.in
+          http:
+            paths:
+              - backend:
+                  serviceName: wordpress-cpa
+                  servicePort: 80
+---
+#oingressdnsrecord/wordpress-ingress
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPIngressDNSRecord
+metadata:
+  name: wordpress-ingress
+  namespace: wordpress
+spec:
+  recordTTL: 300
+---
+#ovs/wordpress
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPVirtualService
+metadata:
+  name: wordpress
+  namespace: wordpress
+spec:
+  hosts:
+    - "keti.wordpress.openmcp.in"
+  gateways:
+    - istio-ingress-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: wordpress-cpa
+            port:
+              number: 80

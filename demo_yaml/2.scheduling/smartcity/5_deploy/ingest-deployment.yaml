@@ -41,6 +41,9 @@ spec:
               name: smartcityingest
               ports:
                 - containerPort: 8888
-              resources: {}
+              resources:
+                requests:
+                  memory: 100Mi
+                  cpu: 100m
           hostname: smartcityingest
           restartPolicy: Always

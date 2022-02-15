@@ -33,5 +33,16 @@ spec:
               name: data-service-broker
               ports:
                 - containerPort: 8082
-              resources: {}
+              livenessProbe:
+                #httpGet:
+                #  path: /
+                #  port: 8082
+                tcpSocket:
+                  port: 8082
+                initialDelaySeconds: 5
+                periodSeconds: 10
+              resources:
+                requests:
+                  memory: 100Mi
+                  cpu: 100m
           restartPolicy: Always

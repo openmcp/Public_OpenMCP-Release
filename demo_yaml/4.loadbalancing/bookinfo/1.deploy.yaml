@@ -28,7 +28,7 @@ spec:
   replicas: 3
   clusters:
     #- cluster03
-    - cluster05
+    - cluster17
     #- cluster14
     - cluster09
     - cluster11
@@ -163,7 +163,7 @@ spec:
   replicas: 2
   clusters:
     - cluster09
-    - cluster15
+    - cluster17
   labels:
     app: ratings
     affinity: "yes"
@@ -216,7 +216,7 @@ spec:
     app: reviews
     affinity: "yes"
   clusters:
-    - cluster15
+    - cluster17
   template:
     spec:
       template:

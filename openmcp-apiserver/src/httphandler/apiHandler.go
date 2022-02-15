@@ -2,7 +2,6 @@ package httphandler
 
 import (
 	"bytes"
-	"crypto/tls"
 	"encoding/json"
 	"io"
 	"io/ioutil"
@@ -102,11 +101,7 @@ func (h *HttpManager) ApiHandler(w http.ResponseWriter, r *http.Request) {
 		omcplog.V(3).Info("Method : " + r.Method)
 		omcplog.V(3).Info("URLPath : " + r.URL.Path)
 
-		tr := &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
-		client := &http.Client{Transport: tr}
-
+		client := h.Client
 		var req *http.Request
 		var err error
 

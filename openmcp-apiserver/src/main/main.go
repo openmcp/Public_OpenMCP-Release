@@ -17,6 +17,7 @@ limitations under the License.
 package main
 
 import (
+	"crypto/tls"
 	"log"
 	"net/http"
 	"openmcp/openmcp/omcplog"
@@ -46,10 +47,21 @@ func main() {
 
 	HTTPServer_PORT := "8080"
 
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	tr.MaxIdleConns = 100
+	tr.MaxIdleConnsPerHost = 100
+
+	client := &http.Client{Transport: tr}
+
 	httpManager := &httphandler.HttpManager{
 		HTTPServer_PORT: HTTPServer_PORT,
 		ClusterManager:  cm,
+		Client:          client,
 	}
+
+	// http.DefaultTransport.(*http.Transport).MaxIdleConnsPerHost = 100
 
 	handler := http.NewServeMux()
 

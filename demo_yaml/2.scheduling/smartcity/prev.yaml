@@ -1,0 +1,28 @@
+#0_deploy/ns/smartcity
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPNamespace
+metadata:
+  name: smartcity
+  labels:
+    istio-injection: enabled
+---
+#opolicy/scheduling-policy
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPolicy
+metadata:
+  name: scheduling-policy
+  namespace: openmcp
+spec:
+  template:
+    spec:
+      targetController:
+        kind: OpenMCPSchduler
+      policies:
+        - type: algorithm
+          value:
+            - OpenMCP
+            #- RR
+  rangeOfApplication: All
+  policyStatus: Enabled
+---
+

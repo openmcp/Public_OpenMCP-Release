@@ -36,5 +36,8 @@ spec:
               ports:
                 - containerPort: 8081
                 - containerPort: 443
-              resources: {}
+              resources:
+                requests:
+                  memory: 200Mi
+                  cpu: 1000m
           restartPolicy: Always

@@ -1,0 +1,29 @@
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPHybridAutoScaler
+metadata:
+  name: odoo-has
+  namespace: odoo
+spec:
+  mainController: OpenMCP
+  scalingOptions:
+    cpaTemplate:
+      scaleTargetRef:
+        kind: OpenMCPDeployment
+        name: web-odoo
+      minReplicas: 1
+      maxReplicas: 7
+      scaleInCriterion:
+        - kind: cpu
+          targetUtilization: 5
+        - kind: memory
+          targetUtilization: 5
+      scaleOutCriterion:
+        - kind: cpu
+          targetUtilization: 60
+        - kind: memory
+          targetUtilization: 60
+      selectRelaxedClusterCriterion:
+        - kind: cpu
+          targetUtilization: 20
+        - kind: memory
+          targetUtilization: 20

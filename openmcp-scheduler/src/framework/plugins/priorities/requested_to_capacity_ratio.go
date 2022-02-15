@@ -53,7 +53,7 @@ func (pl *RequestedToCapacityRatio) PreScore(pod *ketiresource.Pod, clusterInfo 
 		requested = node.RequestedResource.EphemeralStorage + pod.RequestedResource.EphemeralStorage
 		nodeScore += RunRequestedToCapacityRatioScorerFunction(node.CapacityResource.EphemeralStorage, requested)
 
-		node.NodeScore = nodeScore * weight
+		node.NodeScore = nodeScore * weight * 10
 		clusterScore += nodeScore
 	}
 	if !check {

@@ -1,0 +1,253 @@
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: db-postgres
+  namespace: odoo
+spec:
+  replicas: 1
+  clusters:
+    - cluster01
+  labels:
+    app: db-postgres
+  template:
+    spec:
+      revisionHistoryLimit: 10
+      template:
+        spec:
+          securityContext:
+            seLinuxOptions: {}
+          imagePullSecrets:
+            - name: regcred
+          restartPolicy: Always
+          initContainers: []
+          containers:
+            - image: ketidevit2/postgres:10
+              imagePullPolicy: Always
+              name: postgres-odoo
+              volumeMounts: []
+              resources:
+                limits:
+                requests:
+              env:
+                - name: POSTGRES_DB
+                  value: postgres
+                - name: POSTGRES_PASSWORD
+                  value: ketilinux
+                - name: POSTGRES_USER
+                  value: keti
+              lifecycle: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          volumes: []
+          dnsPolicy: ClusterFirst
+          dnsConfig: {}
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+      progressDeadlineSeconds: 600
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 25%
+          maxSurge: 25%
+---
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: db-postgres
+  namespace: odoo
+  labels:
+    app: db-postgres
+spec:
+  template:
+    spec:
+      selector:
+        app: db-postgres
+      type: ClusterIP
+      ports:
+        - port: 5432
+          targetPort: 5432
+---
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: web-odoo
+  namespace: odoo
+spec:
+  replicas: 6
+  clusters:
+    - cluster01
+    - cluster02
+    - cluster03
+  labels:
+    app: web-odoo
+  template:
+    spec:
+      revisionHistoryLimit: 10
+      template:
+        spec:
+          securityContext:
+            seLinuxOptions: {}
+          imagePullSecrets:
+            - name: regcred
+          restartPolicy: Always
+          initContainers: []
+          containers:
+            - image: ketidevit2/odoo:14.0
+              imagePullPolicy: Always
+              name: web-odoo
+              volumeMounts:
+                - name: odoo-persistent-volume
+                  mountPath: /var/lib/odoo
+              resources:
+                requests:
+                  memory: 1Gi
+                  cpu: 200m
+              env:
+                - name: HOST
+                  value: db-postgres
+                - name: USER
+                  value: keti
+                - name: PASSWORD
+                  value: ketilinux
+              lifecycle: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          volumes:
+            - name: odoo-persistent-volume
+              persistentVolumeClaim:
+                claimName: odoo-pvc
+          dnsPolicy: ClusterFirst
+          dnsConfig: {}
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+      progressDeadlineSeconds: 600
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 25%
+          maxSurge: 25%
+---
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: web-odoo
+  namespace: odoo
+  labels:
+    app: web-odoo
+spec:
+  template:
+    spec:
+      selector:
+        app: web-odoo
+      type: LoadBalancer
+      ports:
+        - port: 8069
+          targetPort: 8069
+          protocol: TCP
+---
+#gateway/istio-ingress-gateway
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-ingress-gateway
+  namespace: odoo
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+apiVersion:  openmcp.k8s.io/v1alpha1
+kind: OpenMCPIngress
+metadata:
+  name: odoo-ingress
+  namespace: odoo
+spec:
+  template:
+    spec:
+      rules:
+        - host: keti.odoo.openmcp.in
+          http:
+            paths:
+              - backend:
+                  serviceName: web-odoo
+                  servicePort: 8069
+---
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPIngressDNSRecord
+metadata:
+  name: odoo-ingress
+  namespace: odoo
+spec:
+  recordTTL: 300
+---
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPVirtualService
+metadata:
+  name: odoo
+  namespace: odoo
+spec:
+  hosts:
+    - "keti.odoo.openmcp.in"
+  gateways:
+    - istio-ingress-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: web-odoo
+            port:
+              number: 8069
+---
+#opv/pv002
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPersistentVolume
+metadata:
+  name: odoo-pv
+  labels:
+    type: local
+spec:
+  clusters:
+    - cluster01
+    - cluster02
+    - cluster03
+  labels:
+    type: local
+  template:
+    spec:
+      storageClassName: odoo
+      capacity:
+        storage: 5Gi
+      accessModes:
+        - ReadWriteOnce
+      nfs:
+        path: /odoo/data001
+        server: "115.94.141.62"
+        readOnly: false
+---
+#opvc/mysql-volumeclaim
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPersistentVolumeClaim
+metadata:
+  name: odoo-pvc
+  namespace: odoo
+spec:
+  clusters:
+    - cluster01
+    - cluster02
+    - cluster03
+  template:
+    spec:
+      storageClassName: odoo
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 3Gi

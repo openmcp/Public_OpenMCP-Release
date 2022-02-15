@@ -33,11 +33,10 @@ spec:
               name: smartcitydb
               ports:
                 - containerPort: 5432
-              #resources:
-              #  requests:
-              #    memory: 1Gi
-              #    cpu: 1
-              #    ephemeral-storage: 1Gi
+              resources:
+                requests:
+                  memory: 100Mi
+                  cpu: 100m
               volumeMounts:
                 - mountPath: /docker-entrypoint-initdb.d/init.sql
                   name: postgres-claim0

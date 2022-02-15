@@ -52,7 +52,6 @@ func SyncDRWeight(myClusterManager *clusterManager.ClusterManager, quit, quitok 
 
 	grpcClient := protobuf.NewGrpcClient(SERVER_IP, SERVER_PORT)
 
-
 	for {
 
 		select {
@@ -146,7 +145,7 @@ func SyncDRWeight(myClusterManager *clusterManager.ClusterManager, quit, quitok 
 
 					//omcplog.V(2).Info("***********",osvc.Name," selector :", osvc.Spec.Template.Spec.Selector)
 
-					if cm.Cluster_genClients[mcluster.Name] != nil && len(osvc.Spec.Template.Spec.Selector) != 0 {
+					if cm.Cluster_genClients[mcluster.Name] != nil && osvc.Spec.Template.Spec.Selector != nil {
 
 						listOption := &client.ListOptions{
 							LabelSelector: labels.SelectorFromSet(
@@ -172,12 +171,14 @@ func SyncDRWeight(myClusterManager *clusterManager.ClusterManager, quit, quitok 
 
 							target_node_list[region_zone] = append(target_node_list[region_zone], tmp_pod_list...)
 						}
-					} else {
+					} else if cm.Cluster_genClients[mcluster.Name] == nil {
 						omcplog.V(0).Info("err!! : ", mcluster.Name, " cluster client has 'nil'")
+					} else {
+						omcplog.V(0).Info("Err!! : osvc.Spec.Template.Spec.Selector = nil")
 					}
 				}
 
-				omcplog.V(2).Info("[",osvc.Name,"] target_node_list : ", target_node_list)
+				omcplog.V(2).Info("[", osvc.Name, "] target_node_list : ", target_node_list)
 				if len(target_node_list) > 0 {
 					tmp_rz := map[string][]DRWeight{}
 					for rz, _ := range node_list_all { //from
@@ -391,7 +392,7 @@ func analyzeScore(podname string, namespace string, from string, to string, grpc
 	tmp_result := 0
 
 	if err_grpc != nil {
-		omcplog.V(2).Info("[ ",podname," err ] ",err_grpc)
+		omcplog.V(2).Info("[ ", podname, " err ] ", err_grpc)
 	} else {
 		tmp_result = int(result.Weight)
 	}

@@ -20,7 +20,7 @@ type QosPriority struct {
 const (
 	minScore     int64 = 1
 	midScore     int64 = (minScore + maxScore) / 2
-	maxScore     int64 = 3
+	maxScore     int64 = 2
 	maxRTCRScore int64 = 10
 	weight       int64 = 3
 )
