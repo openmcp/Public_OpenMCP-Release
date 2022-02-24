@@ -25,13 +25,13 @@ metadata:
   name: productpage
   namespace: bookinfo
 spec:
-  replicas: 3
+  replicas: 4
   clusters:
-    #- cluster03
+    - cluster05
     - cluster17
     #- cluster14
     - cluster09
-    - cluster11
+    - cluster13
   labels:
     app: productpage
     affinity: "yes"
@@ -79,7 +79,7 @@ metadata:
 spec:
   replicas: 1
   clusters:
-    - cluster11
+    - cluster13
   labels:
     app: details
     affinity: "yes"

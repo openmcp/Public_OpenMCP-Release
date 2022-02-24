@@ -8,7 +8,7 @@ spec:
   clusters:
   - cluster05
   - cluster10
-  - cluster12
+  - cluster14
   - cluster17
   labels:
     app: datacore-ui

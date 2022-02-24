@@ -7,7 +7,7 @@ spec:
   clusters:
   - cluster05
   - cluster10
-  - cluster12
+  - cluster14
   - cluster17
   replicas: 1
   labels:

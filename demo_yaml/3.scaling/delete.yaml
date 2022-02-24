@@ -1,34 +1,32 @@
 apiVersion: openmcp.k8s.io/v1alpha1
-kind: OpenMCPPolicy
+kind: OpenMCPHybridAutoScaler
 metadata:
-  name: log-level
-  namespace: openmcp
+  name: odoo-has
+  namespace: odoo
 spec:
-  template:
-    spec:
-      targetController:
-        kind: All-OpenMCP-Resource-Controller
-      policies:
-        - type: Level
-          value:
-            - "1"
-  policyStatus: Enabled
----
-apiVersion: openmcp.k8s.io/v1alpha1
-kind: OpenMCPPolicy
-metadata:
-  name: cpa-period
-  namespace: openmcp
-spec:
-  template:
-    spec:
-      targetController:
-        kind: OpenMCPHybridAutoScaler
-      policies:
-        - type: period
-          value:
-            - "100"
-  policyStatus: Enabled
+  mainController: OpenMCP
+  scalingOptions:
+    cpaTemplate:
+      scaleTargetRef:
+        kind: OpenMCPDeployment
+        name: web-odoo
+      minReplicas: 1
+      maxReplicas: 7
+      scaleInCriterion:
+        - kind: cpu
+          targetUtilization: 5
+        - kind: memory
+          targetUtilization: 5
+      scaleOutCriterion:
+        - kind: cpu
+          targetUtilization: 60
+        - kind: memory
+          targetUtilization: 60
+      selectRelaxedClusterCriterion:
+        - kind: cpu
+          targetUtilization: 20
+        - kind: memory
+          targetUtilization: 20
 ---
 apiVersion: openmcp.k8s.io/v1alpha1
 kind: OpenMCPDeployment
@@ -296,6 +294,8 @@ metadata:
 spec:
   clusters:
     - cluster01
+    - cluster02
+    - cluster03
   labels:
     type: local
   template:
@@ -318,6 +318,8 @@ metadata:
 spec:
   clusters:
     - cluster01
+    - cluster02
+    - cluster03
   template:
     spec:
       storageClassName: dbodoo

@@ -12,7 +12,9 @@ import (
 
 	"admiralty.io/multicluster-controller/pkg/cluster"
 	"gopkg.in/yaml.v2"
+	"k8s.io/apimachinery/pkg/api/errors"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 )
 
 var Live *cluster.Cluster
@@ -263,7 +265,26 @@ func CreateCloudClusterResource(c_name string, c_type string, config []byte, c_l
 
 	err := liveClient.Create(context.TODO(), clusterCR)
 
-	if err != nil {
+	if err != nil && errors.IsAlreadyExists(err) {
+
+		found := &clusterv1alpha1.OpenMCPCluster{}
+		nsn := types.NamespacedName{
+			Namespace: clusterCR.Namespace,
+			Name:      clusterCR.Name,
+		}
+		err2 := liveClient.Get(context.TODO(), nsn, found)
+		if err2 != nil {
+			omcplog.V(0).Info(err2)
+		} else {
+			clusterCR.ResourceVersion = found.ResourceVersion
+			err3 := liveClient.Update(context.TODO(), clusterCR)
+			if err3 != nil {
+				omcplog.V(0).Info(err3)
+			}
+
+		}
+
+	} else if err != nil {
 		omcplog.V(4).Info("Fail to create openmcpcluster resource")
 		fmt.Println(err)
 	} else {

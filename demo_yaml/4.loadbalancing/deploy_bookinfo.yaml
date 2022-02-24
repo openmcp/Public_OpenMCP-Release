@@ -30,7 +30,7 @@ spec:
   replicas: 3
   clusters:
     - cluster09
-    - cluster11
+    - cluster13
     - cluster17
   labels:
     app: productpage
@@ -81,7 +81,7 @@ metadata:
 spec:
   replicas: 1
   clusters:
-    - cluster11
+    - cluster13
   labels:
     app: details
     affinity: "yes"
