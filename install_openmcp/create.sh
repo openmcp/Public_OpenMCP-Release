@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "$1" == "" ]; then
+  echo "Config File Arg Empty"
+  echo "example) ./create.sh settings.yaml"
+  exit 1
+fi
 
 REQUIRED_PKG=python-pip
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
@@ -43,7 +48,7 @@ if [ "" = "$PKG_OK" ]; then
 fi
 
 
-CONFFILE=settings.yaml
+CONFFILE=$1
 
 OMCP_INSTALL_TYPE=`yq -r .default.installType $CONFFILE`
 

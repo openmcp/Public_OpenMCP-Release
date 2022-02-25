@@ -108,8 +108,9 @@ kubectl create secret generic cacerts -n istio-system \
       --from-file=openmcp/cert-chain.pem
 popd
 
-chmod 755 bin/istioctl
-sudo cp bin/istioctl /usr/local/bin
+#chmod 755 bin/istioctl
+#sudo cp bin/istioctl /usr/local/bin
+curl -sL https://istio.io/downloadIstioctl | sh -
 chmod 755 samples/multicluster/gen-eastwest-gateway.sh
 
 # istio-system 네임 스페이스가 이미 생성 된 경우 여기에 클러스터의 네트워크를 설정해야합니다
