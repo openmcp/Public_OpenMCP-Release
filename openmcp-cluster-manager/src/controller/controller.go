@@ -189,6 +189,7 @@ func (r *reconciler) Reconcile(request reconcile.Request) (reconcile.Result, err
 						util.CmdExec2("kubectl label nodes " + node.Name + " failure-domain.beta.kubernetes.io/region=" + clusterInstance.Spec.NodeInfo.Region + " --context " + clusterInstance.Name + " --overwrite")
 						util.CmdExec2("kubectl label nodes " + node.Name + " failure-domain.beta.kubernetes.io/zone=" + clusterInstance.Spec.NodeInfo.Zone + " --context " + clusterInstance.Name + " --overwrite")
 						util.CmdExec2("kubectl label nodes " + node.Name + " topology.istio.io/subzone=" + clusterInstance.Name + " --context " + clusterInstance.Name)
+						util.CmdExec2("kubectl label nodes " + node.Name + " topology.istio.io/subzone=" + clusterInstance.Name + " --context " + clusterInstance.Name + " --overwrite")
 					}
 				} else {
 					omcplog.V(4).Info("Fail to get node list - ", err_node)

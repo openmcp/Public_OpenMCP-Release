@@ -110,11 +110,11 @@ metadata:
   name: web-odoo
   namespace: odoo
 spec:
-  replicas: 6
+  replicas: 2
   clusters:
     - kr-gyeonggido-01
-    - kr-gyeonggido-02
-    - kr-gyeonggido-03
+#    - kr-gyeonggido-02
+#    - kr-gyeonggido-03
   labels:
     app: web-odoo
   template:
@@ -252,8 +252,8 @@ metadata:
 spec:
   clusters:
     - kr-gyeonggido-01
-    - kr-gyeonggido-02
-    - kr-gyeonggido-03
+#    - kr-gyeonggido-02
+#    - kr-gyeonggido-03
   labels:
     type: local
   template:
@@ -276,8 +276,8 @@ metadata:
 spec:
   clusters:
     - kr-gyeonggido-01
-    - kr-gyeonggido-02
-    - kr-gyeonggido-03
+#    - kr-gyeonggido-02
+#    - kr-gyeonggido-03
   template:
     spec:
       storageClassName: webodoo

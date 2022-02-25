@@ -100,10 +100,12 @@ if [ $OMCP_INSTALL_TYPE == "learning" ]; then
   rm master/influxdb/deployment.yaml
   rm master/openmcp-apiserver/operator.yaml
   rm master/istio/samples/multicluster/gen-eastwest-gateway.sh
+  rm member/istio/gen-eastwest-gateway.sh
 
   mv master/openmcp-cluster-manager/operator-learningmcp.yaml master/openmcp-cluster-manager/operator.yaml
   mv master/influxdb/deployment-learningmcp.yaml master/influxdb/deployment.yaml
   mv master/openmcp-apiserver/operator-learningmcp.yaml master/openmcp-apiserver/operator.yaml
+  mv master/istio/samples/multicluster/gen-eastwest-gateway-local.sh master/istio/samples/multicluster/gen-eastwest-gateway.sh
   mv member/istio/gen-eastwest-gateway-local.sh member/istio/gen-eastwest-gateway.sh
 
 else
