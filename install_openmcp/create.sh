@@ -52,6 +52,7 @@ CONFFILE=$1
 
 OMCP_INSTALL_TYPE=`yq -r .default.installType $CONFFILE`
 
+DOCKER_REPO_NAME=`yq -r .default.docker.openmcpImageRepository $CONFFILE`
 DOCKER_SECRET_NAME=`yq -r .default.docker.imagePullSecretName $CONFFILE`
 DOCKER_IMAGE_PULL_POLICY=`yq -r .default.docker.imagePullPolicy $CONFFILE`
 
@@ -162,6 +163,32 @@ fi
 
 echo "Replace Setting Variable"
 
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-has-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-scheduler/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-loadbalancing-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-sync-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-configmap-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-apiserver/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-metric-collector/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-ingress-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-analytic-engine/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-secret-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-deployment-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-dns-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-service-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-policy-engine/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-cluster-manager/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-namespace-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-job-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-statefulset-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-daemonset-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-pv-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/openmcp-pvc-controller/operator.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' master/influxdb/deployment.yaml
+
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' member/metric-collector/operator/operator_in.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'\"$DOCKER_REPO_NAME\"'|g' member/metric-collector/operator/operator_ex.yaml
+
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/install.sh
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-has-controller/operator.yaml
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-scheduler/operator.yaml
@@ -177,6 +204,7 @@ sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-d
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-dns-controller/operator.yaml
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-service-controller/operator.yaml
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-policy-engine/operator.yaml
+sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-cluster-manager/operator.yaml
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-namespace-controller/operator.yaml
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-job-controller/operator.yaml
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-statefulset-controller/operator.yaml

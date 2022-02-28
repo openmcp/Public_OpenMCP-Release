@@ -1,6 +1,7 @@
 default:
   installType: debug # learning or debug
   docker:
+    openmcpImageRepository: ketidevit2
     imagePullSecretName: regcred
     imagePullPolicy: Always # Always or IfNotPresent
 master:

@@ -1,6 +1,7 @@
 default:
   installType: learning # learning or debug
   docker:
+    openmcpImageRepository: 127.0.0.1:5000/openmcp
     imagePullSecretName: regcred
     imagePullPolicy: IfNotPresent # Always or IfNotPresent
 master:
