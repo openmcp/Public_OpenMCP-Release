@@ -9,8 +9,8 @@ master:
     internal: 10.0.3.60
     external: 115.94.141.62
   metalLB:
-    rangeStartIP: 10.0.3.191
-    rangeEndIP: 10.0.3.200
+    rangeStartIP: 172.18.255.200
+    rangeEndIP: 172.18.255.250
   Moudules:
     # LoadBalancingController 이외에는 모든 모듈의 IP가 같아도 상관없음
     # 위의 MetalLB의 IP 대역 범위 내에 모듈의 LoadBalancerIP 입력
