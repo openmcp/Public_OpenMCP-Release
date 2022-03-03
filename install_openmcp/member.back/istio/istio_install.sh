@@ -43,6 +43,8 @@ spec:
   profile: remote
   values:
     global:
+      imagePullSecrets:
+      - regcred
       meshID: mesh-$CTX_MASTER
       multiCluster:
         clusterName: $CTX

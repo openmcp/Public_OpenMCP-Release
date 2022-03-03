@@ -6,10 +6,10 @@ metadata:
   #namespace: default
 spec:
   clusters:
-  - cluster05
-  - cluster10
-  - cluster14
-  - cluster17
+  - kr-daejeon-01
+  - de-hesse-gke-01
+  - us-virginia-eks-01
+  - no-oslo-aks-01
   replicas: 1
   labels:
     app: postgres

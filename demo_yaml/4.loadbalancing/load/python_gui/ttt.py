@@ -1,3 +1,4 @@
+#-*-coding:utf-8-*-
 import multiprocessing
 import sys,time
 from multiprocessing import Process, Event, Queue

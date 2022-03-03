@@ -258,13 +258,13 @@ func (r *reconciler) Reconcile(request reconcile.Request) (reconcile.Result, err
 			// }
 
 			if clusterInstance.Spec.ClusterPlatformType == "GKE" || clusterInstance.Spec.ClusterPlatformType == "AKS" {
-				moduleDirectory = []string{"namespace", "custom-metrics-apiserver", "metric-collector", "istio", "nginx-ingress-controller" /*,"metrics-server",  "configmap" */}
+				moduleDirectory = []string{"custom-metrics-apiserver", "metric-collector", "istio", "nginx-ingress-controller", "namespace"  /*,"metrics-server",  "configmap" */}
 			} else if clusterInstance.Spec.ClusterPlatformType == "EKS" {
-				moduleDirectory = []string{"namespace", "custom-metrics-apiserver", "metric-collector", "metrics-server", "istio", "nginx-ingress-controller" /*, "configmap" */}
+				moduleDirectory = []string{"custom-metrics-apiserver", "metric-collector", "metrics-server", "istio", "nginx-ingress-controller", "namespace"  /*, "configmap" */}
 			} else if clusterInstance.Spec.ClusterNetworkLocation == "internal" {
-				moduleDirectory = []string{"namespace", "custom-metrics-apiserver", "metallb", "metric-collector", "metrics-server", "nginx-ingress-controller", "istio" /*, "configmap" */}
+				moduleDirectory = []string{"custom-metrics-apiserver", "metallb", "metric-collector", "metrics-server", "nginx-ingress-controller", "istio", "namespace"  /*, "configmap" */}
 			} else if clusterInstance.Spec.ClusterNetworkLocation == "external" {
-				moduleDirectory = []string{"namespace", "custom-metrics-apiserver", "metallb", "metric-collector", "metrics-server", "nginx-ingress-controller", "istio" /*, "configmap" */}
+				moduleDirectory = []string{"custom-metrics-apiserver", "metallb", "metric-collector", "metrics-server", "nginx-ingress-controller", "istio", "namespace"  /*, "configmap" */}
 			}
 			for i, dirname := range moduleDirectory {
 				moduleDirectory[i] = "/init/" + dirname

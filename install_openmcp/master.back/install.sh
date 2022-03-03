@@ -29,6 +29,18 @@ kubectl create secret generic REPLACE_DOCKERSECRETNAME \
     --type=kubernetes.io/dockerconfigjson \
     --namespace=openmcp
 
+kubectl create secret generic REPLACE_DOCKERSECRETNAME \
+    --from-file=.dockerconfigjson=$HOME/.docker/config.json \
+    --type=kubernetes.io/dockerconfigjson \
+    --namespace=istio-system
+
+kubectl create secret generic REPLACE_DOCKERSECRETNAME \
+    --from-file=.dockerconfigjson=$HOME/.docker/config.json \
+    --type=kubernetes.io/dockerconfigjson \
+    --namespace=metallb-system
+
+
+    
 echo "--- deploy crds"
 kubectl create -f ../../crds/.
 echo "--- openmcp-cluster-manager"
@@ -128,6 +140,8 @@ spec:
        ISTIO_META_DNS_CAPTURE: "true"
   values:
     global:
+      imagePullSecrets:
+      - regcred
       meshID: mesh-$CTX
       multiCluster:
         clusterName: $CTX

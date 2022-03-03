@@ -67,6 +67,10 @@ kind: IstioOperator
 metadata:
   name: eastwest
 spec:
+  values:
+    global:
+      imagePullSecrets:
+      - regcred
   revision: "${REVISION}"
   profile: empty
   components:
