@@ -67,7 +67,6 @@ kind: IstioOperator
 metadata:
   name: eastwest
 spec:
-  hub: REPLACE_ISTIO_HUB
   revision: "${REVISION}"
   profile: empty
   components:
