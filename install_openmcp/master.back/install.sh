@@ -150,6 +150,7 @@ spec:
     ingressGateways:
       - name: istio-ingressgateway
         enabled: true
+        hub: REPLACE_ISTIO_HUB
         k8s:
           service:
             ports:

@@ -1,7 +1,8 @@
 default:
   installType: learning # learning or debug
   docker:
-    openmcpImageRepository: ketidevit2
+    openmcpImageRepository: 127.0.0.1:5000/openmcp
+    istioImageRepository: 127.0.0.1:5000/openmcp
     imagePullSecretName: regcred
     imagePullPolicy: IfNotPresent # Always or IfNotPresent
 master:

@@ -53,6 +53,8 @@ CONFFILE=$1
 OMCP_INSTALL_TYPE=`yq -r .default.installType $CONFFILE`
 
 DOCKER_REPO_NAME=`yq -r .default.docker.openmcpImageRepository $CONFFILE`
+DOCKER_ISTIO_REPO_NAME=`yq -r .default.docker.istioImageRepository $CONFFILE`
+
 DOCKER_SECRET_NAME=`yq -r .default.docker.imagePullSecretName $CONFFILE`
 DOCKER_IMAGE_PULL_POLICY=`yq -r .default.docker.imagePullPolicy $CONFFILE`
 
@@ -100,12 +102,14 @@ if [ $OMCP_INSTALL_TYPE == "learning" ]; then
   rm master/openmcp-cluster-manager/operator.yaml
   rm master/influxdb/deployment.yaml
   rm master/openmcp-apiserver/operator.yaml
+  rm master/openmcp-apiserver/pv.yaml
   rm master/istio/samples/multicluster/gen-eastwest-gateway.sh
   rm member/istio/gen-eastwest-gateway.sh
 
   mv master/openmcp-cluster-manager/operator-learningmcp.yaml master/openmcp-cluster-manager/operator.yaml
   mv master/influxdb/deployment-learningmcp.yaml master/influxdb/deployment.yaml
   mv master/openmcp-apiserver/operator-learningmcp.yaml master/openmcp-apiserver/operator.yaml
+  mv master/openmcp-apiserver/pv-learningmcp.yaml master/openmcp-apiserver/pv.yaml
   mv master/istio/samples/multicluster/gen-eastwest-gateway-local.sh master/istio/samples/multicluster/gen-eastwest-gateway.sh
   mv member/istio/gen-eastwest-gateway-local.sh member/istio/gen-eastwest-gateway.sh
 
@@ -113,6 +117,7 @@ else
   rm master/openmcp-cluster-manager/operator-learningmcp.yaml
   rm master/influxdb/deployment-learningmcp.yaml
   rm master/openmcp-apiserver/operator-learningmcp.yaml
+  rm master/openmcp-apiserver/pv-learningmcp.yaml
   rm master/istio/samples/multicluster/gen-eastwest-gateway-local.sh
   rm member/istio/gen-eastwest-gateway-local.sh
 
@@ -188,6 +193,8 @@ sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' master/influxdb/deploy
 
 sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' member/metric-collector/operator/operator_in.yaml
 sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' member/metric-collector/operator/operator_ex.yaml
+
+sed -i 's|REPLACE_ISTIO_HUB|'$DOCKER_ISTIO_REPO_NAME'|g' master/install.sh
 
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/install.sh
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-has-controller/operator.yaml
