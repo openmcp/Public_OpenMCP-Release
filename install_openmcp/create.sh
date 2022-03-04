@@ -196,6 +196,9 @@ sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' member/metric-collecto
 sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' member/metric-collector/operator/operator_ex.yaml
 
 sed -i 's|REPLACE_ISTIO_HUB|'$DOCKER_ISTIO_REPO_NAME'|g' master/install.sh
+sed -i 's|REPLACE_ISTIO_HUB|'$DOCKER_ISTIO_REPO_NAME'|g' master/istio/samples/multicluster/gen-eastwest-gateway.sh
+sed -i 's|REPLACE_ISTIO_HUB|'$DOCKER_ISTIO_REPO_NAME'|g' member/istio/istio_nstall.sh
+sed -i 's|REPLACE_ISTIO_HUB|'$DOCKER_ISTIO_REPO_NAME'|g' member/istio/gen-eastwest-gateway.sh
 
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/install.sh
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-has-controller/operator.yaml
@@ -224,6 +227,8 @@ sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/istio/pat
 
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' member/metric-collector/operator/operator_in.yaml
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' member/metric-collector/operator/operator_ex.yaml
+
+
 
 
 sed -i 's|REPLACE_DOCKERIMAGEPULLPOLICY|'$DOCKER_IMAGE_PULL_POLICY'|g' master/influxdb/deployment.yaml

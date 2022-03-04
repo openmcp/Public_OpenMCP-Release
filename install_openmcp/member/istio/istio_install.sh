@@ -36,6 +36,7 @@ cat <<EOF > $CTX.yaml
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 spec:
+  hub: REPLACE_ISTIO_HUB
   meshConfig:
    defaultConfig:
      proxyMetadata:
