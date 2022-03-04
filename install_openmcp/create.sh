@@ -190,7 +190,7 @@ sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' master/openmcp-daemons
 sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' master/openmcp-pv-controller/operator.yaml
 sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' master/openmcp-pvc-controller/operator.yaml
 sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' master/influxdb/deployment.yaml
-sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' master/istio/patch_istio_configmap.yaml.yaml
+sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' master/istio/patch_istio_configmap.yaml
 
 sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' member/metric-collector/operator/operator_in.yaml
 sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' member/metric-collector/operator/operator_ex.yaml
@@ -220,7 +220,7 @@ sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-d
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-pv-controller/operator.yaml
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/openmcp-pvc-controller/operator.yaml
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/influxdb/deployment.yaml
-sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/istio/patch_istio_configmap.yaml.yaml
+sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' master/istio/patch_istio_configmap.yaml
 
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' member/metric-collector/operator/operator_in.yaml
 sed -i 's|REPLACE_DOCKERSECRETNAME|'\"$DOCKER_SECRET_NAME\"'|g' member/metric-collector/operator/operator_ex.yaml
@@ -248,7 +248,7 @@ sed -i 's|REPLACE_DOCKERIMAGEPULLPOLICY|'$DOCKER_IMAGE_PULL_POLICY'|g' master/op
 sed -i 's|REPLACE_DOCKERIMAGEPULLPOLICY|'$DOCKER_IMAGE_PULL_POLICY'|g' master/openmcp-daemonset-controller/operator.yaml
 sed -i 's|REPLACE_DOCKERIMAGEPULLPOLICY|'$DOCKER_IMAGE_PULL_POLICY'|g' master/openmcp-pv-controller/operator.yaml
 sed -i 's|REPLACE_DOCKERIMAGEPULLPOLICY|'$DOCKER_IMAGE_PULL_POLICY'|g' master/openmcp-pvc-controller/operator.yaml
-sed -i 's|REPLACE_DOCKERIMAGEPULLPOLICY|'$DOCKER_IMAGE_PULL_POLICY'|g' master/istio/patch_istio_configmap.yaml.yaml
+sed -i 's|REPLACE_DOCKERIMAGEPULLPOLICY|'$DOCKER_IMAGE_PULL_POLICY'|g' master/istio/patch_istio_configmap.yaml
 
 sed -i 's|REPLACE_DOCKERIMAGEPULLPOLICY|'$DOCKER_IMAGE_PULL_POLICY'|g' member/metric-collector/operator/operator_in.yaml
 sed -i 's|REPLACE_DOCKERIMAGEPULLPOLICY|'$DOCKER_IMAGE_PULL_POLICY'|g' member/metric-collector/operator/operator_ex.yaml
