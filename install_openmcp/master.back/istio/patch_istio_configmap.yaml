@@ -11,6 +11,8 @@ spec:
     spec:
       template:
         spec:
+          imagePullSecrets:
+          - name: REPLACE_DOCKERSECRETNAME
           restartPolicy: OnFailure
           serviceAccountName: sa-patch-istio-configmap
           containers:
