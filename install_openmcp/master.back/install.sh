@@ -1,5 +1,5 @@
-mkdir -p /home/nfs/pv/influxdb
-mkdir -p /home/nfs/pv/api-server/cert
+sudo mkdir -p /home/nfs/pv/influxdb
+sudo mkdir -p /home/nfs/pv/api-server/cert
 
 echo "--- API Server Generation Key File"
 #openssl genrsa -out server.key 2048
@@ -13,8 +13,8 @@ openssl req \
     -days 3650 \
     -subj "/C=KR/ST=Seoul/L=Seoul/O=Global Company/OU=IT Department/CN=openmcp-apiserver.openmcp.default-domain.svc.openmcp.example.org"
 
-mv server.key /home/nfs/pv/api-server/cert
-mv server.crt /home/nfs/pv/api-server/cert
+sudo mv server.key /home/nfs/pv/api-server/cert
+sudo mv server.crt /home/nfs/pv/api-server/cert
 
 kubectl create ns openmcp
 kubectl create ns metallb-system
@@ -122,7 +122,12 @@ popd
 
 #chmod 755 bin/istioctl
 #sudo cp bin/istioctl /usr/local/bin
-curl -sL https://istio.io/downloadIstioctl | sh -
+#curl -sL https://istio.io/downloadIstioctl | sh -
+#export PATH=$PATH:$HOME/.istioctl/bin 
+
+curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.9.4 sh -
+export PATH=$PWD/istio-1.9.4/bin:$PATH
+
 chmod 755 samples/multicluster/gen-eastwest-gateway.sh
 
 # istio-system 네임 스페이스가 이미 생성 된 경우 여기에 클러스터의 네트워크를 설정해야합니다
