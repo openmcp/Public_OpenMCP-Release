@@ -215,5 +215,12 @@ kubectl apply -f patch_istio_configmap.yaml
 rm -r ../../member/istio/certs
 cp -r certs ../../member/istio/
 
+# kiali 생성
+kubectl create -f istio/samples/addons/prometheus.yaml
+kubectl create -f istio/samples/addons/kiali.yaml
+
+# OpenMCP Ingress 및 VirtualService 생성 For Kilai
+kubectl create -f istio/openmcp_vs_ingress_kiali.yaml
+
 # Core DNS 리스타트
 kubectl delete pod --namespace kube-system --selector k8s-app=kube-dns

@@ -1,0 +1,64 @@
+#ovs/kiali
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPVirtualService
+metadata:
+  name: kiali
+  namespace: istio-system
+spec:
+  hosts:
+    #- "*"
+    - "kiali.openmcp.com"
+  gateways:
+    - istio-ingress-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: kiali
+            port:
+              number: 20001
+---
+#oing/kiali-ingress
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPIngress
+metadata:
+  name: kiali-ingress
+  namespace: istio-system
+spec:
+  template:
+    spec:
+      rules:
+      - host: kiali.openmcp.com
+        http:
+          paths:
+          - backend:
+              serviceName: kiali
+              servicePort: 20001
+---
+#oingressdnsrecord/kiali-ingress
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPIngressDNSRecord
+metadata:
+  name: kiali-ingress
+  namespace: istio-system
+spec:
+  recordTTL: 300
+---
+#gateway/istio-ingress-gateway
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-ingress-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"

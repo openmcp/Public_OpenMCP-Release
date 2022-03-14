@@ -1,0 +1,73 @@
+#ovs/bookinfo
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPVirtualService
+metadata:
+  name: bookinfo
+  namespace: bookinfo
+spec:
+  hosts:
+    #- "*"
+    - "keti.productpage.openmcp.in"
+  gateways:
+    - istio-ingress-gateway
+  http:
+    - match:
+        - uri:
+            exact: /productpage
+        - uri:
+            prefix: /static
+        - uri:
+            exact: /login
+        - uri:
+            exact: /logout
+        - uri:
+            prefix: /api/v1/products
+      route:
+        - destination:
+            host: productpage
+            port:
+              number: 9080
+---
+#oingress/productpage-ingress
+apiVersion:  openmcp.k8s.io/v1alpha1
+kind: OpenMCPIngress
+metadata:
+  name: productpage-ingress
+  namespace: bookinfo
+spec:
+  # ingressForClientFrom: internal
+  template:
+    spec:
+      rules:
+        - host: keti.productpage.openmcp.in
+          http:
+            paths:
+              - backend:
+                  serviceName: productpage
+                  servicePort: 9080
+---
+#oingressdnsrecord/productpage-ingress
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPIngressDNSRecord
+metadata:
+  name: productpage-ingress
+  namespace: bookinfo
+spec:
+  recordTTL: 300
+---
+#gateway/istio-ingress-gateway
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-ingress-gateway
+  namespace: bookinfo
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"

@@ -152,9 +152,13 @@ func (f *openmcpFramework) RunFilterPluginsOnClusters(pod *ketiresource.Pod, clu
 	Filters := make(map[string]OpenmcpPluginFilterList)
 	result := make(map[string]bool)
 	if clusters == nil {
+		omcplog.V(3).Infof("clusters NILL")
 		return nil
 	}
 	for _, cluster := range clusters {
+		if cluster == nil {
+			continue
+		}
 		cluster.PreFilterTwoStep = false
 		cluster.PreFilter = false
 		result[cluster.ClusterName] = true

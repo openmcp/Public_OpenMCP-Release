@@ -1,0 +1,7 @@
+#ns/bookinfo
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPNamespace
+metadata:
+  name: bookinfo
+  labels:
+    istio-injection: enabled
