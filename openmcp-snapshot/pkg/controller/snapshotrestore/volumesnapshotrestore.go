@@ -26,9 +26,9 @@ import (
 
 //volumeSnapshotRun 내에는 PV 만 들어온다고 가정한다.
 func volumeSnapshotRestoreRun(r *reconciler, resourceCluster string, resourceSnapshotKey string, groupSnapshotKey string, volumeSnapshotKey string, pvIdx int) (error, error) {
-	//omcplog.V(4).Info(snapshotRestoreSource)
+	//omcplog.V(0).Info(snapshotRestoreSource)
 	client := cm.Cluster_genClients[resourceCluster]
-	omcplog.V(3).Info("volumeSnapshot Restore Start")
+	omcplog.V(0).Info("volumeSnapshot Restore Start")
 
 	runType := util.RunTypeSnapshotRestore
 	/*
@@ -63,14 +63,14 @@ func volumeSnapshotRestoreRun(r *reconciler, resourceCluster string, resourceSna
 		resourceName = resourceName[0:60]
 	}
 	//snapshotKey = util.GetStartTimeBySnapshotKey(snapshotKey)
-	omcplog.V(3).Info("  * resourceName : " + resourceName)
-	omcplog.V(3).Info("  * resourceSnapshotKey : " + resourceSnapshotKey)
+	omcplog.V(0).Info("  * resourceName : " + resourceName)
+	omcplog.V(0).Info("  * resourceSnapshotKey : " + resourceSnapshotKey)
 
 	// TODO ETCD Get 으로 변경.
 	// pvResourceOri := &apiv1.PersistentVolume{}
 	// pvGetErr := util.GetPVAPIOri(snapshotKey, pvResource)
 	// if pvGetErr != nil {
-	// 	omcplog.V(3).Info("get pv_info error")
+	// 	omcplog.V(0).Info("get pv_info error")
 	// }
 
 	//pvResource := pvResourceOri.DeepCopy()
@@ -100,15 +100,17 @@ func volumeSnapshotRestoreRun(r *reconciler, resourceCluster string, resourceSna
 	*/
 	expvResource, mountPath := util.GetExternalNfsPVAPI(volumeSnapshotKey, *pvResource, runType)
 	expvcResource := util.GetExternalNfsPVCAPI(volumeSnapshotKey, runType)
-	pvcResource := util.GetPVCAPI(volumeSnapshotKey, *pvResource, runType)
+	oriPvcResource := util.GetPVCAPI(volumeSnapshotKey, *pvResource, runType)
+	omcplog.V(0).Info("oriPvcResource", oriPvcResource)
 	oriPvResource := util.GetPVAPI(volumeSnapshotKey, *pvResource, runType)
+	omcplog.V(0).Info("oriPvResource", pvResource)
 
 	targetErr := client.Create(context.TODO(), expvResource)
 	if targetErr != nil {
 		omcplog.Error(targetErr)
 		return fmt.Errorf("expvResource create error[" + expvResource.Name + "]"), targetErr
 	} else {
-		omcplog.V(3).Info("expvResource create")
+		omcplog.V(0).Info("expvResource create")
 	}
 
 	targetErr = client.Create(context.TODO(), expvcResource)
@@ -116,15 +118,15 @@ func volumeSnapshotRestoreRun(r *reconciler, resourceCluster string, resourceSna
 		omcplog.Error(targetErr)
 		return fmt.Errorf("expvcResource create error[" + expvcResource.Name + "]"), targetErr
 	} else {
-		omcplog.V(3).Info("expvcResource create")
+		omcplog.V(0).Info("expvcResource create")
 	}
 
-	targetErr = client.Create(context.TODO(), pvcResource)
+	targetErr = client.Create(context.TODO(), oriPvcResource)
 	if targetErr != nil {
 		omcplog.Error(targetErr)
-		return fmt.Errorf("pvcResource create error[" + pvcResource.Name + "]"), targetErr
+		return fmt.Errorf("pvcResource create error[" + oriPvcResource.Name + "]"), targetErr
 	} else {
-		omcplog.V(3).Info("pvcResource create")
+		omcplog.V(0).Info("pvcResource create")
 	}
 
 	targetErr = client.Create(context.TODO(), oriPvResource)
@@ -132,7 +134,7 @@ func volumeSnapshotRestoreRun(r *reconciler, resourceCluster string, resourceSna
 		omcplog.Error(targetErr)
 		return fmt.Errorf("oriPvResource create error[" + oriPvResource.Name + "]"), targetErr
 	} else {
-		omcplog.V(3).Info("oriPvResource create")
+		omcplog.V(0).Info("oriPvResource create")
 	}
 
 	/*
@@ -176,7 +178,7 @@ func volumeSnapshotRestoreRun(r *reconciler, resourceCluster string, resourceSna
 		omcplog.Error(targetErr)
 		return fmt.Errorf("job create error : " + jobResource.Name), targetErr
 	} else {
-		omcplog.V(3).Info("jobResource create")
+		omcplog.V(0).Info("jobResource create")
 	}
 
 	targetListClient := *cm.Cluster_kubeClients[resourceCluster]
@@ -184,7 +186,7 @@ func volumeSnapshotRestoreRun(r *reconciler, resourceCluster string, resourceSna
 
 	checkResourceName := jobResource.Name
 	isSnapshotRestoreCompleted := false
-	omcplog.V(4).Info("connecting... : " + checkResourceName)
+	omcplog.V(0).Info("connecting... : " + checkResourceName)
 	podName := ""
 	for !isSnapshotRestoreCompleted {
 		var regexpErr error
@@ -199,17 +201,17 @@ func volumeSnapshotRestoreRun(r *reconciler, resourceCluster string, resourceSna
 				} else {
 					podName = checkResourceName + "-unknown"
 				}
-				omcplog.V(3).Info("TargetCluster PodName : " + podName + "/" + string(pod.Status.Phase))
+				omcplog.V(0).Info("TargetCluster PodName : " + podName + "/" + string(pod.Status.Phase))
 				if pod.Status.Phase == corev1.PodRunning {
 					isSnapshotRestoreCompleted = true
-					omcplog.V(3).Info(podName + " is Running.")
+					omcplog.V(0).Info(podName + " is Running.")
 				}
 			}
 		}
 
 		if timeoutcheck == 30 {
 			//시간초과 - 오류 루틴으로 진입
-			omcplog.V(3).Info("long time error...")
+			omcplog.V(0).Info("long time error...")
 
 			//1. 이벤트 리소스를 통한 오류 검출. 이벤트에서 해당 오류 찾아서 도출. Reason에 SuccessfulCreate가 포함된 경우는 CMD 에서 오류를 찾아야한다.
 			errDetail, eventErr := config.FindErrorForEvent(&targetListClient, jobResource.Name)
@@ -225,7 +227,7 @@ func volumeSnapshotRestoreRun(r *reconciler, resourceCluster string, resourceSna
 		if !isSnapshotRestoreCompleted {
 			timeoutcheck = timeoutcheck + 5
 			time.Sleep(time.Second * 5)
-			omcplog.V(4).Info("connecting...")
+			omcplog.V(0).Info("connecting...")
 		}
 	}
 
@@ -236,19 +238,19 @@ func volumeSnapshotRestoreRun(r *reconciler, resourceCluster string, resourceSna
 		return fmt.Errorf("Command run  error"), commandErr
 	}
 
-	omcplog.V(4).Info("=====in======")
-	omcplog.V(4).Info(fmt.Sprintf("%s", cmdResult.Stdin.Bytes()))
-	omcplog.V(4).Info("=====out======")
-	omcplog.V(4).Info(fmt.Sprintf("%s", cmdResult.Stdout.Bytes()))
-	omcplog.V(4).Info("=====error=======")
-	omcplog.V(4).Info(fmt.Sprintf("%s", cmdResult.Stderr.Bytes()))
+	omcplog.V(0).Info("=====in======")
+	omcplog.V(0).Info(fmt.Sprintf("%s", cmdResult.Stdin.Bytes()))
+	omcplog.V(0).Info("=====out======")
+	omcplog.V(0).Info(fmt.Sprintf("%s", cmdResult.Stdout.Bytes()))
+	omcplog.V(0).Info("=====error=======")
+	omcplog.V(0).Info(fmt.Sprintf("%s", cmdResult.Stderr.Bytes()))
 
 	return nil, nil
 }
 
 //volumeSnapshotRun 내에는 PV 만 들어온다고 가정한다.
 func getEtcdSnapshotRestoreForPV(r *reconciler, resourceSnapshotKey string, startTime string) (*apiv1.PersistentVolume, error) {
-	omcplog.V(4).Info("# getEtcdSnapshotRestoreForPV")
+	omcplog.V(0).Info("# getEtcdSnapshotRestoreForPV")
 	snapshotKeyAllPath := resourceSnapshotKey
 
 	//ETCD 에서 데이터 가져오기.
@@ -275,7 +277,7 @@ func getEtcdSnapshotRestoreForPV(r *reconciler, resourceSnapshotKey string, star
 
 //volumeSnapshotRun 내에는 PV 만 들어온다고 가정한다.
 func getEtcdSnapshotRestoreForPVC(r *reconciler, resourceSnapshotKey string, startTime string) (*apiv1.PersistentVolumeClaim, error) {
-	omcplog.V(4).Info("# getEtcdSnapshotRestoreForPVC")
+	omcplog.V(0).Info("# getEtcdSnapshotRestoreForPVC")
 	snapshotKeyAllPath := resourceSnapshotKey
 
 	//ETCD 에서 데이터 가져오기.

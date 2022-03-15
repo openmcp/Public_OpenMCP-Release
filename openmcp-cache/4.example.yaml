@@ -3,8 +3,8 @@ kind: Cache
 metadata:
   name: cache-test
 spec:
-  timer: "5"
-  cachecount: 4
+  timer: "3"
+  cachecount: 5
 
 
     

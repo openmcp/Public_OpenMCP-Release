@@ -1,4 +1,5 @@
 #!/bin/bash
+#### 해당 서비스의 스냅샷 정보를 추출하는 프로그램.
 set -e
 # 1. externalNFS 에서 해당 deploy 로 지정된 스냅샷 폴더로 이동한다,
 #sleep 1000000000000000000
@@ -17,4 +18,4 @@ ls -al --time-style="+%Y%m%d-%H%M%S" | grep -v ^d | grep -v total |grep -v backu
 #  [ {"size": "10240", "snapshotKey": "1636449053"}, {"size": "10240", "snapshotKey": "1637027140"} ] 
 
 #아래 명령어가 없으면 job 이 완료가 아닌 running 상태가 됨.
-touch /success
+#touch /success

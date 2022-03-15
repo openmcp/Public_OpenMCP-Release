@@ -81,6 +81,17 @@ spec:
               Reason:
                 description: Reason indicates the reason for any backup related failures.
                 type: string
+              UpdateList:
+                items:
+                  properties:
+                    ImageName:
+                      type: string
+                    ImageStatus:
+                      type: string
+                    Timestamp:
+                      type: string
+                  type: object
+                type: array
               succeeded:
                 description: Succeeded indicates if the backup has Succeeded.
                 type: boolean
