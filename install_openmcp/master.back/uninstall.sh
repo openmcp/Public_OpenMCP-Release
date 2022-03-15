@@ -58,6 +58,9 @@ echo "--- istio"
 rm -r istio/certs/
 rm istio/openmcp.yaml
 kubectl delete --context=openmcp -f samples/multicluster/expose-istiod.yaml
+kubectl delete -f istio/samples/addons/kiali.yaml
+kubectl delete -f istio/samples/addons/prometheus.yaml
+
 echo "--- delete crds"
 kubectl delete -f ../../crds
     
