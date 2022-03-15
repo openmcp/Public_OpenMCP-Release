@@ -70,6 +70,12 @@ spec:
   hub: REPLACE_ISTIO_HUB
   values:
     global:
+      proxy:
+        autoInject: enabled
+        resources:
+          limits:
+            cput: "8"
+            memory: 16Gi
       imagePullSecrets:
       - regcred
   revision: "${REVISION}"

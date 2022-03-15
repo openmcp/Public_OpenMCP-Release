@@ -16,13 +16,21 @@ func ClearInfluxDB(clusterName string) error {
 	INFLUX_PORT := os.Getenv("INFLUX_PORT")
 	INFLUX_USERNAME := os.Getenv("INFLUX_USERNAME")
 	INFLUX_PASSWORD := os.Getenv("INFLUX_PASSWORD")
-	inf := NewInflux(INFLUX_IP, INFLUX_PORT, INFLUX_USERNAME, INFLUX_PASSWORD)
 
-	err := inf.DeleteAllCluster(clusterName)
-	if err != nil {
-		omcplog.V(4).Info("ClearInfluxDB ERROR : ", err)
+	if len(INFLUX_IP) != 0 && len(INFLUX_PORT) != 0 && len(INFLUX_USERNAME) != 0 && len(INFLUX_PASSWORD) != 0 {
+		inf := NewInflux(INFLUX_IP, INFLUX_PORT, INFLUX_USERNAME, INFLUX_PASSWORD)
+
+		err := inf.DeleteAllCluster(clusterName)
+		if err != nil {
+			omcplog.V(4).Info("ClearInfluxDB ERROR : ", err)
+		}
+
+		return err
+	}else {
+		omcplog.V(0).Info("!! error : http: no Value in request URL")
 	}
-	return err
+
+	return nil
 }
 func NewInflux(INFLUX_IP, INFLUX_PORT, username, password string) *Influx {
 	omcplog.V(4).Info("Func NewInflux Called")

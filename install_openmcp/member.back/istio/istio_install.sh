@@ -44,6 +44,12 @@ spec:
   profile: remote
   values:
     global:
+      proxy:
+        autoInject: enabled
+        resources:
+          limits:
+            cput: "8"
+            memory: 16Gi
       imagePullSecrets:
       - regcred
       meshID: mesh-$CTX_MASTER
