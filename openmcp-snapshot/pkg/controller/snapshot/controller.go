@@ -51,7 +51,7 @@ func GetPodName(targetClient generic.Client, dpName string, namespace string) (s
 
 func NewController(live *cluster.Cluster, ghosts []*cluster.Cluster, ghostNamespace string, myClusterManager *clusterManager.ClusterManager) (*controller.Controller, error) {
 	cm = myClusterManager
-	omcplog.V(4).Info("NewController start")
+	omcplog.V(0).Info("NewController start")
 	liveclient, err := live.GetDelegatingClient()
 	if err != nil {
 		omcplog.Error("getting delegating client for live cluster: ", err)
@@ -75,7 +75,7 @@ func NewController(live *cluster.Cluster, ghosts []*cluster.Cluster, ghostNamesp
 		omcplog.Error("setting up Pod watch in live cluster: ", err)
 		return nil, err
 	}
-	omcplog.V(4).Info("NewController end")
+	omcplog.V(0).Info("NewController end")
 	return co, nil
 }
 
@@ -88,9 +88,9 @@ type reconciler struct {
 }
 
 func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) {
-	omcplog.V(3).Info("Snapshot Start : Reconcile")
+	omcplog.V(0).Info("Snapshot Start : Reconcile")
 	startDate := time.Now()
-	omcplog.V(3).Info(startDate)
+	omcplog.V(0).Info(startDate)
 	instance := &nanumv1alpha1.Snapshot{}
 	r.progressMax = 1
 	r.progressCurrent = 0
@@ -104,24 +104,24 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 
 	if instance.Status.Status == corev1.ConditionTrue {
 		// 이미 성공한 케이스는 로직을 안탄다.
-		omcplog.V(4).Info(instance.Name + " already succeed")
+		omcplog.V(0).Info(instance.Name + " already succeed")
 		return reconcile.Result{Requeue: false}, nil
 	}
 	if instance.Status.Status == corev1.ConditionFalse {
 		// 이미 실패한 케이스는 로직을 다시 안탄다.
-		omcplog.V(4).Info(instance.Name + " already failed")
+		omcplog.V(0).Info(instance.Name + " already failed")
 		return reconcile.Result{Requeue: false}, nil
 	}
-	omcplog.V(4).Info("0. get instance ... !Update :" + strconv.Itoa(r.progressCurrent))
+	omcplog.V(0).Info("0. get instance ... !Update :" + strconv.Itoa(r.progressCurrent))
 	r.makeStatusRun(instance, "Running", "0. get resource instance success", "", nil)
-	omcplog.V(4).Info("0. get instance ... !Update End")
+	omcplog.V(0).Info("0. get instance ... !Update End")
 
 	//groupSnapshot 키값에 사용될 시간 추출
 	//startTime := strconv.Itoa(int(time.Now().Unix()))
 	groupSnapshotKey := strconv.Itoa(int(time.Now().Unix()))
 
-	omcplog.V(3).Info(time.Now())
-	omcplog.V(4).Info("[Reconcile] startTime : " + groupSnapshotKey)
+	omcplog.V(0).Info(time.Now())
+	omcplog.V(0).Info("[Reconcile] startTime : " + groupSnapshotKey)
 	instance.Status.IsVolumeSnapshot = false
 	instance.Spec.GroupSnapshotKey = groupSnapshotKey
 	//instance.Status.SnapshotKey = startTime
@@ -129,11 +129,11 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 	//progress++
 	r.progressCurrent++ //getResource 하기 전이라 추가함.
 	r.progressMax++
-	omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-	omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
-	omcplog.V(4).Info("1. get SnapshotKey ... !Update :" + strconv.Itoa(r.progressCurrent))
+	omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+	omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+	omcplog.V(0).Info("1. get SnapshotKey ... !Update :" + strconv.Itoa(r.progressCurrent))
 	r.makeStatusRun(instance, "Running", "1. get SnapshotKey success", "", nil)
-	omcplog.V(4).Info("1. get SnapshotKey ... !Update End")
+	omcplog.V(0).Info("1. get SnapshotKey ... !Update End")
 
 	// 스냅샷 Resource 정보들을 가공하는 부분
 	var initErr error
@@ -143,31 +143,31 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 	r.progressMax++ //2번
 	//r.progressMax++ //3번은  setResource에서 etcd, volume 개수만큼 진행
 	//r.progressMax++ //4번  미구현
-	omcplog.V(4).Info("+ [Both] Progress Setting end")
-	omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-	omcplog.V(4).Info("++ progressMax add :" + strconv.Itoa(r.progressMax))
-	omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+	omcplog.V(0).Info("+ [Both] Progress Setting end")
+	omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+	omcplog.V(0).Info("++ progressMax add :" + strconv.Itoa(r.progressMax))
+	omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
 
 	if initErr != nil {
 		omcplog.Error("2. Init error : ", initErr)
 		r.makeStatusRun(instance, corev1.ConditionFalse, "2. Init error", "", initErr)
-		omcplog.V(3).Info("Snapshot Failed")
+		omcplog.V(0).Info("Snapshot Failed")
 		return reconcile.Result{Requeue: false}, nil
 	} else {
 		r.progressCurrent++
-		omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-		omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
-		omcplog.V(4).Info("2. Init ... !Update :" + strconv.Itoa(r.progressCurrent))
+		omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+		omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+		omcplog.V(0).Info("2. Init ... !Update :" + strconv.Itoa(r.progressCurrent))
 		r.makeStatusRun(instance, "Running", "2. Init success", "", nil)
-		omcplog.V(4).Info("2. Init ... !Update End")
+		omcplog.V(0).Info("2. Init ... !Update End")
 	}
 
 	pvIdx := 1
 	for idx, snapshotSource := range instance.Status.SnapshotSources {
 		desc := ""
 		resourceType := snapshotSource.ResourceType
-		omcplog.V(4).Info("\n[" + strconv.Itoa(idx) + "] : Resource : " + resourceType)
-		omcplog.V(4).Info(snapshotSource)
+		omcplog.V(0).Info("\n[" + strconv.Itoa(idx) + "] : Resource : " + resourceType)
+		omcplog.V(0).Info(snapshotSource)
 
 		// resource Type PV일때 볼륨 스냅샷 진행.
 		if resourceType == config.PV {
@@ -175,34 +175,34 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 			volumeSnapshotKey := util.MakeVolumeProcessResourceKey(groupSnapshotKey, strconv.Itoa(int(startDate.Unix())), strconv.Itoa(pvIdx))
 			volumeDataSource := &nanumv1alpha1.VolumeDataSource{VolumeSnapshotKey: volumeSnapshotKey}
 			instance.Status.SnapshotSources[idx].VolumeDataSource = volumeDataSource
-			omcplog.V(4).Info("volumeSnapshotKey : " + volumeSnapshotKey)
+			omcplog.V(0).Info("volumeSnapshotKey : " + volumeSnapshotKey)
 			crdVolumeInfos, volumeSnapshotErr, errDetail := volumeSnapshotRun(r, &snapshotSource, groupSnapshotKey, volumeSnapshotKey, pvIdx)
 			if volumeSnapshotErr != nil {
 				if errDetail == nil {
 					omcplog.Error("3. volumeSnapshotRun error : ", volumeSnapshotErr)
 					r.makeStatusRun(instance, corev1.ConditionFalse, "3. volumeSnapshotRun error", "", volumeSnapshotErr)
-					omcplog.V(3).Info("Snapshot Failed")
+					omcplog.V(0).Info("Snapshot Failed")
 					return reconcile.Result{Requeue: false}, nil
 
 				} else if errDetail.Error() == "Command Error : TargetFile is empty!" {
 					// 타겟이 없은 경우 성공처리
-					omcplog.V(3).Info("3. snapshot volume is zero.")
+					omcplog.V(0).Info("3. snapshot volume is zero.")
 					instance.Status.SnapshotSources[idx].VolumeDataSource.VolumeSnapshotKey += " Empty"
 				} else {
 					omcplog.Error("3. volumeSnapshotRun error(detail) : ", errDetail)
 					r.makeStatusRun(instance, corev1.ConditionFalse, "3. volumeSnapshotRun error(detail)", "", errDetail)
-					omcplog.V(3).Info("Snapshot Failed")
+					omcplog.V(0).Info("Snapshot Failed")
 					return reconcile.Result{Requeue: false}, nil
 				}
 			} else {
 				instance.Status.SnapshotSources[idx].VolumeInfos = crdVolumeInfos
 				r.progressCurrent++
-				omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-				omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
-				omcplog.V(4).Info("3. volumeSnapshotRun... !Update :" + strconv.Itoa(r.progressCurrent))
+				omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+				omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+				omcplog.V(0).Info("3. volumeSnapshotRun... !Update :" + strconv.Itoa(r.progressCurrent))
 				r.makeStatusRun(instance, "Running", "3. volumeSnapshotRun success : "+desc, "", nil)
 				//r.makeStatusRunWithVolumeInfos(instance, corev1.ConditionFalse, "3. volumeSnapshotRun error(detail)", "", errDetail, volumeInfos)
-				omcplog.V(4).Info("3. volumedSnapshotRun ... !Update End")
+				omcplog.V(0).Info("3. volumedSnapshotRun ... !Update End")
 			}
 			pvIdx++
 		}
@@ -211,15 +211,15 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 		if etcdSnapshotErr != nil {
 			omcplog.Error("3. etcdSnapshotRun error : ", etcdSnapshotErr)
 			r.makeStatusRun(instance, corev1.ConditionFalse, "3. etcdSnapshotRun error", "", etcdSnapshotErr)
-			omcplog.V(3).Info("Snapshot Failed")
+			omcplog.V(0).Info("Snapshot Failed")
 			return reconcile.Result{Requeue: false}, nil
 		} else {
 			r.progressCurrent++
-			omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-			omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
-			omcplog.V(4).Info("3. etcdSnapshotRun... !Update :" + strconv.Itoa(r.progressCurrent))
+			omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+			omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+			omcplog.V(0).Info("3. etcdSnapshotRun... !Update :" + strconv.Itoa(r.progressCurrent))
 			r.makeStatusRun(instance, "Running", "3. etcdSnapshotRun success : "+desc, "", nil)
-			omcplog.V(4).Info("3. etcdSnapshotRun ... !Update End")
+			omcplog.V(0).Info("3. etcdSnapshotRun ... !Update End")
 		}
 	}
 
@@ -227,9 +227,9 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 
 	// TODO get Snapshot List 정보 추출.
 	r.progressCurrent++
-	omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-	omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
-	omcplog.V(3).Info("Snapshot Complete")
+	omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+	omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+	omcplog.V(0).Info("Snapshot Complete")
 	elapsed := time.Since(startDate)
 	r.makeStatusRun(instance, corev1.ConditionTrue, "Snapshot succeed", elapsed.String(), nil)
 
@@ -401,10 +401,10 @@ func (r *reconciler) setResource(status *nanumv1alpha1.SnapshotStatus) ([]nanumv
 		//etcd 스냅샷에 대한 내용.
 		r.progressMax++
 	}
-	omcplog.V(4).Info("+ ProgressMax Setting end")
-	omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-	omcplog.V(4).Info("++ progressMax add :" + strconv.Itoa(r.progressMax))
-	omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+	omcplog.V(0).Info("+ ProgressMax Setting end")
+	omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+	omcplog.V(0).Info("++ progressMax add :" + strconv.Itoa(r.progressMax))
+	omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
 
 	resourceList = fixedResourceList
 	return resourceList, nil

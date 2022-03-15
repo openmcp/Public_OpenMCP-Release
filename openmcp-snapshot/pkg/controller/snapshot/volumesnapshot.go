@@ -26,7 +26,7 @@ import (
 //volumeSnapshotRun 내에는 PV 만 들어온다고 가정한다.
 func volumeSnapshotRun(r *reconciler, snapshotSource *nanumv1alpha1.SnapshotSource, startTime string, volumeSnapshotKey string, pvIdx int) ([]nanumv1alpha1.VolumeInfo, error, error) {
 	client := cm.Cluster_genClients[snapshotSource.ResourceCluster]
-	omcplog.V(3).Info("volumeSnapshot Start")
+	omcplog.V(0).Info("volumeSnapshot Start")
 
 	runType := util.RunTypeSnapshot
 	/*
@@ -48,7 +48,7 @@ func volumeSnapshotRun(r *reconciler, snapshotSource *nanumv1alpha1.SnapshotSour
 	*/
 	pvResourceOri := &corev1.PersistentVolume{}
 
-	omcplog.V(4).Info("get PV { Namespace : " + snapshotSource.ResourceNamespace + ", ResourceName : " + snapshotSource.ResourceName)
+	omcplog.V(0).Info("get PV { Namespace : " + snapshotSource.ResourceNamespace + ", ResourceName : " + snapshotSource.ResourceName)
 	pvGetErr := client.Get(context.TODO(), pvResourceOri, snapshotSource.ResourceNamespace, snapshotSource.ResourceName)
 	if pvGetErr != nil {
 		omcplog.Error(pvGetErr)
@@ -62,7 +62,7 @@ func volumeSnapshotRun(r *reconciler, snapshotSource *nanumv1alpha1.SnapshotSour
 	// Key 생성 후 snapshotSource.volumeDataSource.VolumeSnapshotID 에 넣기. - 로직 끝난 뒤 reconcile 에서 업데이트.
 	pvResource.ClusterName = snapshotSource.ResourceCluster
 
-	omcplog.V(4).Info("set Cluster... [" + snapshotSource.ResourceCluster + "]")
+	omcplog.V(0).Info("set Cluster... [" + snapshotSource.ResourceCluster + "]")
 	/*
 		2. dummy job 생성 및 PV, external NFS 연결
 
@@ -76,36 +76,38 @@ func volumeSnapshotRun(r *reconciler, snapshotSource *nanumv1alpha1.SnapshotSour
 	*/
 	expvResource, mountPath := util.GetExternalNfsPVAPI(volumeSnapshotKey, *pvResource, runType)
 	expvcResource := util.GetExternalNfsPVCAPI(volumeSnapshotKey, runType)
-	pvcResource := util.GetPVCAPI(volumeSnapshotKey, *pvResource, runType)
+	oriPvcResource := util.GetPVCAPI(volumeSnapshotKey, *pvResource, runType)
+	omcplog.V(0).Info("oriPvcResource", oriPvcResource)
 	oriPvResource := util.GetPVAPI(volumeSnapshotKey, *pvResource, runType)
+	omcplog.V(0).Info("oriPvResource", oriPvResource)
 
 	targetErr := client.Create(context.TODO(), expvResource)
 	if targetErr != nil {
 		omcplog.Error(targetErr)
 		return nil, fmt.Errorf("expvResource create error[" + expvResource.Name + "]"), targetErr
 	} else {
-		omcplog.V(3).Info("expvResource create[" + expvResource.Name + "]")
+		omcplog.V(0).Info("expvResource create[" + expvResource.Name + "]")
 	}
 	targetErr = client.Create(context.TODO(), expvcResource)
 	if targetErr != nil {
 		omcplog.Error(targetErr)
 		return nil, fmt.Errorf("expvcResource create error[" + expvcResource.Name + "]"), targetErr
 	} else {
-		omcplog.V(3).Info("expvcResource create[" + expvcResource.Name + "]")
+		omcplog.V(0).Info("expvcResource create[" + expvcResource.Name + "]")
 	}
-	targetErr = client.Create(context.TODO(), pvcResource)
+	targetErr = client.Create(context.TODO(), oriPvcResource)
 	if targetErr != nil {
 		omcplog.Error(targetErr)
-		return nil, fmt.Errorf("pvcResource create error[" + pvcResource.Name + "]"), targetErr
+		return nil, fmt.Errorf("pvcResource create error[" + oriPvcResource.Name + "]"), targetErr
 	} else {
-		omcplog.V(3).Info("pvcResource create[" + pvcResource.Name + "]")
+		omcplog.V(0).Info("pvcResource create[" + oriPvcResource.Name + "]")
 	}
 	targetErr = client.Create(context.TODO(), oriPvResource)
 	if targetErr != nil {
 		omcplog.Error(targetErr)
 		return nil, fmt.Errorf("oriPvResource create error[" + oriPvResource.Name + "]"), targetErr
 	} else {
-		omcplog.V(3).Info("oriPvResource create[" + oriPvResource.Name + "]")
+		omcplog.V(0).Info("oriPvResource create[" + oriPvResource.Name + "]")
 	}
 
 	/*
@@ -148,6 +150,11 @@ func volumeSnapshotRun(r *reconciler, snapshotSource *nanumv1alpha1.SnapshotSour
 		omcplog.Error(getTmpErr)
 		return nil, fmt.Errorf("get GetVolumeListTemplate error"), getTmpErr
 	}
+	getVolumeSizeCmd, getTmpErr := util.GetVolumeSizeTemplate(pvResource.Name, mountPath)
+	if getTmpErr != nil {
+		omcplog.Error(getTmpErr)
+		return nil, fmt.Errorf("get GetVolumeSizeTemplate error"), getTmpErr
+	}
 
 	// 잡생성
 	jobResource := util.GetJobAPI(volumeSnapshotKey, snapshotTmpCmd, runType)
@@ -156,7 +163,7 @@ func volumeSnapshotRun(r *reconciler, snapshotSource *nanumv1alpha1.SnapshotSour
 		omcplog.Error(targetErr)
 		return nil, fmt.Errorf("jobResource create error : " + jobResource.Name), targetErr
 	} else {
-		omcplog.V(3).Info("jobResource create[" + jobResource.Name + "]")
+		omcplog.V(0).Info("jobResource create[" + jobResource.Name + "]")
 	}
 
 	targetListClient := *cm.Cluster_kubeClients[snapshotSource.ResourceCluster]
@@ -165,7 +172,7 @@ func volumeSnapshotRun(r *reconciler, snapshotSource *nanumv1alpha1.SnapshotSour
 	//Job 생성 체크
 	checkResourceName := jobResource.Name
 	isSnapshotCompleted := false
-	omcplog.V(4).Info("connecting... : " + checkResourceName)
+	omcplog.V(0).Info("connecting... : " + checkResourceName)
 	podName := ""
 	for !isSnapshotCompleted {
 		var regexpErr error
@@ -180,17 +187,17 @@ func volumeSnapshotRun(r *reconciler, snapshotSource *nanumv1alpha1.SnapshotSour
 				} else {
 					podName = checkResourceName + "-unknown"
 				}
-				omcplog.V(3).Info("TargetCluster PodName : " + podName + "/" + string(pod.Status.Phase))
+				omcplog.V(0).Info("TargetCluster PodName : " + podName + "/" + string(pod.Status.Phase))
 				if pod.Status.Phase == corev1.PodRunning {
 					isSnapshotCompleted = true
-					omcplog.V(3).Info(podName + " is Running.")
+					omcplog.V(0).Info(podName + " is Running.")
 				}
 			}
 		}
 
 		if timeoutcheck == 30 {
 			//시간초과 - 오류 루틴으로 진입
-			omcplog.V(3).Info("long time error...")
+			omcplog.V(0).Info("long time error...")
 
 			//1. 이벤트 리소스를 통한 오류 검출. 이벤트에서 해당 오류 찾아서 도출. Reason에 SuccessfulCreate가 포함된 경우는 CMD 에서 오류를 찾아야한다.
 			errDetail, eventErr := config.FindErrorForEvent(&targetListClient, jobResource.Name)
@@ -206,13 +213,14 @@ func volumeSnapshotRun(r *reconciler, snapshotSource *nanumv1alpha1.SnapshotSour
 		if !isSnapshotCompleted {
 			timeoutcheck = timeoutcheck + 5
 			time.Sleep(time.Second * 5)
-			omcplog.V(4).Info("connecting...")
+			omcplog.V(0).Info("connecting...")
 		}
 	}
 
 	//Job Command 실행
 	restconfig := cm.Cluster_configs[snapshotSource.ResourceCluster]
 
+	//1. 스냅샷 Job 실행
 	cmdResult, commandErr := config.RunCommand(&targetListClient, restconfig, podName, snapshotCmd, config.JOB_NAMESPACE)
 	if nil != commandErr {
 		return nil, fmt.Errorf("Command run  error"), commandErr
@@ -221,16 +229,17 @@ func volumeSnapshotRun(r *reconciler, snapshotSource *nanumv1alpha1.SnapshotSour
 	stdin := fmt.Sprintf("%s", cmdResult.Stdin.Bytes())
 	stdout := fmt.Sprintf("%s", cmdResult.Stdout.Bytes())
 	stderr := fmt.Sprintf("%s", cmdResult.Stderr.Bytes())
-	omcplog.V(4).Info("=====in======")
-	omcplog.V(4).Info(stdin)
-	omcplog.V(4).Info("=====out======")
-	omcplog.V(4).Info(stdout)
-	omcplog.V(4).Info("=====error=======")
-	omcplog.V(4).Info(stderr)
+	omcplog.V(0).Info("=====in======")
+	omcplog.V(0).Info(stdin)
+	omcplog.V(0).Info("=====out======")
+	omcplog.V(0).Info(stdout)
+	omcplog.V(0).Info("=====error=======")
+	omcplog.V(0).Info(stderr)
 	if "" != strings.TrimSpace(stderr) {
 		return nil, fmt.Errorf("Command run  error"), fmt.Errorf(stderr)
 	}
 
+	//2-1. 볼륨 리스트 추출 Job 실행
 	cmdResult2, commandErr := config.RunCommand(&targetListClient, restconfig, podName, getVolumeListCmd, config.JOB_NAMESPACE)
 	if nil != commandErr {
 		return nil, fmt.Errorf("Command run  error"), commandErr
@@ -239,32 +248,68 @@ func volumeSnapshotRun(r *reconciler, snapshotSource *nanumv1alpha1.SnapshotSour
 	stdin = fmt.Sprintf("%s", cmdResult2.Stdin.Bytes())
 	stdout = fmt.Sprintf("%s", cmdResult2.Stdout.Bytes())
 	stderr = fmt.Sprintf("%s", cmdResult2.Stderr.Bytes())
-	omcplog.V(4).Info("=====in======")
-	omcplog.V(4).Info(stdin)
-	omcplog.V(4).Info("=====out======")
-	omcplog.V(4).Info(stdout)
-	omcplog.V(4).Info("=====error=======")
-	omcplog.V(4).Info(stderr)
+	omcplog.V(0).Info("=====in======")
+	omcplog.V(0).Info(stdin)
+	omcplog.V(0).Info("=====out======")
+	omcplog.V(0).Info(stdout)
+	omcplog.V(0).Info("=====error=======")
+	omcplog.V(0).Info(stderr)
 	if "" != strings.TrimSpace(stderr) {
 		return nil, fmt.Errorf("Command run  error"), fmt.Errorf(stderr)
 	}
 
-	var volumeInfos []VolumeInfo
-	if err := json.Unmarshal([]byte(stdout), &volumeInfos); err != nil {
+	// 2-2. 추출된 stdout 변수를 volumeInfos에 매핑.
+	var currentVolumeInfos []VolumeInfo
+	if err := json.Unmarshal([]byte(stdout), &currentVolumeInfos); err != nil {
 		return nil, fmt.Errorf("Command run  error"), fmt.Errorf(stderr)
 	}
 
+	//3-1. 볼륨 리스트 추출 Job 실행
+	cmdResult3, commandErr := config.RunCommand(&targetListClient, restconfig, podName, getVolumeSizeCmd, config.JOB_NAMESPACE)
+	if nil != commandErr {
+		return nil, fmt.Errorf("Command run  error"), commandErr
+	}
+
+	stdin = fmt.Sprintf("%s", cmdResult3.Stdin.Bytes())
+	stdout = fmt.Sprintf("%s", cmdResult3.Stdout.Bytes())
+	stderr = fmt.Sprintf("%s", cmdResult3.Stderr.Bytes())
+	omcplog.V(0).Info("=====in======")
+	omcplog.V(0).Info(stdin)
+	omcplog.V(0).Info("=====out======")
+	omcplog.V(0).Info(stdout)
+	omcplog.V(0).Info("=====error=======")
+	omcplog.V(0).Info(stderr)
+	if "" != strings.TrimSpace(stderr) {
+		return nil, fmt.Errorf("Command run  error"), fmt.Errorf(stderr)
+	}
+
+	// 3-2. 추출된 stdout 변수를 currentVolumeInfos 매핑.
+	currentMaxSize := stdout
+
+	// total. 위 2,3에서 추출된 volumeInfos, currentMaxSize 데이터로 리턴시킬 crdVolumeInfos 작성.
 	crdVolumeInfos := []nanumv1alpha1.VolumeInfo{}
-	for _, volumeInfo := range volumeInfos {
+	currentVolumeInfosIdx := 0
+	for _, volumeInfo := range currentVolumeInfos {
 		crdVolumeInfo := nanumv1alpha1.VolumeInfo{}
 		crdVolumeInfo.VolumeSnapshotDate = volumeInfo.Date
 		crdVolumeInfo.VolumeSnapshotKey = volumeInfo.SnapshotKey
+
+		// 마지막에 현재 사이즈를 삽입.
+		if currentVolumeInfosIdx == len(currentVolumeInfos)-1 {
+			crdVolumeInfo.VolumeSnapshotMaxSize = currentMaxSize
+		}
+		if len(crdVolumeInfo.VolumeSnapshotMaxSize) == 0 {
+			crdVolumeInfo.VolumeSnapshotMaxSize = "undefined"
+		}
+		//crdVolumeInfo.VolumeSnapshotSize = volumeInfo.Size + "/" + crdVolumeInfo.VolumeSnapshotMaxSize
 		crdVolumeInfo.VolumeSnapshotSize = volumeInfo.Size
 		crdVolumeInfos = append(crdVolumeInfos, crdVolumeInfo)
+
+		currentVolumeInfosIdx++
 	}
 
-	omcplog.V(4).Info("=====volumeInfos======")
-	omcplog.V(4).Info(crdVolumeInfos)
+	omcplog.V(0).Info("=====crdVolumeInfos======")
+	omcplog.V(0).Info(crdVolumeInfos)
 
 	return crdVolumeInfos, nil, nil
 }

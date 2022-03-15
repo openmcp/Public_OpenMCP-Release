@@ -147,7 +147,7 @@ func RunCommand(client kubernetes.Interface, config *restclient.Config, podName 
 			omcplog.Error("Command Error : TargetFile is empty!")
 			return result, fmt.Errorf("Command Error : TargetFile is empty!")
 		} else {
-			omcplog.Error("NewSPDYExecutor Stream err : ", err, result.Stderr)
+			omcplog.Error("NewSPDYExecutor Stream err : ", err, &result.Stderr)
 			return result, err
 		}
 	}

@@ -93,8 +93,23 @@ func GetVolumeListTemplate(pvName string, mountPath string) (string, error) {
 	}
 
 	ret1 := strings.ReplaceAll(cmd, "!PVNAME", pvName)
-        ret := strings.ReplaceAll(ret1, "!PATH", mountPath)
+	ret := strings.ReplaceAll(ret1, "!PATH", mountPath)
 
 	omcplog.V(5).Info("--- GetVolumeListTemplate end")
+	return ret, nil
+}
+
+func GetVolumeSizeTemplate(pvName string, mountPath string) (string, error) {
+	omcplog.V(5).Info("--- GetVolumeSizeTemplate start")
+	cmd, err := GetTemplate("getVolumeSize.sh")
+	if err != nil {
+		omcplog.Error("get GetVolumeSizeTemplate error : ", err)
+		return "", err
+	}
+
+	ret1 := strings.ReplaceAll(cmd, "!PVNAME", pvName)
+	ret := strings.ReplaceAll(ret1, "!PATH", mountPath)
+
+	omcplog.V(5).Info("--- GetVolumeSizeTemplate end")
 	return ret, nil
 }

@@ -56,7 +56,7 @@ func (r *RegistryManager) getAppName(nodeName string) string {
 
 	if len(appName) >= 64 {
 		appName = appName[0:63]
-		omcplog.V(4).Info(" appName size error! ")
+		omcplog.V(4).Info(" appName big size ! ")
 	}
 	return appName
 }

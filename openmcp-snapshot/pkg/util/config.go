@@ -24,9 +24,11 @@ const EXTERNAL_NFS_PATH_STORAGE = "/home/nfs/storage"
 //const EXTERNAL_ETCD = "10.0.3.40:12379"
 
 //keti test
-const EXTERNAL_NFS = "115.94.141.62"
+//const EXTERNAL_NFS = "115.94.141.62"
+const EXTERNAL_NFS = "211.45.109.210"
 const MASTER_IP = "192.168.0.152"
-const EXTERNAL_ETCD = "10.0.3.20:12379"
+const EXTERNAL_ETCD = "211.45.109.210:12379"
+//const EXTERNAL_ETCD = "10.0.3.20:12379"
 
 /*
 

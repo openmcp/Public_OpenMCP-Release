@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu
+  labels:
+    app: ubuntu
+spec:
+  containers:
+  - image: ubuntu
+    command:
+      - "sleep"
+      - "604800"
+      - "echo nameserver 8.8.8 > /etc/resolv.conf"
+    imagePullPolicy: IfNotPresent
+    name: ubuntu
+  restartPolicy: Always

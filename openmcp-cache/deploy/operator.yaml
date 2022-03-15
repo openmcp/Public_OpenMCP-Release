@@ -19,7 +19,8 @@ spec:
       containers:
         - name: openmcp-cache
           # Replace this with the built image name
-          image: openmcp/openmcp-cache:v0.0.1
+          #v1.0.1c : 꾸미다 버전 
+          image: openmcp/openmcp-cache:v1.0.1c
           command:
           - openmcp-cache
           imagePullPolicy: Always

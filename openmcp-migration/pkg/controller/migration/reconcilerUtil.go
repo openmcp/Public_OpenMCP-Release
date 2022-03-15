@@ -101,10 +101,12 @@ func (r *reconciler) setBeforeOpenmcpDeploymnet(migraionSource v1alpha1.Migratio
 	omcplog.V(4).Info("--- odeploy status ---")
 	omcplog.V(4).Info(odeploy.Status)
 	moveCount := odeploy.Status.ClusterMaps[migraionSource.SourceCluster]
-	omcplog.V(4).Info(moveCount)
 	r.moveCount = moveCount
+	omcplog.V(4).Info(moveCount)
 
-	odeploy.Status.CheckSubResource = true
+	odeploy.Status.ClusterMaps[migraionSource.SourceCluster] -= r.moveCount
+	odeploy.Status.ClusterMaps[migraionSource.TargetCluster] += r.moveCount
+	odeploy.Status.CheckSubResource = false
 	err = r.live.Status().Update(context.TODO(), odeploy)
 	if err != nil {
 		omcplog.V(3).Info(err, "-----------")
@@ -112,6 +114,7 @@ func (r *reconciler) setBeforeOpenmcpDeploymnet(migraionSource v1alpha1.Migratio
 	omcplog.V(4).Info("setBeforeOpenmcpDeploymnet end")
 	omcplog.V(4).Info("---------------")
 
+	r.setBeforeOpenmcpService(migraionSource, idx)
 	return nil
 }
 
@@ -132,9 +135,9 @@ func (r *reconciler) setAfterOpenmcpDeploymnet(micSource MigrationControllerReso
 	omcplog.V(4).Info(odeploy.Status)
 	omcplog.V(4).Info(r.moveCount)
 
-	odeploy.Status.CheckSubResource = false
-	odeploy.Status.ClusterMaps[micSource.sourceCluster] -= r.moveCount
-	odeploy.Status.ClusterMaps[micSource.targetCluster] += r.moveCount
+	odeploy.Status.CheckSubResource = true
+	//odeploy.Status.ClusterMaps[micSource.sourceCluster] -= r.moveCount
+	//odeploy.Status.ClusterMaps[micSource.targetCluster] += r.moveCount
 
 	omcplog.V(4).Info("--- convert odeploy ---")
 	omcplog.V(4).Info(odeploy.Status)
@@ -144,6 +147,73 @@ func (r *reconciler) setAfterOpenmcpDeploymnet(micSource MigrationControllerReso
 		omcplog.V(3).Info(err, "-----------")
 	}
 	omcplog.V(4).Info("setAfterOpenmcpDeploymnet end")
+	omcplog.V(4).Info("---------------")
+
+	r.setAfterOpenmcpService(micSource, idx)
+	return nil
+}
+
+// setBeforeOpenmcpService : openmcp service 가 있는지 파악하여 없으면 스킵하고, 있으면 openmcp service의 CheckSubResource 기능을 키고, r.moveCount 에 값을 넣는 기능.
+func (r *reconciler) setBeforeOpenmcpService(migraionSource v1alpha1.MigrationServiceSource, idx int) error {
+	oservice := &resourcev1alpha1.OpenMCPService{}
+	err := r.live.Get(context.TODO(), types.NamespacedName{Name: migraionSource.MigrationSources[idx].ResourceName, Namespace: migraionSource.NameSpace}, oservice)
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			omcplog.V(4).Info("setBeforeOpenmcpService skip : " + migraionSource.MigrationSources[idx].ResourceName)
+			return nil
+		} else {
+			omcplog.Error("setBeforeOpenmcpService error : ", err)
+		}
+		return err
+	}
+	omcplog.V(4).Info("--- oservice status ---")
+	omcplog.V(4).Info(oservice.Status)
+	moveCount := oservice.Status.ClusterMaps[migraionSource.SourceCluster]
+	r.moveCount = moveCount
+	omcplog.V(4).Info(moveCount)
+
+	oservice.Status.ClusterMaps[migraionSource.SourceCluster] -= r.moveCount
+	oservice.Status.ClusterMaps[migraionSource.TargetCluster] += r.moveCount
+	oservice.Status.CheckSubResource = false
+	err = r.live.Status().Update(context.TODO(), oservice)
+	if err != nil {
+		omcplog.V(3).Info(err, "-----------")
+	}
+	omcplog.V(4).Info("setBeforeOpenmcpService end")
+	omcplog.V(4).Info("---------------")
+
+	return nil
+}
+
+// setAfterOpenmcpService : openmcp service 가 있는지 파악하여 없으면 스킵하고 있으면 openmcp service의 CheckSubResource 기능을 끄고, r.moveCount 의 값을 이용하여 ClusterMaps의 개수를 조정하는 함수.
+func (r *reconciler) setAfterOpenmcpService(micSource MigrationControllerResource, idx int) error {
+	oservice := &resourcev1alpha1.OpenMCPService{}
+	err := r.live.Get(context.TODO(), types.NamespacedName{Name: micSource.resourceList[idx].ResourceName, Namespace: micSource.nameSpace}, oservice)
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			omcplog.V(4).Info("setAfterOpenmcpService skip : " + micSource.resourceList[idx].ResourceName)
+			return nil
+		} else {
+			omcplog.Error("setAfterOpenmcpService error : ", err)
+		}
+		return err
+	}
+	omcplog.V(4).Info("--- oservice ---")
+	omcplog.V(4).Info(oservice.Status)
+	omcplog.V(4).Info(r.moveCount)
+
+	oservice.Status.CheckSubResource = true
+	//oservice.Status.ClusterMaps[micSource.sourceCluster] -= r.moveCount
+	//oservice.Status.ClusterMaps[micSource.targetCluster] += r.moveCount
+
+	omcplog.V(4).Info("--- convert oservice ---")
+	omcplog.V(4).Info(oservice.Status)
+
+	err = r.live.Status().Update(context.TODO(), oservice)
+	if err != nil {
+		omcplog.V(3).Info(err, "-----------")
+	}
+	omcplog.V(4).Info("setAfterOpenmcpService end")
 	omcplog.V(4).Info("---------------")
 
 	return nil
