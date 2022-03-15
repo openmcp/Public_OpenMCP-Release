@@ -1,4 +1,4 @@
-#-*-coding:utf-8-*-
+#-*- coding: UTF-8 -*-
 import multiprocessing
 import sys,time
 from multiprocessing import Process, Event, Queue
@@ -78,7 +78,7 @@ class Form(QMainWindow):
         self.amessage = MyLabel('External Client Connector')
         self.amessage.setAlignment(Qt.AlignCenter)
        
-        self.alabel = MyLabel('국가:',3)
+        self.alabel = MyLabel('Region:',3)
         self.abuttonmessage = MyTextEdit("[Status] : <font color=\"red\">DisConnected</font>")
         self.abuttonstart = MyButton('Connect',4)
         self.acombobox = MyComboBox(2)
@@ -108,11 +108,14 @@ class Form(QMainWindow):
         self.cmessage.setAlignment(Qt.AlignCenter)
         # self.cmessage.setStyleSheet("background-color : black; color : white; font-size: 14pt; font-weight: bold;")
         # self.cmessage.setAlignment(Qt.AlignCenter)
-        self.clabel = MyLabel('동시 접속자 수:',3)
+        self.clabel = MyLabel('Concurrent Users:',3)
         self.cbuttonmessage = MyTextEdit("[Status] : <font color=\"red\">Disable</font>")
         self.cbuttonstart = MyButton('Send',4)
         self.ccombobox = MyComboBox(2)
+        self.ccombobox.addItem("100")
+        self.ccombobox.addItem("200")
         self.ccombobox.addItem("1000")
+        self.ccombobox.addItem("2000")
         self.ccombobox.addItem("5000")
         self.ccombobox.addItem("10000")
         self.ccombobox.addItem("50000")
@@ -169,7 +172,7 @@ class Form(QMainWindow):
         self.sysbenchInfoList = self.getSvcSysbenchs()
         self.BClusterList = [Event() for i in range (0, len(self.sysbenchInfoList))]
         
-        
+        print("333 sysbenchInfoList : ", self.sysbenchInfoList)
         
         for i in range(0, len(self.sysbenchInfoList)):
             self.bcombobox.addItem(self.sysbenchInfoList[i].clusterName)
@@ -286,7 +289,9 @@ class Form(QMainWindow):
     
     def getSvcSysbenchs(self):
         allClusterList = self.getAllClusterList()
-        
+
+        print("111 allClusterList : ", allClusterList)
+
         sysbenchInfoList = []     
           
         TOKEN = self.getToken()
@@ -316,6 +321,9 @@ class Form(QMainWindow):
                 print(queue.qsize())
             
         print("get complete" )
+
+        print("222 sysbenchInfoList : ", sysbenchInfoList)
+
         return sysbenchInfoList
         
     
