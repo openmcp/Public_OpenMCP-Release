@@ -87,7 +87,7 @@ spec:
 EOF
 
 # $CTX에 configuration 적용
-istioctl install --context=$CTX -f $CTX.yaml -y
+istioctl install --context=$CTX --readiness-timeout=5m -f $CTX.yaml -y
 
 # $CTX에 east-west traffic 전용 게이트웨이를 설치합니다.
 $DIR/gen-eastwest-gateway.sh \

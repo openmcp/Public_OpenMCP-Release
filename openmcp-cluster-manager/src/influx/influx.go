@@ -48,26 +48,22 @@ func (in *Influx) DeleteAllCluster(clusterName string) error {
 	omcplog.V(4).Info("Func DeleteAllCluster Called")
 
 	//q := client.Query{}
-	omcplog.V(2).Info("DELETE FROM Pods WHERE cluster = '" + clusterName + "'")
 	q := client.NewQuery("DELETE FROM Pods WHERE cluster = '"+clusterName+"'", "Metrics", "")
 	response, err := in.inClient.Query(q)
-	if err != nil {
-		omcplog.V(0).Info(err)
-		return err
-	}
+
 	if err != nil && response.Error() != nil {
-		return response.Error()
+		omcplog.V(0).Info("!! err: ", err)
+		omcplog.V(0).Info("!! response.Error(): ", response.Error())
+		//return response.Error()
 	}
 
-	omcplog.V(2).Info("DELETE FROM Nodes WHERE cluster = '" + clusterName + "'")
 	q2 := client.NewQuery("DELETE FROM Nodes WHERE cluster = '"+clusterName+"'", "Metrics", "")
 	response2, err := in.inClient.Query(q2)
-	if err != nil {
-		omcplog.V(0).Info(err)
-		return err
-	}
+
 	if err != nil && response2.Error() != nil {
-		return response2.Error()
+		omcplog.V(0).Info("!! err: ", err)
+		omcplog.V(0).Info("!! response.Error(): ", response2.Error())
+		//return response2.Error()
 	}
 
 	return nil
