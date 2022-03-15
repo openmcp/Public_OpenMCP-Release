@@ -10,6 +10,8 @@ const (
 
 var ImageCacheNfs = "211.45.109.210"
 
+//var ImageCacheNfs = "192.168.0.161"
+
 type globalRepoParamsMap struct {
 	URI      string
 	LoginURL string

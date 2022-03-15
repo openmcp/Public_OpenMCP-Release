@@ -140,6 +140,7 @@ func GetJobAPI(volumeSnapshotKey string, cmd string, runType RunType) *batchv1.J
 }
 
 func GetExternalNfsPVCAPI(volumeSnapshotKey string, runType RunType) *v1.PersistentVolumeClaim {
+	empty := ""
 	pvc := &v1.PersistentVolumeClaim{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      getExternalNfsPVCName(volumeSnapshotKey, runType),
@@ -161,6 +162,7 @@ func GetExternalNfsPVCAPI(volumeSnapshotKey string, runType RunType) *v1.Persist
 					"openmcp": "snapshot",
 				},
 			},
+			StorageClassName: &empty,
 		},
 	}
 	return pvc
@@ -210,6 +212,7 @@ func getExternalNfsPVPath(clusterName string, snapshotType string, resourceName 
 
 //PV 정보를 이용하여 PVC 정보를 만들어내는 부분. Label 을 snapshot Key로 둠
 func GetPVCAPI(volumeSnapshotKey string, pvResource apiv1.PersistentVolume, runType RunType) *v1.PersistentVolumeClaim {
+	empty := ""
 	pvc := &v1.PersistentVolumeClaim{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      getPVCName(volumeSnapshotKey, runType),
@@ -232,6 +235,7 @@ func GetPVCAPI(volumeSnapshotKey string, pvResource apiv1.PersistentVolume, runT
 					"openmcp": "snapshot",
 				},
 			},
+			StorageClassName: &empty,
 
 			//VolumeName: getPVCName(snapshotKey),
 		},

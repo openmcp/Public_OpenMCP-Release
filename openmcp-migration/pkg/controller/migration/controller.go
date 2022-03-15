@@ -56,7 +56,7 @@ var cm *clusterManager.ClusterManager
 
 func NewController(live *cluster.Cluster, ghosts []*cluster.Cluster, ghostNamespace string, myClusterManager *clusterManager.ClusterManager) (*controller.Controller, error) {
 	cm = myClusterManager
-	omcplog.V(4).Info("NewController start")
+	omcplog.V(0).Info("NewController start")
 	liveclient, err := live.GetDelegatingClient()
 	if err != nil {
 		omcplog.V(0).Info("getting delegating client for live cluster: ", err)
@@ -80,7 +80,7 @@ func NewController(live *cluster.Cluster, ghosts []*cluster.Cluster, ghostNamesp
 		omcplog.V(0).Info("setting up Pod watch in live cluster: ", err)
 		return nil, err
 	}
-	omcplog.V(4).Info("NewController end")
+	omcplog.V(0).Info("NewController end")
 	return co, nil
 }
 
@@ -234,7 +234,6 @@ func (r *reconciler) setResource(migraionSource v1alpha1.MigrationServiceSource,
 			fixedResourceList = append(fixedResourceList, resource)
 		}
 	}
-	omcplog.V(0).Info(fixedResourceList)
 	//Deploy를 가장 뒤로.
 	for i, fixedResource := range fixedResourceList {
 		if fixedResource.ResourceType == config.DEPLOY {
@@ -259,10 +258,10 @@ func (r *reconciler) setResource(migraionSource v1alpha1.MigrationServiceSource,
 
 		r.progressMax++
 	}
-	omcplog.V(4).Info("+ ProgressMax Setting end")
-	omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-	omcplog.V(4).Info("++ progressMax add :" + strconv.Itoa(r.progressMax))
-	omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+	omcplog.V(0).Info("+ ProgressMax Setting end")
+	omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+	omcplog.V(0).Info("++ progressMax add :" + strconv.Itoa(r.progressMax))
+	omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
 
 	migSource.resourceList = fixedResourceList
 	migSource.pvCheck = pvCheck
@@ -292,6 +291,15 @@ func (r *reconciler) ResourceInit(migraionSource v1alpha1.MigrationServiceSource
 	migSource.sourceClient = cm.Cluster_genClients[migraionSource.SourceCluster]
 	migSource.serviceName = migraionSource.ServiceName
 
+	if migSource.targetClient == nil {
+		omcplog.Error(migSource.targetCluster, " not loaded.")
+		return migSource, fmt.Errorf(migSource.targetCluster, " not loaded.")
+	}
+	if migSource.sourceClient == nil {
+		omcplog.Error(migSource.sourceCluster, " not loaded.")
+		return migSource, fmt.Errorf(migSource.sourceCluster, " not loaded.")
+	}
+
 	var err error
 	//migSource.resourceList, migSource.pvCheck = setResourceForOnlyDeploy(migraionSource)
 	err = r.setResource(migraionSource, &migSource)
@@ -310,16 +318,16 @@ func (r *reconciler) ResourceInit(migraionSource v1alpha1.MigrationServiceSource
 	// r.progressMax++ //2번은 setResource 함수에서 진행
 	r.progressMax++ //3번
 	r.progressMax++ //4번
-	omcplog.V(4).Info("+ [Both] Progress Setting end")
-	omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-	omcplog.V(4).Info("++ progressMax add :" + strconv.Itoa(r.progressMax))
-	omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+	omcplog.V(0).Info("+ [Both] Progress Setting end")
+	omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+	omcplog.V(0).Info("++ progressMax add :" + strconv.Itoa(r.progressMax))
+	omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
 
 	return migSource, nil
 }
 
 func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) {
-	omcplog.V(3).Info("Migration Start : Reconcile")
+	omcplog.V(0).Info("Migration Start : Reconcile")
 	startDate := time.Now()
 	instance := &v1alpha1.Migration{}
 	checkResourceName := ""
@@ -333,21 +341,21 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 	} else {
 		if instance.Status.Status == corev1.ConditionTrue {
 			// 이미 성공한 케이스는 로직을 안탄다.
-			omcplog.V(4).Info(instance.Name + " already succeed")
+			omcplog.V(0).Info(instance.Name + " already succeed")
 			return reconcile.Result{Requeue: false}, nil
 		}
 		if instance.Status.Status == corev1.ConditionFalse {
 			// 이미 실패한 케이스는 로직을 다시 안탄다.
-			omcplog.V(4).Info(instance.Name + " already failed")
+			omcplog.V(0).Info(instance.Name + " already failed")
 			return reconcile.Result{Requeue: false}, nil
 		}
-		omcplog.V(4).Info("0. get instance ... !Update :" + strconv.Itoa(r.progressCurrent))
+		omcplog.V(0).Info("0. get instance ... !Update :" + strconv.Itoa(r.progressCurrent))
 		r.makeStatusRun(instance, "Running", "0. get resource instance success", corev1.ConditionUnknown, "", nil)
-		omcplog.V(4).Info("0. get instance ... !Update End")
+		omcplog.V(0).Info("0. get instance ... !Update End")
 	}
 
-	omcplog.V(4).Info(req.NamespacedName)
-	//omcplog.V(4).Info(instance)
+	omcplog.V(0).Info(req.NamespacedName)
+	//omcplog.V(0).Info(instance)
 
 	deployInfoList := []deploymentInfo{}
 	svcInfoList := []svcInfo{}
@@ -356,32 +364,35 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 
 	// 한번만 실행됨.
 	for _, migraionSource := range instance.Spec.MigrationServiceSources {
-		omcplog.V(4).Info(migraionSource)
+		omcplog.V(0).Info(migraionSource)
 		migSource, initErr := r.ResourceInit(migraionSource)
 		if initErr != nil {
 			omcplog.Error("1. Init error : ", initErr)
 			r.makeStatusRun(instance, corev1.ConditionFalse, "1. Init error", corev1.ConditionUnknown, "", initErr)
-			omcplog.V(3).Info("Migration Failed")
+			omcplog.V(0).Info("Migration Failed")
 			return reconcile.Result{Requeue: false}, nil
 		} else {
 			r.progressCurrent++
-			omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-			omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
-			omcplog.V(4).Info("1. Init ... !Update :" + strconv.Itoa(r.progressCurrent))
+			omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+			omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+			omcplog.V(0).Info("1. Init ... !Update :" + strconv.Itoa(r.progressCurrent))
 			r.makeStatusRun(instance, "Running", "1. Init success", corev1.ConditionUnknown, "", nil)
-			omcplog.V(4).Info("1. Init ... !Update End")
+			omcplog.V(0).Info("1. Init ... !Update End")
 		}
+
+		omcplog.V(0).Info("-------------------------------------", migSource.targetClient)
+		omcplog.V(0).Info("-------------------------------------", migSource.nameSpace)
 		checkNameSpace(migSource.targetClient, migSource.nameSpace)
-		omcplog.V(4).Info("======== migSource.resourceList ==========")
-		omcplog.V(4).Info(migSource.resourceList)
+		omcplog.V(0).Info("======== migSource.resourceList ==========")
+		omcplog.V(0).Info(migSource.resourceList)
 
 		var migErr error
 		var desc string
 		for i, resource := range migSource.resourceList {
 			resourceType := resource.ResourceType
 			if resourceType == config.DEPLOY {
-				omcplog.V(4).Info("======== resource ==========")
-				omcplog.V(4).Info(resource)
+				omcplog.V(0).Info("======== resource ==========")
+				omcplog.V(0).Info(resource)
 				deploy := &deploymentInfo{migSource: &migSource, resource: resource}
 				migErr = deploy.migdeploy()
 				checkResourceName = resource.ResourceName
@@ -390,40 +401,40 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 				deployInfoList = append(deployInfoList, *deploy)
 				desc = deploy.description
 				r.progressCurrent++
-				omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-				omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+				omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+				omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
 			} else if resourceType == config.SERVICE {
-				omcplog.V(4).Info("======== resource ==========")
-				omcplog.V(4).Info(resource)
+				omcplog.V(0).Info("======== resource ==========")
+				omcplog.V(0).Info(resource)
 				svc := &svcInfo{migSource: &migSource, resource: resource}
 				migErr = svc.migservice()
 				svcInfoList = append(svcInfoList, *svc)
 				desc = svc.description
 				r.progressCurrent++
-				omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-				omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+				omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+				omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
 			} else if resourceType == config.PV {
-				omcplog.V(4).Info("======== resource ==========")
-				omcplog.V(4).Info(resource)
+				omcplog.V(0).Info("======== resource ==========")
+				omcplog.V(0).Info(resource)
 				pv := &pvInfo{migSource: &migSource, resource: resource}
 				migErr = pv.migpv()
 				pvInfoList = append(pvInfoList, *pv)
 				desc = pv.description
-				omcplog.V(4).Info("====================")
-				omcplog.V(4).Info(pvInfoList[0].resource)
+				omcplog.V(0).Info("====================")
+				omcplog.V(0).Info(pvInfoList[0].resource)
 				r.progressCurrent++
-				omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-				omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+				omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+				omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
 			} else if resourceType == config.PVC {
-				omcplog.V(4).Info("======== resource ==========")
-				omcplog.V(4).Info(resource)
+				omcplog.V(0).Info("======== resource ==========")
+				omcplog.V(0).Info(resource)
 				pvc := &pvcInfo{migSource: &migSource, resource: resource}
 				migErr = pvc.migpvc()
 				pvcInfoList = append(pvcInfoList, *pvc)
 				desc = pvc.description
 				r.progressCurrent++
-				omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-				omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+				omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+				omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
 			} else {
 				omcplog.Error(fmt.Errorf("Resource Type Error!"))
 				r.makeStatusRun(instance, corev1.ConditionFalse, "2. Migration error...", corev1.ConditionUnknown, "", fmt.Errorf("Resource Type Error!"))
@@ -436,9 +447,9 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 				omcplog.Error("Migration Failed")
 				return reconcile.Result{Requeue: false}, nil
 			} else {
-				omcplog.V(4).Info("2. Migration... !Update :" + strconv.Itoa(r.progressCurrent))
+				omcplog.V(0).Info("2. Migration... !Update :" + strconv.Itoa(r.progressCurrent))
 				r.makeStatusRun(instance, "Running", "2. Migration success : "+desc, corev1.ConditionUnknown, "", nil)
-				omcplog.V(4).Info("2. Migration ... !Update End")
+				omcplog.V(0).Info("2. Migration ... !Update End")
 			}
 		}
 
@@ -446,8 +457,8 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 		timeoutcheck := 0
 
 		isMigCompleted := false
-		omcplog.V(4).Info("==== check Resource ====")
-		omcplog.V(4).Info("connecting... : " + checkResourceName)
+		omcplog.V(0).Info("==== check Resource ====")
+		omcplog.V(0).Info("connecting... : " + checkResourceName)
 		for !isMigCompleted {
 			var regexpErr error
 			var errMessage string
@@ -465,21 +476,21 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 					}
 					if pod.Status.Phase == corev1.PodRunning {
 						isMigCompleted = true
-						omcplog.V(3).Info("TargetCluster PodName : " + podName + " is Running.")
+						omcplog.V(0).Info("TargetCluster PodName : " + podName + " is Running.")
 					} else {
 						if pod.Status.Reason == "" {
 							errMessage = string(pod.Status.Phase)
 						} else {
 							errMessage = string(pod.Status.Phase) + "/" + pod.Status.Reason + "/" + pod.Status.Message
 						}
-						omcplog.V(3).Info("TargetCluster PodName : " + podName + " is " + errMessage)
+						omcplog.V(0).Info("TargetCluster PodName : " + podName + " is " + errMessage)
 					}
 				}
 			}
 
 			if timeoutcheck == 50 {
 				//시간초과 - 오류 루틴으로 진입
-				omcplog.V(3).Info("long time error...")
+				omcplog.V(0).Info("long time error...")
 				omcplog.Error(fmt.Errorf("Target Cluster Pod not loaded... : " + podName))
 				omcplog.Error(errMessage)
 				r.makeStatusRun(instance, corev1.ConditionFalse, "3. TargetCluster Pod not loaded... : "+podName, corev1.ConditionUnknown, "", fmt.Errorf(errMessage))
@@ -489,17 +500,18 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 
 			timeoutcheck = timeoutcheck + 1
 			time.Sleep(time.Second * 1)
-			omcplog.V(4).Info("connecting...")
+			omcplog.V(0).Info("connecting...")
 		}
 
 		r.progressCurrent++
-		omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-		omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
-		omcplog.V(4).Info("3. TargetCluster resource created... !Update :" + strconv.Itoa(r.progressCurrent))
+		omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+		omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+		omcplog.V(0).Info("3. TargetCluster resource created... !Update :" + strconv.Itoa(r.progressCurrent))
 		r.makeStatusRun(instance, "Running", "3. TargetCluster resource created success", corev1.ConditionUnknown, "", nil)
-		omcplog.V(4).Info("3. TargetCluster resource created... !Update End")
+		omcplog.V(0).Info("3. TargetCluster resource created... !Update End")
 
 		// ********* delete Migration Source File ************
+		time.Sleep(5 * time.Second)
 		zeroDownSTime := time.Now()
 		var closeErr error
 		for _, deployInfo := range deployInfoList {
@@ -521,12 +533,12 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 		zeroDownElapsed := time.Since(zeroDownSTime)
 		if zeroDownElapsed > time.Second*3 {
 			// 이때는 무중단이 아님!
-			omcplog.V(3).Info("** Not zeroDownTime")
-			omcplog.V(3).Info("zeroDownElapsed : " + zeroDownElapsed.String())
+			omcplog.V(0).Info("** Not zeroDownTime")
+			omcplog.V(0).Info("zeroDownElapsed : " + zeroDownElapsed.String())
 			r.isZeroDownTime = corev1.ConditionFalse
 		} else {
-			omcplog.V(3).Info("** zeroDownTime")
-			omcplog.V(3).Info("zeroDownElapsed : " + zeroDownElapsed.String())
+			omcplog.V(0).Info("** zeroDownTime")
+			omcplog.V(0).Info("zeroDownElapsed : " + zeroDownElapsed.String())
 			r.isZeroDownTime = corev1.ConditionTrue
 		}
 		if closeErr != nil {
@@ -537,9 +549,9 @@ func (r *reconciler) Reconcile(req reconcile.Request) (reconcile.Result, error) 
 		}
 	}
 	r.progressCurrent++
-	omcplog.V(4).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
-	omcplog.V(4).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
-	omcplog.V(3).Info("Migration Complete")
+	omcplog.V(0).Info("++ progressCurrent add :" + strconv.Itoa(r.progressCurrent))
+	omcplog.V(0).Info("++ progress Count : " + strconv.Itoa(r.progressCurrent) + "/" + strconv.Itoa(r.progressMax))
+	omcplog.V(0).Info("Migration Complete")
 	elapsed := time.Since(startDate)
 	r.makeStatusRun(instance, corev1.ConditionTrue, "Migration succeed", r.isZeroDownTime, elapsed.String(), nil)
 
@@ -570,7 +582,7 @@ START:
 	for _, pod := range pods.Items {
 		result, err := regexp.MatchString(dpName, pod.Name)
 		if err == nil && result == true && pod.Labels["updateCheck"] == "true" {
-			//omcplog.V(4).Info("pod STATUS:  ", pod.Status.ContainerStatuses)
+			//omcplog.V(0).Info("pod STATUS:  ", pod.Status.ContainerStatuses)
 			podName = pod.Name
 			break
 		} else if err != nil {
@@ -581,19 +593,19 @@ START:
 		}
 	}
 	if podName == "" {
-		omcplog.V(4).Info(" Pod hasn't created yet")
+		omcplog.V(0).Info(" Pod hasn't created yet")
 		time.Sleep(time.Second * 1)
 		goto START
 	} else {
-		omcplog.V(4).Info("podName :  ", podName)
+		omcplog.V(0).Info("podName :  ", podName)
 		return podName
 	}
 }
 func CopyToNfsCMD(oriVolumePath string, serviceName string) (string, string) {
 	mkCMD := config.MKDIR_CMD + " " + config.EXTERNAL_NFS_PATH + "/" + serviceName
 	copyCMD := config.COPY_CMD + " " + oriVolumePath + " " + config.EXTERNAL_NFS_PATH + "/" + serviceName
-	omcplog.V(4).Info("mkdir cmd  :  ", mkCMD)
-	omcplog.V(4).Info("copy cmd  :  ", copyCMD)
+	omcplog.V(0).Info("mkdir cmd  :  ", mkCMD)
+	omcplog.V(0).Info("copy cmd  :  ", copyCMD)
 	return mkCMD, copyCMD
 }
 
@@ -636,7 +648,7 @@ START:
 			omcplog.Error("error stream", err)
 			return err
 		}
-		omcplog.V(4).Info("connecting: ", podName)
+		omcplog.V(0).Info("connecting: ", podName)
 		time.Sleep(time.Second * 1)
 		goto START
 	} else {
@@ -716,13 +728,13 @@ func CreateLinkShare(client generic.Client, sourceResource *appsv1.Deployment, v
 		omcplog.Error("nfsPv 생성 에러: ", pvErr)
 		return false, pvErr, nfsNewPv, nfsNewPvc
 	}
-	omcplog.V(3).Info("nfsPv 생성 완료")
+	omcplog.V(0).Info("nfsPv 생성 완료")
 	pvcErr := client.Create(context.TODO(), nfsNewPvc)
 	if pvcErr != nil {
 		omcplog.Error("nfsPvc 생성 에러: ", pvcErr)
 		return false, pvcErr, nfsNewPv, nfsNewPvc
 	}
-	omcplog.V(3).Info("nfsPvc 생성 완료")
+	omcplog.V(0).Info("nfsPvc 생성 완료")
 	//client.Update(context.TODO(), resourceInfo)
 	//client.Create(context.TODO(), resourceInfo)
 	dpErr := client.Update(context.TODO(), resourceInfo)
@@ -730,7 +742,7 @@ func CreateLinkShare(client generic.Client, sourceResource *appsv1.Deployment, v
 		omcplog.Error("dp 생성 에러: ", dpErr)
 		return false, dpErr, nfsNewPv, nfsNewPvc
 	}
-	omcplog.V(3).Info("dp 생성 완료")
+	omcplog.V(0).Info("dp 생성 완료")
 	return true, nil, nfsNewPv, nfsNewPvc
 	// return true, nil
 }
@@ -762,15 +774,15 @@ func getVolumePath(migSource *MigrationControllerResource) error {
 		}
 	}
 	if pvcName == "" {
-		omcplog.V(3).Info("MigrationSpec pvcName none")
+		omcplog.V(0).Info("MigrationSpec pvcName none")
 		return nil
 	}
 	if dpResource.Name == "" {
-		omcplog.V(3).Info("Source dpResourceName none")
+		omcplog.V(0).Info("Source dpResourceName none")
 		return nil
 	}
 	if pvcResource.Name == "" {
-		omcplog.V(3).Info("Source pvcResourceName none")
+		omcplog.V(0).Info("Source pvcResourceName none")
 		return nil
 	}
 
@@ -819,7 +831,7 @@ func checkNameSpace(client generic.Client, namespace string) bool {
 	client.List(context.TODO(), ns, "")
 	for _, nss := range ns.Items {
 		if nss.Name == namespace {
-			omcplog.V(4).Info("Already exists namespace: ", namespace)
+			omcplog.V(0).Info("Already exists namespace: ", namespace)
 			return true
 		}
 	}
@@ -827,7 +839,7 @@ func checkNameSpace(client generic.Client, namespace string) bool {
 	nameSpaceObj := &corev1.Namespace{}
 	nameSpaceObj.Name = namespace
 	client.Create(context.TODO(), nameSpaceObj)
-	omcplog.V(4).Info("Create namespace: ", namespace)
+	omcplog.V(0).Info("Create namespace: ", namespace)
 	return true
 }
 func GetLinkSharePvc(sourceResource *corev1.PersistentVolumeClaim, volumePath string, serviceName string) *corev1.PersistentVolumeClaim {

@@ -58,15 +58,15 @@ func (r *RegistryManager) SetNodeLabelSync() error {
 		//node name으로 node 정보 가져와서 내용 바꿔서 update 하는 기능.
 		retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
 
-			omcplog.V(4).Info("   get Node : " + node.Name)
+			omcplog.V(3).Info("   get Node : " + node.Name)
 			//1. Node 정보를 가져온다.
 			result, getErr := r.clientset.CoreV1().Nodes().Get(context.TODO(), node.Name, metav1.GetOptions{})
 			if getErr != nil {
 				return getErr
 			}
 
-			omcplog.V(4).Info("   get Node mod...")
-			omcplog.V(4).Info("   addLabelName : " + r.getLabelName(node.Name))
+			omcplog.V(3).Info("   get Node mod...")
+			omcplog.V(3).Info("   addLabelName : " + r.getLabelName(node.Name))
 
 			//2. 라벨을 추가해준다.
 			modLabels := result.GetLabels()
@@ -74,7 +74,7 @@ func (r *RegistryManager) SetNodeLabelSync() error {
 			modLabels[addLabelName] = "true"
 			result.SetLabels(modLabels)
 
-			omcplog.V(4).Info("   get Node update")
+			omcplog.V(3).Info("   get Node update")
 			//3. 업데이트.
 			_, updateErr := r.clientset.CoreV1().Nodes().Update(context.TODO(), result, metav1.UpdateOptions{})
 			return updateErr
@@ -101,7 +101,7 @@ func (r *RegistryManager) DeleteJob() error {
 	if err != nil {
 		return err
 	}
-	omcplog.V(3).Info("Deleted job %q.\n")
+	omcplog.V(3).Info("Deleted job")
 
 	return nil
 }
@@ -173,13 +173,13 @@ func (r *RegistryManager) CreateDeleteJob(imageName string) error {
 	return r.CreateDelete(imageName)
 }
 func (r *RegistryManager) CreateDelete(imageName string) error {
-	omcplog.V(4).Info("Create Delete Command")
+	omcplog.V(3).Info("Create Delete Command")
 	//nfs 해당 이미지 삭제
 	return nil
 }
 
 //CreateJob 원하는 노드에 특정 명령을 내리는 job을 생성하는 기능.
-func (r *RegistryManager) CreateJob(nodeName string, imageName string, cmdType string) error {
+func (r *RegistryManager) CreateJob(nodeName string, imageFullName string, cmdType string) error {
 	appName := r.getAppName(nodeName)
 	labelName := r.getLabelName(nodeName)
 
@@ -195,33 +195,41 @@ func (r *RegistryManager) CreateJob(nodeName string, imageName string, cmdType s
 		} else {
 			omcplog.V(3).Info("job : " + job.ObjectMeta.Name + "delete complete!")
 		}
+		time.Sleep(time.Second * 5)
 	}
 	cmd := ""
 
 	imagedir := "/nfs"
+
+	tmp := strings.Split(imageFullName, ":")
+	imageName := tmp[0]
+	imageVersion := tmp[1]
 	switch cmdType {
 	case "delete":
 		// docker rm images
-		cmd += "rm -r " + imagedir + "/" + imageName + ".tar" + ";"
-		cmd += "docker rmi -f " + imageName + ";"
+		cmd += "rm -r " + imagedir + "/" + imageFullName + ".tar" + ";"
+		cmd += "docker rmi -f " + imageFullName + ";"
 
-		cmd = utils.SetImageCommand(cmd)
 	case "push":
 		//docker save images
 		if strings.Contains(imageName, "/") {
 			dirlist := strings.SplitAfter(imageName, "/")
 			dirName := strings.Replace(imageName, dirlist[len(dirlist)-1], "", -1)
 			cmd += "mkdir -p " + dirName + ";"
-			omcplog.V(4).Info("mkdir -p " + dirName)
+			omcplog.V(3).Info("mkdir -p " + dirName)
 		}
-		cmd += "docker save -o " + imageName + ".tar" + " " + imageName + ";"
-		omcplog.V(4).Info("docker save -o " + imageName + ".tar" + " " + imageName + ";")
-		cmd = utils.SetImageCommand(cmd)
+		cmd += "export check=`docker images |grep \"" + imageName + "\" |grep \"" + imageVersion + "\" | awk '{ print $1\":\"$2}'` ;"
+		cmd += "echo $check ;"
+		innerCmd := "docker save -o \"" + imageFullName + ".tar\"" + " \"" + imageFullName + "\";"
+		cmd += "if [ -n ${check} ] ; then echo start save...; " + innerCmd + "  fi ;"
 	case "pull":
-		cmd = "docker load -i " + imageName + ".tar" + ";"
-		cmd = utils.SetImageCommand(cmd)
+		innerCmd := "docker load -i \"" + imageFullName + ".tar\";"
+		cmd += "if [ -e " + imageFullName + ".tar ] ; then echo start load...; " + innerCmd + "  fi ;"
 	default:
 	}
+	cmd += "echo end"
+	omcplog.V(3).Info("job's command : ", cmd)
+	cmd = utils.SetImageCommand(cmd)
 
 	//1. 해당 push 할 컨테이너 명을 찾는다.
 	//2. commit 명령을 내린다.
@@ -230,16 +238,16 @@ func (r *RegistryManager) CreateJob(nodeName string, imageName string, cmdType s
 	job = r.getJobAPI(appName, labelName, cmd)
 
 	// Create Deployment
-	omcplog.V(3).Info("Creating " + cmdType + " Job...")
+	omcplog.V(3).Info("Creating ", cmdType, " Job...")
 	_, err := jobClient.Create(context.TODO(), job, metav1.CreateOptions{})
 	if err != nil {
 		return err
 	}
-	omcplog.V(3).Info("Created "+cmdType+" Job %q.\n", job.GetObjectMeta().GetName())
+	omcplog.V(3).Info("Created ", cmdType, " Job : (", job.GetObjectMeta().GetName(), ")")
 
 	//r.JobRunCheck(batchv1.JobComplete, afterFunc)
 
-	time.Sleep(time.Second * 5)
+	time.Sleep(time.Second * 3)
 	return nil
 }
 func int32Ptr(i int32) *int32 { return &i }

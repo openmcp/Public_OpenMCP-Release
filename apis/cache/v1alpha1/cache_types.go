@@ -23,12 +23,17 @@ type CacheStatus struct {
 	// Add custom validation using kubebuilder tags: https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html
 
 	// Succeeded indicates if the backup has Succeeded.
-	Succeeded bool   `json:"succeeded"`
-	History   []Data `json:"History,omitempty"`
+	Succeeded  bool         `json:"succeeded"`
+	History    []Data       `json:"History,omitempty"`
+	UpdateList []UpdateData `json:"UpdateList,omitempty"`
 	// Reason indicates the reason for any backup related failures.
 	Reason string `json:"Reason,omitempty"`
 }
-
+type UpdateData struct {
+	ImageName   string `json:"ImageName,omitempty"`
+	ImageStatus string `json:"ImageStatus,omitempty"`
+	Timestamp   string `json:"Timestamp,omitempty"`
+}
 type Data struct {
 	ImageList []ImageInfo `json:"ImageList,omitempty"`
 	Timestamp string      `json:"Timestamp,omitempty"`
