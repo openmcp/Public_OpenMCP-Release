@@ -42,6 +42,8 @@ spec:
             - name: aws-config
               mountPath: /root/.aws
           env:
+          - name: installType
+            value: "debug"
           - name: INFLUX_IP
             value: "10.0.3.20"
           - name: INFLUX_PORT

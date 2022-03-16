@@ -258,13 +258,13 @@ func (r *reconciler) Reconcile(request reconcile.Request) (reconcile.Result, err
 			// }
 
 			if clusterInstance.Spec.ClusterPlatformType == "GKE" || clusterInstance.Spec.ClusterPlatformType == "AKS" {
-				moduleDirectory = []string{"custom-metrics-apiserver", "metric-collector", "istio", "nginx-ingress-controller", "namespace"  /*,"metrics-server",  "configmap" */}
+				moduleDirectory = []string{"custom-metrics-apiserver", "metric-collector", "istio", "nginx-ingress-controller", "namespace" /*,"metrics-server",  "configmap" */}
 			} else if clusterInstance.Spec.ClusterPlatformType == "EKS" {
-				moduleDirectory = []string{"custom-metrics-apiserver", "metric-collector", "metrics-server", "istio", "nginx-ingress-controller", "namespace"  /*, "configmap" */}
+				moduleDirectory = []string{"custom-metrics-apiserver", "metric-collector", "metrics-server", "istio", "nginx-ingress-controller", "namespace" /*, "configmap" */}
 			} else if clusterInstance.Spec.ClusterNetworkLocation == "internal" {
-				moduleDirectory = []string{"custom-metrics-apiserver", "metallb", "metric-collector", "metrics-server", "nginx-ingress-controller", "istio", "namespace"  /*, "configmap" */}
+				moduleDirectory = []string{"custom-metrics-apiserver", "metallb", "metric-collector", "metrics-server", "nginx-ingress-controller", "istio", "namespace" /*, "configmap" */}
 			} else if clusterInstance.Spec.ClusterNetworkLocation == "external" {
-				moduleDirectory = []string{"custom-metrics-apiserver", "metallb", "metric-collector", "metrics-server", "nginx-ingress-controller", "istio", "namespace"  /*, "configmap" */}
+				moduleDirectory = []string{"custom-metrics-apiserver", "metallb", "metric-collector", "metrics-server", "nginx-ingress-controller", "istio", "namespace" /*, "configmap" */}
 			}
 			for i, dirname := range moduleDirectory {
 				moduleDirectory[i] = "/init/" + dirname
@@ -350,7 +350,10 @@ func InstallInitModule(directory []string, clustername string, ipaddressfrom str
 
 						util.CmdExec2("chmod 755 " + dirname + "/gen-eastwest-gateway.sh")
 						util.CmdExec2("chmod 755 " + dirname + "/istio_install.sh")
-						util.CmdExec2(dirname + "/istio_install.sh " + dirname + " " + clustername)
+
+						if os.Getenv("installType") == "debug" {
+							util.CmdExec2(dirname + "/istio_install.sh " + dirname + " " + clustername)
+						}
 
 						fmt.Println("*** ", dirname+" created")
 

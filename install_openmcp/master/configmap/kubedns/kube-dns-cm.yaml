@@ -1,9 +1,0 @@
-apiVersion: v1
-data:
-  upstreamNameservers: |
-    ["10.0.3.12:53"]
-    #["119.65.195.180:5353"]
-kind: ConfigMap
-metadata:
-  name: kube-dns
-  namespace: kube-system

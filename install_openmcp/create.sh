@@ -112,6 +112,7 @@ if [ $OMCP_INSTALL_TYPE == "learning" ]; then
   mv master/openmcp-apiserver/pv-learningmcp.yaml master/openmcp-apiserver/pv.yaml
   mv master/istio/samples/multicluster/gen-eastwest-gateway-local.sh master/istio/samples/multicluster/gen-eastwest-gateway.sh
   mv member/istio/gen-eastwest-gateway-local.sh member/istio/gen-eastwest-gateway.sh
+  
 
 else
   rm master/openmcp-cluster-manager/operator-learningmcp.yaml
@@ -167,6 +168,7 @@ fi
 
 
 echo "Replace Setting Variable"
+sed -i 's|REPLACE_OMCP_INSTALL_TYPE|'$OMCP_INSTALL_TYPE'|g' master/openmcp-cluster-manager/operator.yaml
 
 sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' master/openmcp-has-controller/operator.yaml
 sed -i 's|REPLACE_DOCKER_REPO_NAME|'$DOCKER_REPO_NAME'|g' master/openmcp-scheduler/operator.yaml
