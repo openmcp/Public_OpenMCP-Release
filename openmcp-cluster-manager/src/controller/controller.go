@@ -351,9 +351,9 @@ func InstallInitModule(directory []string, clustername string, ipaddressfrom str
 						util.CmdExec2("chmod 755 " + dirname + "/gen-eastwest-gateway.sh")
 						util.CmdExec2("chmod 755 " + dirname + "/istio_install.sh")
 
-						if os.Getenv("installType") == "debug" {
-							util.CmdExec2(dirname + "/istio_install.sh " + dirname + " " + clustername)
-						}
+						//if os.Getenv("installType") == "debug" {
+						util.CmdExec2(dirname + "/istio_install.sh " + dirname + " " + clustername)
+						//}
 
 						fmt.Println("*** ", dirname+" created")
 
@@ -397,10 +397,10 @@ func InstallInitModule(directory []string, clustername string, ipaddressfrom str
 
 					if filepath.Ext(f.Name()) == ".yaml" || filepath.Ext(f.Name()) == ".yml" {
 						if strings.Contains(dirname, "samples/addons") {
-							if os.Getenv("installType") == "debug" {
-								util.CmdExec2("/usr/local/bin/kubectl apply -f " + dirname + "/kiali.yaml --context " + clustername)
-								util.CmdExec2("/usr/local/bin/kubectl apply -f " + dirname + "/prometheus.yaml --context " + clustername)
-							}
+							//if os.Getenv("installType") == "debug" {
+							util.CmdExec2("/usr/local/bin/kubectl apply -f " + dirname + "/kiali.yaml --context " + clustername)
+							util.CmdExec2("/usr/local/bin/kubectl apply -f " + dirname + "/prometheus.yaml --context " + clustername)
+							//}
 
 						} else if strings.Contains(dirname, "metric-collector/operator") {
 							if netLoc == "external" {
