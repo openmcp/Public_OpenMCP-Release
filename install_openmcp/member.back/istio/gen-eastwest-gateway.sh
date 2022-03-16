@@ -74,7 +74,7 @@ spec:
         autoInject: enabled
         resources:
           limits:
-            cput: "8"
+            cpu: "8"
             memory: 16Gi
       imagePullSecrets:
       - regcred
