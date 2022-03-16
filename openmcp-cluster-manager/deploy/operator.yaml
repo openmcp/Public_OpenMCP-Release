@@ -24,6 +24,8 @@ spec:
           - openmcp-cluster-manager
           imagePullPolicy: Always
           env:
+            - name: installType
+              value: "debug"
             - name: WATCH_NAMESPACE
               valueFrom:
                 fieldRef:

@@ -24,6 +24,8 @@ spec:
           - openmcp-cluster-manager
           imagePullPolicy: REPLACE_DOCKERIMAGEPULLPOLICY
           env:
+            - name: installType
+              value: "REPLACE_OMCP_INSTALL_TYPE"
             - name: WATCH_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -40,8 +42,6 @@ spec:
             - name: initmodule
               mountPath: /init
       volumes:
-        - name: installType
-          value: "REPLACE_OMCP_INSTALL_TYPE"
         - name: kubeconfig
           hostPath:
             path: /kube

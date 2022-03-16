@@ -24,6 +24,8 @@ spec:
           - openmcp-cluster-manager
           imagePullPolicy: REPLACE_DOCKERIMAGEPULLPOLICY
           env:
+            - name: installType
+              value: "REPLACE_OMCP_INSTALL_TYPE"
             - name: WATCH_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -42,8 +44,6 @@ spec:
             - name: aws-config
               mountPath: /root/.aws
           env:
-          - name: installType
-            value: "REPLACE_OMCP_INSTALL_TYPE"
           - name: INFLUX_IP
             value: REPLACE_INFLUXDBIP
           - name: INFLUX_PORT
