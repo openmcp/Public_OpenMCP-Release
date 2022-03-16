@@ -93,12 +93,12 @@ spec:
 EOF
 
 # $CTX에 configuration 적용
-istioctl install --context=$CTX -f $CTX.yaml -y
+istioctl install --readiness-timeout=15m --context=$CTX -f $CTX.yaml -y
 
 # $CTX에 east-west traffic 전용 게이트웨이를 설치합니다.
 $DIR/gen-eastwest-gateway.sh \
     --mesh mesh-openmcp --cluster $CTX --network network-$CTX | \
-    istioctl --context=$CTX install -y -f -
+    istioctl --context=$CTX --readiness-timeout=15m install -y -f -
 
 # East-west 게이트웨이에 외부 IP 주소가 할당 될 때까지 기다립니다.
 for ((;;))

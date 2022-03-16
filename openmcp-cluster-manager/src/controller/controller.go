@@ -437,6 +437,10 @@ func InstallInitModule(directory []string, clustername string, ipaddressfrom str
 								util.CmdExec2("/usr/local/bin/kubectl delete pod --namespace kube-system --selector k8s-app=kube-dns")
 								fmt.Println("*** ", dirname+" restarted")
 							}*/
+						} else if strings.Contains(dirname, "nginx-ingress-controller") {
+							if os.Getenv("installType") == "debug" {
+								util.CmdExec2("/usr/local/bin/kubectl apply -f " + dirname + "/" + f.Name() + " --context " + clustername)
+							}
 						} else {
 							if strings.Contains(dirname, "istio") {
 							} else {
