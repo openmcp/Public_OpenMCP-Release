@@ -24,10 +24,45 @@ spec:
 apiVersion: openmcp.k8s.io/v1alpha1
 kind: OpenMCPDeployment
 metadata:
-  name: productpage
+  name: productpage-cluster02
   namespace: bookinfo
 spec:
-  replicas: 2
+  replicas: 1
+  clusters:
+  - cluster02
+  labels:
+    app: productpage
+    affinity: "yes"
+  template:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regcred
+          containers:
+            - name: productpage
+              image: istio/examples-bookinfo-productpage-v1:1.10.0
+              imagePullPolicy: IfNotPresent
+              ports:
+                - containerPort: 9080
+            - name: sysbench
+              command:
+                - sysbench-test
+              image: ketidevit2/sysbench-test:v0.0.1
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 7070
+---
+#odeploy/productpage
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: productpage-cluster03
+  namespace: bookinfo
+spec:
+  replicas: 1
+  clusters:
+  - cluster03
   labels:
     app: productpage
     affinity: "yes"
