@@ -10,6 +10,8 @@ kubectl get secret -n istio-system --context $CTX_MASTER cacerts -o yaml | kubec
 kubectl --context=$CTX get namespace istio-system && \
 kubectl --context=$CTX label namespace istio-system topology.istio.io/network=network-$CTX
 
+kubectl --context $CTX label namespace istio-system istio-injection=enabled --overwrite 
+
 # Enable API Server Access to $CTX
 istioctl x create-remote-secret \
     --context=$CTX \
@@ -114,4 +116,5 @@ done
 # Expose services in $CTX
 kubectl --context=$CTX apply -n istio-system -f \
     $DIR/expose-services.yaml
+
 
