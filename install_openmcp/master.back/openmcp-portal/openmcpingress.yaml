@@ -1,0 +1,26 @@
+#oing/kiali-ingress
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPIngress
+metadata:
+  name: openmcp-portal-ingress
+  namespace: openmcp
+spec:
+  template:
+    spec:
+      rules:
+      - host: portal-site.openmcp.com
+        http:
+          paths:
+          - backend:
+              serviceName: openmcp-portal
+              servicePort: 3000
+---
+#oingressdnsrecord/kiali-ingress
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPIngressDNSRecord
+metadata:
+  name: openmcp-portal-ingress
+  namespace: openmcp
+spec:
+  recordTTL: 300
+  
