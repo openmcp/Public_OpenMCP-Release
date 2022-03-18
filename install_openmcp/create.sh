@@ -84,6 +84,28 @@ PDNS_PUBLIC_IP=`yq -r .externalServer.ServerIP.external $CONFFILE`
 PDNS_PUBLIC_PORT=`yq -r .externalServer.powerDNS.externalPort $CONFFILE`
 PDNS_API_KEY=`yq -r .externalServer.powerDNS.apiKey $CONFFILE`
 
+NFS_IP=`yq -r .master.ServerIP.internal $CONFFILE`
+NFS_MOUNT_POINT=`yq -r .master.ServerIP.nfsmount $CONFFILE`
+POSTGRESQL_USER=`yq -r .master.Moudules.postgresql.user $CONFFILE`
+POSTGRESQL_PASSWORD=`yq -r .master.Moudules.postgresql.password $CONFFILE`
+POSTGRESQL_NODEPORT=`yq -r .master.Moudules.postgresql.NodePort $CONFFILE`
+
+INFLUX_IP=`yq -r .master.ServerIP.internal $CONFFILE`
+INFLUX_PORT=`yq -r .master.Moudules.influx.NodePort $CONFFILE`
+INFLUX_USERNAME=`yq -r .master.Moudules.influx.userName $CONFFILE`
+INFLUX_PASSWORD=`yq -r .master.Moudules.influx.password $CONFFILE`
+OPENMCPURL=`yq -r .master.ServerIP.internal $CONFFILE`
+OPENMCPURLPORT=`yq -r .master.Moudules.APIServer.NodePort $CONFFILE`
+DB_HOST=`yq -r .master.ServerIP.internal $CONFFILE`
+DB_USER=`yq -r .master.Moudules.postgresql.user $CONFFILE`
+DB_PASSWORD=`yq -r .master.Moudules.postgresql.password $CONFFILE`
+DB_PORT=`yq -r .master.Moudules.postgresql.NodePort $CONFFILE`
+
+DB_DATABASE=`yq -r .master.Moudules.postgresql.dbname $CONFFILE`
+API_URL_NodePort=`yq -r .master.Moudules.portalapi.NodePort $CONFFILE`
+
+
+mkdir $NFS_MOUNT_POINT/postgresql
 
 if [ -d "master" ]; then
   # Control will enter here if $DIRECTORY exists.
@@ -324,6 +346,33 @@ sed -i 's|REPLACE_ADDRESS_TO|'"$ADDRESS_TO"'|g' master/metallb/configmap.yaml
 sed -i 's|REPLACE_PUBLIC_IP|'"$OMCP_EXTERNAL_IP"'|g' master/metallb/configmap.yaml
 
 
+sed -i 's|REPLACE_NFSIP|'$NFS_IP'|g' master/postgresql/postgres-db-pv.yaml
+sed -i 's|REPLACE_NODEPORT|'$POSTGRESQL_NODEPORT'|g' master/postgresql/postgres-db-service.yaml
+sed -i 's|REPLACE_POSTGRES_USER|'$POSTGRESQL_USER'|g' master/postgresql/postgres-secret.yaml
+sed -i 's|REPLACE_POSTGRES_PASSWORD|'$POSTGRESQL_PASSWORD'|g' master/postgresql/postgres-secret.yaml
+
+
+sed -i 's|REPLACE_INFLUX_IP|'$INFLUX_IP'|g' master/openmcp-portal-apiserver/deployment.yaml
+sed -i 's|REPLACE_INFLUX_PORT|'$INFLUX_PORT'|g' master/openmcp-portal-apiserver/deployment.yaml
+sed -i 's|REPLACE_INFLUX_USERNAME|'$INFLUX_USERNAME'|g' master/openmcp-portal-apiserver/deployment.yaml
+sed -i 's|REPLACE_INFLUX_PASSWORD|'$INFLUX_PASSWORD'|g' master/openmcp-portal-apiserver/deployment.yaml
+sed -i 's|REPLACE_OPENMCP_URL|'$OPENMCPURL'|g' master/openmcp-portal-apiserver/deployment.yaml
+sed -i 's|REPLACE_OPENMCP_PORT|'$OPENMCPURLPORT'|g' master/openmcp-portal-apiserver/deployment.yaml
+sed -i 's|REPLACE_DB_HOST|'$DB_HOST'|g' master/openmcp-portal-apiserver/deployment.yaml
+sed -i 's|REPLACE_DB_USER|'$DB_USER'|g' master/openmcp-portal-apiserver/deployment.yaml
+sed -i 's|REPLACE_DB_PASSWORD|'$DB_PASSWORD'|g' master/openmcp-portal-apiserver/deployment.yaml
+sed -i 's|REPLACE_DB_PORT|'$DB_PORT'|g' master/openmcp-portal-apiserver/deployment.yaml
+
+
+sed -i 's|REPLACE_api_url|http://'$OMCP_IP':'$API_URL_NodePort'|g' master/openmcp-portal/deployment.yaml
+sed -i 's|REPLACE_db_user|'$DB_USER'|g' master/openmcp-portal/deployment.yaml
+sed -i 's|REPLACE_db_host|'$DB_HOST'|g' master/openmcp-portal/deployment.yaml
+sed -i 's|REPLACE_db_database|'$DB_DATABASE'|g' master/openmcp-portal/deployment.yaml
+sed -i 's|REPLACE_db_password|'$DB_PASSWORD'|g' master/openmcp-portal/deployment.yaml
+sed -i 's|REPLACE_db_port|'$DB_PORT'|g' master/openmcp-portal/deployment.yaml
+
+
+
 echo "Replace Setting Variable Complete"
 USERNAME=`whoami`
 
@@ -335,6 +384,7 @@ fi
 
 chmod 755 master/*.sh
 chmod 755 member/istio/*.sh
+
 
 
 echo "Complete Make Dir(master/member)" 

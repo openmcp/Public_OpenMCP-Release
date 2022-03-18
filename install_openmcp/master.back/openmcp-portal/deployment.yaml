@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openmcp-portal
+  namespace: openmcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: openmcp-portal
+  template:
+    metadata:
+      labels:
+        name: openmcp-portal
+    spec:
+      serviceAccountName: openmcp-portal-sa
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: openmcp-portal
+          image: lkh1434/openmcp-portal:v0.0.1
+          command:
+          - yarn
+          args:
+          - dev
+          imagePullPolicy: Always
+          env:
+            - name: api_url
+              value: "REPLACE_api_url"
+            - name: db_user
+              value: "REPLACE_db_user"
+            - name: db_host
+              value: "REPLACE_db_host"
+            - name: db_database
+              value: "REPLACE_db_database"
+            - name: db_password
+              value: "REPLACE_db_password"
+            - name: db_port
+              value: "REPLACE_db_port"
+          ports:
+          - containerPort: 3000
+            name: http
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          effect: NoExecute
+          tolerationSeconds: 0
+        - key: node.kubernetes.io/unreachable
+          effect: NoExecute
+          tolerationSeconds: 0

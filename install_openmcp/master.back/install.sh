@@ -100,6 +100,16 @@ kubectl apply -f configmap/coredns/.
 # echo "--- ingress gateway"
 # kubectl create -f nginx-ingress-controller
 
+echo "=== create postgresql ==="
+kubectl create -f postgresql/.
+
+echo "=== create portal-apiserver ==="
+kubectl create -f openmcp-portal-apiserver/.
+
+echo "=== create portal ==="
+kubectl create -f openmcp-portal/.
+
+
 kubectl create ns istio-system --context openmcp
 # istio 클러스터간 접근을 위한 인증서 만들기
 cd istio

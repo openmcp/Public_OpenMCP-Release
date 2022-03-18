@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume     
+metadata:
+  name: postgres-pv-volume
+  labels:
+    app: openmcp-postgres
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain       # Retain the PV even after PVC is deleted. 
+  nfs:
+    server: REPLACE_NFSIP # Please change this to your NFS server
+    path: /home/nfs/postgresql # Please change this to the relevant share

@@ -9,6 +9,7 @@ master:
   ServerIP:
     internal: 10.0.3.20
     external: 115.94.141.62
+    nfsmount: /home/nfs
   metalLB:
     rangeStartIP: 10.0.3.191
     rangeEndIP: 10.0.3.200
@@ -28,10 +29,19 @@ master:
       NodePort: 30002
       externalPort: 3212 # 115.94.141.62:3212 (MetricCollector는 멤버클러스터 gke, eks, aks의 접근이 가능해야 하므로 외부 IP 가 필요)
     InfluxDB:
+      userName: root
+      password: root
       NodePort: 30003
     LoadBalancingController:
       external: 115.94.141.62 #무조건 80포트 사용해야함.( Routing 규칙 필요시 외부포트80)
       NodePort: 30004
+    portgresql:
+      user: porsgres
+      password: postgres123
+      NodePort: 30901
+      dbname: portal-controller
+    portalapi:
+      NodePort: 30902
 externalServer:
   ServerIP:
     internal: 10.0.3.12
