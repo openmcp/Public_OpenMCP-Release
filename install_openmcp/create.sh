@@ -127,6 +127,7 @@ if [ $OMCP_INSTALL_TYPE == "learning" ]; then
   rm master/openmcp-apiserver/pv.yaml
   rm master/istio/samples/multicluster/gen-eastwest-gateway.sh
   rm member/istio/gen-eastwest-gateway.sh
+  rm master/postgresql/postgres-db-deployment.yaml
 
   mv master/openmcp-cluster-manager/operator-learningmcp.yaml master/openmcp-cluster-manager/operator.yaml
   mv master/influxdb/deployment-learningmcp.yaml master/influxdb/deployment.yaml
@@ -134,6 +135,7 @@ if [ $OMCP_INSTALL_TYPE == "learning" ]; then
   mv master/openmcp-apiserver/pv-learningmcp.yaml master/openmcp-apiserver/pv.yaml
   mv master/istio/samples/multicluster/gen-eastwest-gateway-local.sh master/istio/samples/multicluster/gen-eastwest-gateway.sh
   mv member/istio/gen-eastwest-gateway-local.sh member/istio/gen-eastwest-gateway.sh
+  mv master/postgresql/postgres-db-deployment-learningmcp.yaml master/postgresql/postgres-db-deployment.yaml
   
 
 else
@@ -143,6 +145,7 @@ else
   rm master/openmcp-apiserver/pv-learningmcp.yaml
   rm master/istio/samples/multicluster/gen-eastwest-gateway-local.sh
   rm member/istio/gen-eastwest-gateway-local.sh
+  rm master/postgresql/postgres-db-deployment-learningmcp.yaml
 
 fi
 

@@ -40,7 +40,13 @@ kubectl create secret generic REPLACE_DOCKERSECRETNAME \
     --namespace=metallb-system
 
 
-    
+
+echo "=== create postgresql ==="
+kubectl create -f postgresql/.
+
+echo "=== create portal-apiserver ==="
+kubectl create -f openmcp-portal-apiserver/.
+
 echo "--- deploy crds"
 kubectl create -f ../../crds/.
 echo "--- openmcp-cluster-manager"
@@ -77,8 +83,7 @@ echo "--- create policy"
 kubectl create -f openmcp-policy-engine/policy/.
 echo "--- openmcp-dns-controller"
 kubectl create -f openmcp-dns-controller/.
-echo "--- openmcp-loadbalancing-controller"
-kubectl create -f openmcp-loadbalancing-controller/.
+
 echo "--- openmcp-sync-controller"
 kubectl create -f openmcp-sync-controller/.
 echo "--- openmcp-job-controller"
@@ -100,14 +105,8 @@ kubectl apply -f configmap/coredns/.
 # echo "--- ingress gateway"
 # kubectl create -f nginx-ingress-controller
 
-echo "=== create postgresql ==="
-kubectl create -f postgresql/.
 
-echo "=== create portal-apiserver ==="
-kubectl create -f openmcp-portal-apiserver/.
 
-echo "=== create portal ==="
-kubectl create -f openmcp-portal/.
 
 
 kubectl create ns istio-system --context openmcp
@@ -236,6 +235,12 @@ kubectl create -f samples/addons/kiali.yaml
 
 # OpenMCP Ingress 및 VirtualService 생성 For Kilai
 kubectl create -f openmcp_vs_ingress_kiali.yaml
+
+echo "--- openmcp-loadbalancing-controller"
+kubectl create -f openmcp-loadbalancing-controller/.
+
+echo "=== create portal ==="
+kubectl create -f openmcp-portal/.
 
 # Core DNS 리스타트
 kubectl delete pod --namespace kube-system --selector k8s-app=kube-dns
