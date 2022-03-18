@@ -18,7 +18,7 @@ spec:
         - name: regcred
       containers:
         - name: openmcp-portal
-          image: lkh1434/openmcp-portal:v0.0.1
+          image: lkh1434/openmcp-portal:v1.0
           command:
           - yarn
           args:

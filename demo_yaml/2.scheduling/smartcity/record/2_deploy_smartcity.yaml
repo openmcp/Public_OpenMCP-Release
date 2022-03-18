@@ -1,0 +1,207 @@
+#0_deploy/gw/istio-ingress-gateway
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-ingress-gateway
+  namespace: smartcity
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+#0_deploy/opolicy/scheduling-policy
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPPolicy
+metadata:
+  name: scheduling-policy
+  namespace: openmcp
+spec:
+  template:
+    spec:
+      targetController:
+        kind: OpenMCPSchduler
+      policies:
+        - type: algorithm
+          value:
+            - OpenMCP
+  rangeOfApplication: All
+  policyStatus: Enabled
+---
+#5_deploy/odeploy/ingest
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: ingest
+  namespace: smartcity
+spec:
+  replicas: 1
+  clusters:
+    - kr-daejeon-01
+    - de-hesse-gke-01
+    - us-virginia-eks-01
+    - no-oslo-aks-01
+  labels:
+    app: ingest
+  template:
+    spec:
+      template:
+        spec:
+          hostAliases:
+            - ip: 27.101.215.194
+              hostnames:
+                - "apis.data.go.kr"
+          imagePullSecrets:
+            - name: regcred
+          containers:
+            - env:
+                - name: AGENT_CONF
+                  value: ./conf
+                - name: AGENT_FILE
+                  value: ./conf/agent1st.conf
+                - name: AGENT_NAME
+                  value: agent1st
+                - name: DATACORE_URL
+                  value: http://ingest-interface:8081/entityOperations/upsert
+                - name: SCHEMA_URL
+                  value: http://data-manager:8080/datamodels
+                - name: TZ
+                  value: Asia/Seoul
+              image: ketidevit2/smartcity-daemon:0.0.1
+              imagePullPolicy: Always
+              name: smartcityingest
+              ports:
+                - containerPort: 8888
+              resources: {}
+          hostname: smartcityingest
+          restartPolicy: Always
+---
+#5_deploy/osvc/ingest
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: ingest
+  namespace: smartcity
+  labels:
+    app: ingest
+spec:
+  template:
+    spec:
+      ports:
+        - name: "8888"
+          port: 8888
+          targetPort: 8888
+      selector:
+        app: ingest
+---
+#5_deploy/odeploy/user-tool
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPDeployment
+metadata:
+  name: user-tool
+  namespace: smartcity
+spec:
+  replicas: 1
+  clusters:
+    - kr-daejeon-01
+    - de-hesse-gke-01
+    - us-virginia-eks-01
+    - no-oslo-aks-01
+  labels:
+    app: user-tool
+  template:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regcred
+          containers:
+            - env:
+                - name: DATACOREUSERTOOL_URL
+                  value: http://user-tool:8083/notification
+                - name: DATAMANAGER_URL
+                  value: http://data-manager:8080
+                - name: DATASERVICEBROKER_URL
+                  value: http://data-service-broker:8082
+                - name: SECURITY_ENABLED
+                  value: "false"
+              image: ketidevit2/datacore-usertool:0.0.1
+              imagePullPolicy: Always
+              name: user-tool
+              ports:
+                - containerPort: 38081
+              resources: {}
+          restartPolicy: Always
+---
+#5_deploy/oingress/user-tool-ingess
+apiVersion:  openmcp.k8s.io/v1alpha1
+kind: OpenMCPIngress
+metadata:
+  name: user-tool-ingress
+  namespace: smartcity
+spec:
+  template:
+    spec:
+      rules:
+        - host: usertool.smartcity.openmcp.com
+          http:
+            paths:
+              - path: /
+                backend:
+                  serviceName: user-tool
+                  servicePort: 8083
+---
+#5_deploy/oingressdnsrecord/user-tool-ingress
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPIngressDNSRecord
+metadata:
+  name: user-tool-ingress
+  namespace: smartcity
+spec:
+  recordTTL: 300
+---
+#5_deploy/ovs/user-tool
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPVirtualService
+metadata:
+  name: user-tool
+  namespace: smartcity
+spec:
+  hosts:
+    - "usertool.smartcity.openmcp.com"
+  gateways:
+    - istio-ingress-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: user-tool
+            port:
+              number: 8083
+---
+#5_deploy/osvc/user-tool
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: OpenMCPService
+metadata:
+  name: user-tool
+  namespace: smartcity
+  labels:
+    app: user-tool
+spec:
+  template:
+    spec:
+      type: LoadBalancer
+      ports:
+        - name: "8083"
+          port: 8083
+          targetPort: 38081
+          nodePort: 30036
+      selector:
+        app: user-tool

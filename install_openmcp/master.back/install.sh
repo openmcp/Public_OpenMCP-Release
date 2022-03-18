@@ -236,6 +236,8 @@ kubectl create -f samples/addons/kiali.yaml
 # OpenMCP Ingress 및 VirtualService 생성 For Kilai
 kubectl create -f openmcp_vs_ingress_kiali.yaml
 
+cd ..
+
 echo "--- openmcp-loadbalancing-controller"
 kubectl create -f openmcp-loadbalancing-controller/.
 

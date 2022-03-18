@@ -84,8 +84,8 @@ PDNS_PUBLIC_IP=`yq -r .externalServer.ServerIP.external $CONFFILE`
 PDNS_PUBLIC_PORT=`yq -r .externalServer.powerDNS.externalPort $CONFFILE`
 PDNS_API_KEY=`yq -r .externalServer.powerDNS.apiKey $CONFFILE`
 
-NFS_IP=`yq -r .master.ServerIP.internal $CONFFILE`
-NFS_MOUNT_POINT=`yq -r .master.ServerIP.nfsmount $CONFFILE`
+NFS_IP=`yq -r .master.Moudules.postgresql.nfsip $CONFFILE`
+NFS_MOUNT_POINT=`yq -r master.Moudules.postgresql.nfsmount $CONFFILE`
 POSTGRESQL_USER=`yq -r .master.Moudules.postgresql.user $CONFFILE`
 POSTGRESQL_PASSWORD=`yq -r .master.Moudules.postgresql.password $CONFFILE`
 POSTGRESQL_NODEPORT=`yq -r .master.Moudules.postgresql.NodePort $CONFFILE`

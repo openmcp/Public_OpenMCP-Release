@@ -9,7 +9,6 @@ master:
   ServerIP:
     internal: 10.0.3.20
     external: 115.94.141.62
-    nfsmount: /home/nfs
   metalLB:
     rangeStartIP: 10.0.3.191
     rangeEndIP: 10.0.3.200
@@ -36,12 +35,33 @@ master:
       external: 115.94.141.62 #무조건 80포트 사용해야함.( Routing 규칙 필요시 외부포트80)
       NodePort: 30004
     postgresql:
-      user: porsgres
+      user: postgres
       password: postgres123
       NodePort: 30901
       dbname: portal-controller
+      nfsip: 10.0.3.20
+      nfsmount: /home/nfs
     portalapi:
       NodePort: 30902
+    migration:
+      # external nfs server info
+      nfs: 
+        path: /home/nfs/pv
+        ip: 115.94.141.62
+    cache:
+      # external nfs server info
+      nfs: 
+        ip: 211.45.109.210
+    snapshot:
+      # external nfs server info
+      nfs: 
+        path: /home/nfs/storage
+        ip: 211.45.109.210
+      # external etcd info
+      etcd:
+        ip: 211.45.109.210
+        hostname: RND
+        masterip: 192.168.0.152
 externalServer:
   ServerIP:
     internal: 10.0.3.12
