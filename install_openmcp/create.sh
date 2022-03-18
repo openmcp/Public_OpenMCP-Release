@@ -91,9 +91,9 @@ POSTGRESQL_PASSWORD=`yq -r .master.Moudules.postgresql.password $CONFFILE`
 POSTGRESQL_NODEPORT=`yq -r .master.Moudules.postgresql.NodePort $CONFFILE`
 
 INFLUX_IP=`yq -r .master.ServerIP.internal $CONFFILE`
-INFLUX_PORT=`yq -r .master.Moudules.influx.NodePort $CONFFILE`
-INFLUX_USERNAME=`yq -r .master.Moudules.influx.userName $CONFFILE`
-INFLUX_PASSWORD=`yq -r .master.Moudules.influx.password $CONFFILE`
+INFLUX_PORT=`yq -r .master.Moudules.InfluxDB.NodePort $CONFFILE`
+INFLUX_USERNAME=`yq -r .master.Moudules.InfluxDB.userName $CONFFILE`
+INFLUX_PASSWORD=`yq -r .master.Moudules.InfluxDB.password $CONFFILE`
 OPENMCPURL=`yq -r .master.ServerIP.internal $CONFFILE`
 OPENMCPURLPORT=`yq -r .master.Moudules.APIServer.NodePort $CONFFILE`
 DB_HOST=`yq -r .master.ServerIP.internal $CONFFILE`
