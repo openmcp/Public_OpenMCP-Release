@@ -25,6 +25,8 @@ spec:
           - dev
           imagePullPolicy: Always
           env:
+            - name: DANGEROUSLY_DISABLE_HOST_CHECK
+              value: "true"
             - name: api_url
               value: "REPLACE_api_url"
             - name: db_user
