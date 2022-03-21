@@ -51,11 +51,18 @@ kubectl delete -f openmcp-sync-controller/.
 echo "--- metallb"
 kubectl delete -f metallb/.
 
-echo "--- metallb"
+echo "--- openmcp-portal"
 kubectl delete -f openmcp-portal/.
-echo "--- metallb"
+
+echo "--- portal-api-server"
 kubectl delete -f openmcp-portal-apiserver/.
-echo "--- metallb"
+
+echo "--- cache, mig, snapshot"
+kubectl delete -f cache.
+kubectl delete -f migration/.
+kubectl delete -f snapshot/.
+
+echo "--- postgres"
 kubectl delete -f postgresql/.
 #echo "--- nginx-ingressgateway"
 #kubectl delete -f nginx-ingress-controller/.
