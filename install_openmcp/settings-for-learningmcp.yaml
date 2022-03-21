@@ -43,6 +43,26 @@ master:
       nfsmount: /home/nfs
     portalapi:
       NodePort: 30902
+    migration:
+      # external nfs server info
+      nfs:
+        path: /home/nfs/pv
+        ip: 10.0.3.60
+    cache:
+      # external nfs server info
+      nfs:
+        ip: 10.0.3.60
+    snapshot:
+      # external nfs server info
+      nfs:
+        path: /home/nfs/storage
+        ip: 10.0.3.60
+      # external etcd info
+      etcd:
+        ip: 10.0.3.60
+        hostname: learningmcp
+        masterip: 10.0.3.60
+
 externalServer:
   ServerIP:
     internal: 10.0.3.60

@@ -106,6 +106,25 @@ DB_DATABASE=`yq -r .master.Moudules.postgresql.dbname $CONFFILE`
 API_URL_NodePort=`yq -r .master.Moudules.portalapi.NodePort $CONFFILE`
 
 
+### Migration
+MIGRATION_EXTERNAL_NFS_PATH=`yq -r .master.Moudules.migration.nfs.path $CONFFILE`                  #  EXTERNAL_NFS_PATH = "/home/nfs/pv"
+MIGRATION_EXTERNAL_NFS_IP=`yq -r .master.Moudules.migration.nfs.ip $CONFFILE`                      #   EXTERNAL_NFS = "115.94.141.62"
+
+### Cache
+CACHE_EXTERNAL_NFS_IP=`yq -r .master.Moudules.cache.nfs.ip $CONFFILE` 
+
+### Snapshot
+SNAPSHOT_EXTERNAL_NFS_PATH=`yq -r .master.Moudules.snapshot.nfs.path $CONFFILE`                 #  EXTERNAL_NFS_PATH_STORAGE = "/home/nfs/storage"
+SNAPSHOT_EXTERNAL_NFS_IP=`yq -r .master.Moudules.snapshot.nfs.ip $CONFFILE`                        # EXTERNAL_NFS = "211.45.109.210"
+
+SNAPSHOT_OPENMCP_MASTER_IP=`yq -r .master.Moudules.snapshot.etcd.masterip $CONFFILE`                     #  MASTER_IP = "192.168.0.152"          # /home/nfs/openmcp/MASTER_IP/certs/etcd-client.crt 에서의 MASTER_IP
+SNAPSHOT_EXTERNAL_ETCDIP=`yq -r .master.Moudules.snapshot.etcd.ip $CONFFILE` 
+SNAPSHOT_EXTERNAL_ETCDPORT="12379"
+SNAPSHOT_EXTERNAL_ETCDURL="${SNAPSHOT_EXTERNAL_ETCDIP}:${SNAPSHOT_EXTERNAL_ETCDPORT}"                     #   EXTERNAL_ETCD = "211.45.109.210:12379"
+
+SNAPSHOT_EXTERNAL_ETCDHOSTNAME=`yq -r .master.Moudules.snapshot.etcd.hostname $CONFFILE`                                #  EXTERNAL_ETCD = "nanumdev6"
+
+
 mkdir $NFS_MOUNT_POINT/postgresql
 
 if [ -d "master" ]; then
@@ -374,6 +393,17 @@ sed -i 's|REPLACE_db_host|'$DB_HOST'|g' master/openmcp-portal/deployment.yaml
 sed -i 's|REPLACE_db_database|'$DB_DATABASE'|g' master/openmcp-portal/deployment.yaml
 sed -i 's|REPLACE_db_password|'$DB_PASSWORD'|g' master/openmcp-portal/deployment.yaml
 sed -i 's|REPLACE_db_port|'$DB_PORT'|g' master/openmcp-portal/deployment.yaml
+
+
+sed -i 's|REPLACE_NFS_PATH|'$MIGRATION_EXTERNAL_NFS_PATH'|g' ./deploy/migration/operator.yaml
+sed -i 's|REPLACE_NFS_IP|'$MIGRATION_EXTERNAL_NFS_IP'|g' ./deploy/migration/operator.yaml
+
+sed -i 's|REPLACE_NFS_IP|'$CACHE_EXTERNAL_NFS_IP'|g' ./deploy/cache/operator.yaml
+
+sed -i 's|REPLACE_NFS_PATH|'$SNAPSHOT_EXTERNAL_NFS_PATH'|g' ./deploy/snapshot/operator.yaml
+sed -i 's|REPLACE_NFS_IP|'$SNAPSHOT_EXTERNAL_NFS_IP'|g' ./deploy/snapshot/operator.yaml
+sed -i 's|REPLACE_MASTER_IP|'$SNAPSHOT_OPENMCP_MASTER_IP'|g' ./deploy/snapshot/operator.yaml
+sed -i 's|REPLACE_ETCDURL|'$SNAPSHOT_EXTERNAL_ETCDURL'|g' ./deploy/snapshot/operator.yaml
 
 
 

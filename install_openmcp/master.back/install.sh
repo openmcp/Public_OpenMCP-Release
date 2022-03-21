@@ -100,6 +100,13 @@ echo "--- openmcp-statefulset-controller"
 kubectl apply -f openmcp-statefulset-controller/.
 echo "--- metallb"
 kubectl create -f metallb/.
+
+# -- Deploy 
+echo "* Deploy Mig, Snapshot, Cache controller"
+kubectl create -f migration/.
+kubectl create -f snapshot/.
+kubectl create -f cache/.
+
 echo "--- configmap"
 kubectl apply -f configmap/coredns/.
 # echo "--- ingress gateway"
