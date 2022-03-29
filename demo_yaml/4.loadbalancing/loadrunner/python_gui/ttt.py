@@ -1,4 +1,3 @@
-#-*- coding: UTF-8 -*-
 import multiprocessing
 import sys,time
 from multiprocessing import Process, Event, Queue
@@ -112,8 +111,8 @@ class Form(QMainWindow):
         self.cbuttonmessage = MyTextEdit("[Status] : <font color=\"red\">Disable</font>")
         self.cbuttonstart = MyButton('Send',4)
         self.ccombobox = MyComboBox(2)
-        self.ccombobox.addItem("100")
         self.ccombobox.addItem("200")
+        self.ccombobox.addItem("500")
         self.ccombobox.addItem("1000")
         self.ccombobox.addItem("2000")
         self.ccombobox.addItem("5000")
@@ -172,8 +171,7 @@ class Form(QMainWindow):
         self.sysbenchInfoList = self.getSvcSysbenchs()
         self.BClusterList = [Event() for i in range (0, len(self.sysbenchInfoList))]
         
-        print("333 sysbenchInfoList : ", self.sysbenchInfoList)
-        
+
         for i in range(0, len(self.sysbenchInfoList)):
             self.bcombobox.addItem(self.sysbenchInfoList[i].clusterName)
         
@@ -289,8 +287,7 @@ class Form(QMainWindow):
     
     def getSvcSysbenchs(self):
         allClusterList = self.getAllClusterList()
-
-        print("111 allClusterList : ", allClusterList)
+        
 
         sysbenchInfoList = []     
           
@@ -298,13 +295,15 @@ class Form(QMainWindow):
         headers = {
             'Authorization': 'Bearer '+TOKEN,
         }
-
+        
         queue = Queue()
         procs = []
         for clusterName in allClusterList:
             params = (
                 ('clustername', clusterName),
             )
+
+
             proc = Process(target=self.getSvcSysbench,args=(clusterName, headers, params, queue))
             procs.append(proc)
             proc.start()
@@ -312,9 +311,9 @@ class Form(QMainWindow):
         for proc in procs:
             proc.join()
 
-        print("join complete", queue.qsize())
+        print("join complete ", queue.qsize())
+        
         for i in range(queue.qsize()):
-            print("join complete" ,i)
             try:
                 sysbenchInfoList.append(queue.get())
             except:
@@ -322,7 +321,6 @@ class Form(QMainWindow):
             
         print("get complete" )
 
-        print("222 sysbenchInfoList : ", sysbenchInfoList)
 
         return sysbenchInfoList
         
@@ -340,12 +338,16 @@ class Form(QMainWindow):
         
         print(clusterName, response.status_code)
         response.raise_for_status()
-        
         if response.text != "":
             #print(response.text)
             loaded = json.loads(response.text)
             svcIP = loaded.get('status').get('loadBalancer').get('ingress')[0].get('ip')
+            print("svcIP : ", svcIP)
+            if svcIP == None :
+                svcIP = loaded.get('status').get('loadBalancer').get('ingress')[0].get('hostname')
+
             svcPort = ""
+
             for port in loaded.get('spec').get('ports'):
                 if port["name"] =="http-sysbench":
                     svcPort = port["port"]

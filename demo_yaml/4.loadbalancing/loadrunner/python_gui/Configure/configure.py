@@ -13,7 +13,7 @@ class Global(object):
     Traffic_URL = "http://keti.productpage.openmcp.in:8181/productpage"
     #Traffic_URL = "http://kr-gyeonggido-02.keti.odoo.openmcp.in"
     
-    Load_Namespace = "default"
+    Load_Namespace = "bookinfo"
     Load_Svc_Name = "productpage"
     
     winWidth = 700
