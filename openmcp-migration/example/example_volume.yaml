@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata: 
-  name: iot-gateway-pv
+  name: testmig2-pv
   labels: 
-    name: iot-gateway-pv
-    app: iot-gateway
+    name: testmig2-pv
+    app: testmig2
 spec: 
   capacity: 
     storage: 1Gi
@@ -15,47 +15,44 @@ spec:
   hostPath: 
     path: /tmp
     type: Directory
-  claimRef:
-    name: iot-gateway-pvc
-    namespace: default
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata: 
-  name: iot-gateway-pvc
-  namespace: default
+  name: testmig2-pvc
+  namespace: testmig
   labels: 
-    name: iot-gateway-pvc
-    app: iot-gateway
+    name: testmig2-pvc
+    app: testmig2
 spec: 
   accessModes: 
     - ReadWriteOnce
   resources: 
     requests: 
       storage: 1Gi
-#  selector: 
-#    matchLabels: 
-#      name: iot-gateway-pv 
+  selector: 
+    matchLabels: 
+      name: testmig2-pv 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-  name: iot-gateway
-  namespace: default
+  name: testmig2-dp
+  namespace: testmig
   labels: 
-    name: iot-gateway
-    app: iot-gateway
+    name: testmig2-dp
+    app: testmig2
 spec: 
   selector: 
     matchLabels: 
-      app: iot-gateway
+      app: testmig2
   template: 
     metadata: 
       labels: 
-        app: iot-gateway
+        app: testmig2
     spec: 
       containers: 
-      - name: iot-gateway
+      - name: testmig2
         image: ubuntu:16.04
         command: ["sh", "-c", "chmod a+x /entrypoint.sh; /entrypoint.sh; sleep 100000000;"]
         imagePullPolicy: IfNotPresent
@@ -63,30 +60,30 @@ spec:
         - containerPort: 8080
         volumeMounts: 
         - mountPath: /mountdir/ 
-          name: iot-gateway-volume
+          name: testmig2-volume
         env: 
           - name: DOCKER_HOST
             value: tcp://localhost:2375 
       volumes: 
-      - name: iot-gateway-volume 
+      - name: testmig2-volume 
         persistentVolumeClaim: 
-          claimName: iot-gateway-pvc
+          claimName: testmig2-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata: 
-  name: iot-gateway-sv
-  namespace: default
+  name: testmig2-sv
+  namespace: testmig
   labels: 
-    name: iot-gateway-sv
-    app: iot-gateway
+    name: testmig2-sv
+    app: testmig2
 spec: 
   type: NodePort
   ports: 
-  - name: iot-gateway-web
-    port: 31327
+  - name: testmig2-web
+    port: 31330
     targetPort: 8080
     protocol: TCP
-    nodePort: 31327
+    nodePort: 31330
   selector: 
-    app: iot-gateway
+    app: testmig2

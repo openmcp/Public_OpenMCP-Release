@@ -1,8 +1,7 @@
 apiVersion: openmcp.k8s.io/v1alpha1
 kind: SnapshotRestore
 metadata:
-  name: example-snapshotrestore-group
+  name: example-snapshotrestore
 spec:
-#  groupSnapshotKey: "1625037263"
-  groupSnapshotKey: "1638515789"
+  groupSnapshotKey: "1647852714"
   isGroupSnapshot: true
