@@ -395,15 +395,15 @@ sed -i 's|REPLACE_db_password|'$DB_PASSWORD'|g' master/openmcp-portal/deployment
 sed -i 's|REPLACE_db_port|'$DB_PORT'|g' master/openmcp-portal/deployment.yaml
 
 
-sed -i 's|REPLACE_NFS_PATH|'$MIGRATION_EXTERNAL_NFS_PATH'|g' ./deploy/migration/operator.yaml
-sed -i 's|REPLACE_NFS_IP|'$MIGRATION_EXTERNAL_NFS_IP'|g' ./deploy/migration/operator.yaml
+sed -i 's|REPLACE_NFS_PATH|'$MIGRATION_EXTERNAL_NFS_PATH'|g' master/migration/operator.yaml
+sed -i 's|REPLACE_NFS_IP|'$MIGRATION_EXTERNAL_NFS_IP'|g' master/migration/operator.yaml
 
-sed -i 's|REPLACE_NFS_IP|'$CACHE_EXTERNAL_NFS_IP'|g' ./deploy/cache/operator.yaml
+sed -i 's|REPLACE_NFS_IP|'$CACHE_EXTERNAL_NFS_IP'|g' master/cache/operator.yaml
 
-sed -i 's|REPLACE_NFS_PATH|'$SNAPSHOT_EXTERNAL_NFS_PATH'|g' ./deploy/snapshot/operator.yaml
-sed -i 's|REPLACE_NFS_IP|'$SNAPSHOT_EXTERNAL_NFS_IP'|g' ./deploy/snapshot/operator.yaml
-sed -i 's|REPLACE_MASTER_IP|'$SNAPSHOT_OPENMCP_MASTER_IP'|g' ./deploy/snapshot/operator.yaml
-sed -i 's|REPLACE_ETCDURL|'$SNAPSHOT_EXTERNAL_ETCDURL'|g' ./deploy/snapshot/operator.yaml
+sed -i 's|REPLACE_NFS_PATH|'$SNAPSHOT_EXTERNAL_NFS_PATH'|g' master/snapshot/operator.yaml
+sed -i 's|REPLACE_NFS_IP|'$SNAPSHOT_EXTERNAL_NFS_IP'|g' master/snapshot/operator.yaml
+sed -i 's|REPLACE_MASTER_IP|'$SNAPSHOT_OPENMCP_MASTER_IP'|g' master/snapshot/operator.yaml
+sed -i 's|REPLACE_ETCDURL|'$SNAPSHOT_EXTERNAL_ETCDURL'|g' master/snapshot/operator.yaml
 
 
 
