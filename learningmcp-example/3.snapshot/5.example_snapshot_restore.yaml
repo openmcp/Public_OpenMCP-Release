@@ -1,0 +1,16 @@
+apiVersion: openmcp.k8s.io/v1alpha1
+kind: SnapshotRestore
+metadata:
+  name: example-snapshotrestore
+spec:
+  groupSnapshotKey: "1647852714"
+  isGroupSnapshot: false
+  snapshotRestoreSource:
+  - resourceCluster: cluster02
+    resourceNamespace: openmcp
+    resourceType: Deployment
+    resourceSnapshotKey: openmcp/snapshot/1647852714/cluster02/Deployment/snapshot-dp
+  - resourceCluster: cluster02
+    resourceNamespace: openmcp
+    resourceType: Service
+    resourceSnapshotKey: openmcp/snapshot/1647852714/cluster02/Service/snapshot-sv

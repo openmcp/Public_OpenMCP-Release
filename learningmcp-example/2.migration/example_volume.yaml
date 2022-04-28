@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: testmig2-pv
+  labels: 
+    name: testmig2-pv
+    app: testmig2
+spec: 
+  capacity: 
+    storage: 1Gi
+  accessModes: 
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: 
+    Delete
+  hostPath: 
+    path: /tmp
+    type: Directory
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: testmig2-pvc
+  namespace: testmig
+  labels: 
+    name: testmig2-pvc
+    app: testmig2
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  resources: 
+    requests: 
+      storage: 1Gi
+  selector: 
+    matchLabels: 
+      name: testmig2-pv 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: testmig2-dp
+  namespace: testmig
+  labels: 
+    name: testmig2-dp
+    app: testmig2
+spec: 
+  selector: 
+    matchLabels: 
+      app: testmig2
+  template: 
+    metadata: 
+      labels: 
+        app: testmig2
+    spec: 
+      containers: 
+      - name: testmig2
+        image: ubuntu:16.04
+        command: ["sh", "-c", "chmod a+x /entrypoint.sh; /entrypoint.sh; sleep 100000000;"]
+        imagePullPolicy: IfNotPresent
+        ports: 
+        - containerPort: 8080
+        volumeMounts: 
+        - mountPath: /mountdir/ 
+          name: testmig2-volume
+        env: 
+          - name: DOCKER_HOST
+            value: tcp://localhost:2375 
+      volumes: 
+      - name: testmig2-volume 
+        persistentVolumeClaim: 
+          claimName: testmig2-pvc
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: testmig2-sv
+  namespace: testmig
+  labels: 
+    name: testmig2-sv
+    app: testmig2
+spec: 
+  type: NodePort
+  ports: 
+  - name: testmig2-web
+    port: 31330
+    targetPort: 8080
+    protocol: TCP
+    nodePort: 31330
+  selector: 
+    app: testmig2

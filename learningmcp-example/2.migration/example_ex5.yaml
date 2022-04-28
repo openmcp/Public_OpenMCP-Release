@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: testmig-dp
+  namespace: openmcp
+  labels: 
+    name: testmig-dp
+    app: testmig
+spec: 
+  selector: 
+    matchLabels: 
+      app: testmig
+  template: 
+    metadata: 
+      labels: 
+        app: testmig
+    spec: 
+      containers: 
+      - name: testmig
+        image: nginx:latest
+        # command: ["sh", "-c", "chmod a+x /entrypoint.sh; /entrypoint.sh; sleep 100000000;"]
+        imagePullPolicy: IfNotPresent
+        ports: 
+        - containerPort: 80
+        env: 
+          - name: DOCKER_HOST
+            value: tcp://localhost:2375 
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: testmig-sv
+  namespace: openmcp
+  labels: 
+    name: testmig-sv
+    app: testmig
+spec: 
+  type: NodePort
+  ports: 
+  - name: testmig-web
+    port: 31329
+    targetPort: 80
+    protocol: TCP
+    nodePort: 31329
+  selector: 
+    app: testmig

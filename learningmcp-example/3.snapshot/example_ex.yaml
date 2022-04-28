@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: snapshot-dp
+  namespace: openmcp
+  labels: 
+    name: snapshot-dp
+    app: snapshot
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: snapshot
+  template: 
+    metadata: 
+      labels: 
+        app: snapshot
+    spec: 
+      containers: 
+      - name: snapshot
+        image: nginx:latest
+        # command: ["sh", "-c", "chmod a+x /entrypoint.sh; /entrypoint.sh; sleep 100000000;"]
+        imagePullPolicy: IfNotPresent
+        ports: 
+        - containerPort: 80
+        env: 
+          - name: DOCKER_HOST
+            value: tcp://localhost:2375 
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: snapshot-sv
+  namespace: openmcp
+  labels: 
+    name: snapshot-sv
+    app: snapshot
+spec: 
+  type: NodePort
+  ports: 
+  - name: snapshot-web
+    port: 31339
+    targetPort: 80
+    protocol: TCP
+    nodePort: 31339
+  selector: 
+    app: snapshot
