@@ -2,7 +2,7 @@ default:
   installType: debug # learning or debug
   docker:
     openmcpImageRepository: ketidevit2
-    istioImageRepository: docker.io
+    istioImageRepository: docker.io/istio
     imagePullSecretName: regcred
     imagePullPolicy: Always # Always or IfNotPresent
 master:

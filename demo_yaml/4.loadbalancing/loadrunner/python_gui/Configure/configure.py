@@ -10,7 +10,7 @@ class Global(object):
     FONT_Family = "MS Sans Serif"
     
     Traffic_Period = 5
-    Traffic_URL = "http://keti.productpage.openmcp.in:8181/productpage"
+    #Traffic_URL = "http://keti.productpage.openmcp.in:8181/productpage"
     #Traffic_URL = "http://kr-gyeonggido-02.keti.odoo.openmcp.in"
     
     Load_Namespace = "bookinfo"

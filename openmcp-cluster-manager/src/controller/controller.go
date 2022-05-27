@@ -274,6 +274,10 @@ func (r *reconciler) Reconcile(request reconcile.Request) (reconcile.Result, err
 			util.CmdExec2("/init/vertical-pod-autoscaler/hack/vpa-down.sh " + clusterInstance.Name)
 			util.CmdExec2("kubectl delete --context openmcp -n istio-system secret istio-remote-secret-" + clusterInstance.Name)
 			UninstallInitModule(moduleDirectory, clusterInstance.Name)
+                        util.CmdExec2("/usr/local/bin/kubectl delete crd monitoringdashboards.monitoring.kiali.io --context " + clusterInstance.Name)
+                        util.CmdExec2("/usr/local/bin/kubectl delete clusterrolebinding kiali --context " + clusterInstance.Name)
+                        util.CmdExec2("/usr/local/bin/kubectl delete clusterrole kiali --context " + clusterInstance.Name)
+                        util.CmdExec2("/usr/local/bin/kubectl delete clusterrole kiali-viewer --context " + clusterInstance.Name)
 
 			// 그동안 OpenMCP 리소스로 배포된 하위 리소스 제거
 			err := resourceDelete.DeleteSubResourceAll(clusterInstance.Name, cm)
@@ -398,8 +402,12 @@ func InstallInitModule(directory []string, clustername string, ipaddressfrom str
 					if filepath.Ext(f.Name()) == ".yaml" || filepath.Ext(f.Name()) == ".yml" {
 						if strings.Contains(dirname, "samples/addons") {
 							//if os.Getenv("installType") == "debug" {
-							util.CmdExec2("/usr/local/bin/kubectl apply -f " + dirname + "/kiali.yaml --context " + clustername)
-							util.CmdExec2("/usr/local/bin/kubectl apply -f " + dirname + "/prometheus.yaml --context " + clustername)
+							if strings.Contains(f.Name(), "kiali") {
+								util.CmdExec2("/usr/local/bin/kubectl apply -f " + dirname + "/kiali.yaml --context " + clustername)
+							}
+							if strings.Contains(f.Name(), "prometheus") {
+								util.CmdExec2("/usr/local/bin/kubectl apply -f " + dirname + "/prometheus.yaml --context " + clustername)
+							}
 							//}
 
 						} else if strings.Contains(dirname, "metric-collector/operator") {
@@ -483,7 +491,14 @@ func UninstallInitModule(directory []string, clustername string) {
 				} else {
 					if filepath.Ext(f.Name()) == ".yaml" || filepath.Ext(f.Name()) == ".yml" {
 						if strings.Contains(dirname, "istio") {
-
+						//	if strings.Contains(f.Name(), "kiali") {
+                                                //                fmt.Println("debug22 ---- ",dirname)
+                                                //                util.CmdExec2("/usr/local/bin/kubectl delete crd monitoringdashboards.monitoring.kiali.io --context " + clustername)
+						//		util.CmdExec2("/usr/local/bin/kubectl delete clusterrolebinding kiali --context " + clustername)
+						//		util.CmdExec2("/usr/local/bin/kubectl delete clusterrole kiali --context " + clustername)
+						//		util.CmdExec2("/usr/local/bin/kubectl delete clusterrole kiali-viewer --context " + clustername)
+								//util.CmdExec2("/usr/local/bin/kubectl apply -f " + dirname + "/kiali.yaml --context " + clustername)
+                                                //        }
 						} else if strings.Contains(dirname, "namespace") {
 							ctx, cancel := context.WithTimeout(context.Background(), 90*time.Second)
 							go func() {

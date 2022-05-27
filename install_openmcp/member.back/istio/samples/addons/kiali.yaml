@@ -552,6 +552,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: envoy
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -613,6 +614,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: go
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -685,6 +687,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: kiali
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -734,6 +737,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: micrometer-1.0.6-jvm-pool
+  namespace: default  
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -782,6 +786,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: micrometer-1.0.6-jvm
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -852,6 +857,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: micrometer-1.1-jvm
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -925,6 +931,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: microprofile-1.1
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -989,6 +996,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: microprofile-x.y
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -1032,6 +1040,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: nodejs
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -1096,6 +1105,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: quarkus
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -1134,6 +1144,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: springboot-jvm-pool
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -1155,6 +1166,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: springboot-jvm
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -1176,6 +1188,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: springboot-tomcat
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -1197,6 +1210,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: thorntail
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -1224,6 +1238,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: tomcat
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -1296,6 +1311,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: vertx-client
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -1361,6 +1377,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: vertx-eventbus
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -1425,6 +1442,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: vertx-jvm
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -1446,6 +1464,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: vertx-pool
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
@@ -1519,6 +1538,7 @@ apiVersion: "monitoring.kiali.io/v1alpha1"
 kind: MonitoringDashboard
 metadata:
   name: vertx-server
+  namespace: default
   labels:
     helm.sh/chart: kiali-server-1.29.0
     app: kiali
