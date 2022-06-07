@@ -1,10 +1,9 @@
 #!/bin/bash
 #docker_registry_ip="10.0.3.40:5005"
 docker_registry_ip="index.docker.io"
-docker_id="ketidevit2"
-#docker_id="openmcp"
+docker_id="openmcp"
 controller_name="openmcp-snapshot"
-controller_version="v0.0.2"
+controller_version="v1.0"
 
 export GO111MODULE=on
 go mod vendor

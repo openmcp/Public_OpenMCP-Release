@@ -3,14 +3,14 @@ kind: SnapshotRestore
 metadata:
   name: example-snapshotrestore
 spec:
-  groupSnapshotKey: "1647852714"
+  groupSnapshotKey: "1638515789"
   isGroupSnapshot: false
   snapshotRestoreSource:
-  - resourceCluster: cluster02
+  - resourceCluster: cluster2
     resourceNamespace: openmcp
     resourceType: Deployment
-    resourceSnapshotKey: openmcp/snapshot/1647852714/cluster02/Deployment/snapshot-dp
-  - resourceCluster: cluster02
+    resourceSnapshotKey: openmcp/snapshot/1624521742/cluster2/Deployment/testmig-dp
+  - resourceCluster: cluster2
     resourceNamespace: openmcp
     resourceType: Service
-    resourceSnapshotKey: openmcp/snapshot/1647852714/cluster02/Service/snapshot-sv
+    resourceSnapshotKey: openmcp/snapshot/1624521742/cluster2/Service/testmig-sv
