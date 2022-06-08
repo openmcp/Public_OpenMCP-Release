@@ -12,7 +12,7 @@ import (
 	"go.etcd.io/etcd/pkg/transport"
 )
 
-const openmcpDirnam = "/home/nfs/openmcp/" + config.MASTER_IP + "/"
+var openmcpDirnam = "/home/nfs/openmcp/" + config.MASTER_IP + "/"
 
 type etcdInfoParamsMap struct {
 	Endpoints      []string
