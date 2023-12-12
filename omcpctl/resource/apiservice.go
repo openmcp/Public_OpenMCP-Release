@@ -64,7 +64,7 @@ func PrintAPIServiceList(body []byte) {
 		if !cobrautil.Option_allnamespace {
 			errMsg += " in "+ ns +" namespace."
 		}
-		fmt.Println(errMsg)
+		// fmt.Println(errMsg)
 		return
 	}
 
